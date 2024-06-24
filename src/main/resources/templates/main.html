@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 어서오시개</title>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            $(".search").on("click", function (e) {
+                e.preventDefault();
+                page(0)
+            })
+        })
+        function page(page) {
+            location.href= "/" + page;
+        }
+    </script>
+
+</head>
+<body>
+
+    <div layout:fragment="content">
+
+        <div class="row row-cols-1  g-4 mb-3">
+
+
+<!--            <div class="col">-->
+<!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
+<!--            </div>-->
+
+            <div class="col">
+                <div class="card border-light shadow">
+
+
+
+                    <div class="card-body">
+
+                        <h4>🦮 산책하개</h4>
+                        <a href="/quest/list"> +) 더보기 </a>
+
+                        <hr>
+
+
+                        <div class="row row-cols-2  row-cols-md-5 mt-2">
+
+                            <th:block th:each="quest, status: ${quests.getContent()}">
+
+                                <div class="col">
+
+                                    <div class="card border-light shadow">
+
+                                        <div class="card-body">
+
+
+                                            <div class="row row-cols-1  g-4">
+
+                                                <a class="card-link " th:href="'/quest/read/' + ${quest.id}"  style="color: black">
+
+                                                    <div class="ratio ratio-1x1">
+                                                        <img alt="" th:src="${quest.imgUrl}" heigh="100%" class="card-img-top ratio ratio-1x1">
+                                                    </div>
+
+                                                    <span th:if="${quest.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-1 end">도와주개</span>
+                                                    <span th:if="${quest.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-1 end">완료다개</span>
+
+                                                    <div class="font-size small mb-1">
+                                                        [[${quest.area}]]
+                                                    </div>
+                                                    <div class="card-desc mb-1">
+                                                        <h2 class="card-title"></h2>
+                                                        <div class="card-desc mb-1">
+                                                            [[${quest.title}]]
+                                                        </div>
+                                                        <div class="card-price" >
+                                                            [[${quest.salaryOption}]] <span th:if="${quest.salary} != 0">[[${quest.salary}]] 원</span>
+
+<!--                                                            <span style="text-align:right">-->
+<!--                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">-->
+<!--                                                                  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"></path>-->
+<!--                                                                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"></path>-->
+<!--                                                                </svg>-->
+<!--                                                                [[${quest.regTime}]]-->
+<!--                                                            </span>-->
+                                                        </div>
+                                                        <div class="card-counts">
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+
+                                            </div>
+
+
+
+
+                                    </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </th:block>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="row row-cols-2  g-4">
+
+
+            <!--            <div class="col">-->
+            <!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
+            <!--            </div>-->
+
+            <div class="col">
+                <div class="card border-light shadow">
+
+
+
+                    <div class="card-body">
+
+                        <h4>🐶 공지하개</h4>
+                        <a href="/notice/list"> +) 더보기 </a>
+
+                        <hr>
+
+
+                        <div class="row row-cols-2  row-cols-md-5 mt-2">
+
+                            <th:block th:each="quest, status: ${quests.getContent()}">
+
+                                <div class="col">
+
+                                    <div class="card border-light shadow">
+
+                                        <div class="card-body">
+
+
+                                            <div class="row row-cols-1  g-4">
+
+                                                <a class="card-link " th:href="'/quest/read/' + ${quest.id}"  style="color: black">
+
+                                                    <div class="ratio ratio-1x1">
+                                                        <img alt="" th:src="${quest.imgUrl}" heigh="100%" class="card-img-top ratio ratio-1x1">
+                                                    </div>
+
+                                                    <span th:if="${quest.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-1 end">도와주개</span>
+                                                    <span th:if="${quest.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-1 end">완료다개</span>
+
+                                                    <div class="font-size small mb-1">
+                                                        [[${quest.area}]]
+                                                    </div>
+                                                    <div class="card-desc mb-1">
+                                                        <h2 class="card-title"></h2>
+                                                        <div class="card-desc mb-1">
+                                                            [[${quest.title}]]
+                                                        </div>
+                                                        <div class="card-price" text-align="right">
+                                                            [[${quest.salaryOption}]] <span th:if="${quest.salary} != 0">[[${quest.salary}]] 원</span>
+                                                        </div>
+                                                        <div class="card-counts">
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </th:block>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+</body>
+</html>

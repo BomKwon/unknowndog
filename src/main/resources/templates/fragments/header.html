@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+
+
+</head>
+<body>
+
+    <div th:fragment="header">
+        <header class="p-3 mb-3 border-bottom" style="background-color: lavenderblush">
+            <div class="container" >
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+<!--                            <img src="/img/main.png" width="60" height="60" class="rounded-circle">-->
+                            <img src="/img/yoohoo.png" width="70" height="70">&nbsp;&nbsp;
+                        </svg>
+                    </a>
+
+
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/notice/list" class="nav-link px-2 link-secondary"> 공지하개</a></li>
+                        <li><a href="/quest/list" class="nav-link px-2 link-body-emphasis"> 산책하개</a></li>
+                        <li><a href="/board/list" class="nav-link px-2 link-body-emphasis"> 대화하개</a></li>
+                        <li><a href="#" class="nav-link px-2 link-body-emphasis"> 알려줄개</a></li>
+                    </ul>
+
+<!--                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">-->
+<!--                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">-->
+<!--                    </form>-->
+
+
+
+
+                    <div class="font-size small" sec:authorize="isAuthenticated()" >
+
+                        <span  ></span>
+                        <a th:href="'/user/read/' +${#authentication.name}" sec:authentication property="principal" var="principal" th:text="${#authentication.name}"></a>이시여 어서오시개🐶
+
+                    </div>
+
+
+                    <div class="font-size small" sec:authorize="isAnonymous()">
+
+                        어서 <a href="/user/login">로그인</a> 해주시개🐶
+
+                    </div>
+
+
+                    &ensp;&ensp;
+
+
+
+                    <a href="찜" sec:authorize="isAuthenticated()">
+                        <img src="/img/heart.gif" width="30" height="30" alt="" class="rounded-circle">
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">-->
+<!--                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>-->
+<!--                            <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>-->
+<!--                        </svg>-->
+                    </a>
+
+                    &ensp;
+
+
+                    <div class="dropdown text-end me-3">
+
+
+                            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/img/pizza.png" alt="" width="40" height="40" class="rounded-circle">
+                            </a>
+
+
+
+                        <ul class="dropdown-menu text-small">
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="|@{/view}|">내 산책 정보</a></li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="|@{/user/read}|">마이페이지</a></li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="#">응애</a></li>
+                            <li sec:authorize="isAnonymous()">
+                                <a class="dropdown-item" href="/user/register">
+                                    회원가입
+                                </a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()"><hr class="dropdown-divider"></li>
+                            <li sec:authorize="isAuthenticated()">
+                                <a class="dropdown-item" href="/user/logout"> 로그아웃 </a>
+                            </li>
+                            <li sec:authorize="isAnonymous()">
+                                <a class="dropdown-item" href="/user/login">
+                                    로그인
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+
+</body>
+</html>
