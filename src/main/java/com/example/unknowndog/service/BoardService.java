@@ -3,7 +3,7 @@ package com.example.unknowndog.service;
 import com.example.unknowndog.dto.BoardDTO;
 import com.example.unknowndog.dto.BoardSearchDTO;
 import com.example.unknowndog.entity.Board;
-import com.example.unknowndog.entity.QuestImg;
+import com.example.unknowndog.entity.BoardImg;
 import com.example.unknowndog.entity.User;
 import com.example.unknowndog.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +28,8 @@ public class BoardService {
 
     private final UserService userService;
 
+    private final BoardImgService boardImgService;
+
     //글 등록
     public Long newboard(BoardDTO boardDTO, Principal principal,
                          List<MultipartFile> multipartFiles) throws Exception{
@@ -43,17 +45,17 @@ public class BoardService {
         for (int i=0; i < multipartFiles.size(); i++){
             //입력받은 아이템이미지 숫자만큼
             //하지만 우리가 만들어놓은건 5개라 5개 들어옴
-            QuestImg questImg = new QuestImg();
-            questImg.setQuest(board);      //이 아이템은 id를 가지고 있는가 저장되는가? 더티
+            BoardImg boardImg = new BoardImg();
+            boardImg.setBoard(board);      //이 아이템은 id를 가지고 있는가 저장되는가? 더티
 
             if(i == 0 ){
-                questImg.setRepimgYn("Y");   //대표이미지
+                boardImg.setRepimgYn("Y");   //대표이미지
 
             }else {
-                questImg.setRepimgYn("N");
+                boardImg.setRepimgYn("N");
             }
 
-            questImgService.saveQuestImg(questImg, multipartFiles.get(i));
+            boardImgService.saveBoardImg(boardImg, multipartFiles.get(i));
 
         }
 
