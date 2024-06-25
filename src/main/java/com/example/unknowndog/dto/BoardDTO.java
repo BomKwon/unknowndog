@@ -1,5 +1,6 @@
 package com.example.unknowndog.dto;
 
+import com.example.unknowndog.constant.BoardCategory;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
@@ -33,6 +34,9 @@ public class BoardDTO {
     private int view;
 
     private User user;
+
+    private BoardCategory boardCategory; // 상품 판매 상태
+
 
 
 

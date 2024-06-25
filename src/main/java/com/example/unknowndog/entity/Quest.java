@@ -40,7 +40,7 @@ public class Quest extends BaseEntity {
     private String area; //지역(이건 회원 주소랑 연동 이지만 수정 가능)
 
 
-    @Column(columnDefinition = "int(1) default 1")
+    @Column(columnDefinition = "integer default 1")
     private int stockNumber; //재고수량, 1고정
 
     @Lob    //@Lob은 일반적인 데이터베이스에서 저장하는 길이인 255개 이상의 문자를 저장하고 싶을 때 지정한다.

@@ -57,7 +57,7 @@ public class QuestSearchImpl extends QuerydslRepositorySupport implements QuestS
       booleanBuilder.and(quest.regTime.after(localDateTime));
     }
 
-    if(StringUtils.equals("itemNm", questSearchDTO.getSearchBy())){
+    if(StringUtils.equals("title", questSearchDTO.getSearchBy())){
       booleanBuilder.and(quest.title.like("%" + questSearchDTO.getSearchQuery()+ "%"));
 
     }else if(StringUtils.equals("area",  questSearchDTO.getSearchBy()) ){

@@ -1,5 +1,7 @@
 package com.example.unknowndog.entity;
 
+import com.example.unknowndog.constant.BoardCategory;
+import com.example.unknowndog.constant.QuestStatus;
 import com.example.unknowndog.dto.NoticeDTO;
 import com.example.unknowndog.entity.base.BaseEntity;
 import jakarta.persistence.*;
@@ -34,6 +36,10 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private BoardCategory boardCategory; // 상품 판매 상태
+
 
     public void Board(NoticeDTO noticeDTO) {
         this.title = noticeDTO.getTitle();
