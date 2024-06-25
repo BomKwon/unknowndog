@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4">
+        <div class="col">
+            <div class="card border-light shadow">
+
+                <div class="card-body">
+
+                    <h4>공지쓰개</h4>
+
+                    <hr>
+
+                    <div class="row row-cols-1  row-cols-md-1">
+                        <div class="col">
+
+
+                            <form  method="post" th:object="${noticeDTO}">
+
+                                <input type="hidden" th:field="*{id}">
+
+<!--                                <input type="text" th:field="*{writer}">-->
+                                <!--<input type="text" readonly th:value="${userDTO.nickname}">-->
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="title">제목</span>
+                                    <input type="text"  th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">
+                                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">글 상세 내용</span>
+                                    <textarea class="form-control" th:field="*{content}" aria-label="상세 내용을 입력해주세요"></textarea>
+                                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+
+                                <!--                                 넘어오는 이미지 파일이 있다면 , 데이터값 db-->
+                                <div th:if =  "${#strings.isEmpty(noticeDTO.id)}" style="text-align: center">
+
+                                    <button th:formaction="@{/admin/notice/new}" type="submit" class="btn btn-danger">작성완료</button>
+
+                                </div>
+
+<!--                                <div th:unless="${#strings.isEmpty(noticeDTO.id)}">-->
+<!--                                    <button th:formaction="@{'/notice/admin/modify/' + ${noticeDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>-->
+<!--                                    <a th:href="@{'/quest/remove/' + ${noticeDTO.id} }" class="btn btn-danger btn-sm delBtn">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </div>-->
+
+
+                            </form>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 의뢰 등록하개</title>
+
+
+    <th:block layout:fragment="css">
+        <!--css-->
+        <style>
+            .fieldError {
+                color: red;
+            }
+        </style>
+    </th:block>
+
+    <!-- 사용자 스크립트 추가-->
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+            $(document).ready(function errMsg() {
+
+                var errorMessage = [[${errorMessage}]];
+                if (errorMessage != null) {
+                    alert(errorMessage);
+                }
+                bindDomEvent();
+            })
+
+
+            // 사진파일 검사
+
+            function bindDomEvent() {
+                $(".form-control-file").on("click", function () {
+                    console.log($(this).val())
+                    if($(this).val() == "" &&  $(this).siblings(".form-control-label").val()  == "이미지"){
+                        $(this).siblings(".form-control-label").html("이미지");
+                    }
+                })
+
+                $(".form-control-file").on("change", function () {
+                    //파일을 검사할꺼예요
+                    //파일명
+
+
+                    var fileName = $(this).val().split("\\").pop();
+                    //확장자
+
+                    console.log(fileName)
+
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
+
+                    fileExt = fileExt.toLowerCase();//소문자
+
+                    if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                        if(fileExt ==null || fileExt ==""){
+                            $(this).siblings(".form-control-label").html("이미지가 비어있다개");
+                            return;
+                        }
+                        alert("이미지 파일만 등록이 가능하다개");
+                        return;
+                    }
+
+                    $(this).siblings(".form-control-label").html(fileName);
+
+
+                })
+
+            }
+
+
+        </script>
+    </th:block>
+
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4">
+        <div class="col">
+            <div class="card border-light shadow">
+
+                <div class="card-body">
+
+                    <h4>🐩🐾 산책하개</h4>
+
+                    <hr>
+
+                    <div class="row row-cols-1  row-cols-md-1">
+                        <div class="col">
+
+
+                            <form  method="post" enctype="multipart/form-data" th:object="${questFormDTO}">
+
+                                <input type="hidden" th:field="*{id}">
+
+<!--                                <input type="text" th:field="*{writer}" >-->
+<!--                                <input type="text" readonly th:value="${userDTO.nickname}">-->
+
+                                <!-- 셀렉트 박스-->
+
+                                <select class="form-select mb-3" th:field="*{questStatus}" aria-label="Default select example">
+                                    <option value="UNSUCCESS" selected>구인중</option>
+                                    <option value="SUCCESS">구인완료</option>
+                                </select>
+
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="title">제목</span>
+                                    <input type="text"  th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">
+                                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">급여</span>
+                                    <select class="form-select mb-1" th:field="*{salaryOption}" aria-label="Default select example">
+                                        <option value="" selected>옵션을 선택해주시개</option>
+                                        <option value="시급">시급</option>
+                                        <option value="일급">일급</option>
+                                        <option value="월급">월급</option>
+                                        <option value="연봉">연봉</option>
+                                        <option value="함께하개">함께</option>
+                                    </select>
+                                    <input type="number" th:field="*{salary}"  class="form-control" aria-label="Username" aria-describedby="basic-addon1"  min="0">
+                                    <p th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="area">지역</span>
+                                    <input type="text"  th:field="*{area}" class="form-control" placeholder="지역을 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">
+                                    <p th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+
+<!--                                    <input type="text" min="0" th:field="*{stockNumber}" readonly value="1" class="form-control" placeholder="재고를 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">-->
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">글 상세 내용</span>
+                                    <textarea class="form-control" th:field="*{questDetail}" aria-label="상세 내용을 입력해주세요"></textarea>
+                                    <p th:if="${#fields.hasErrors('questDetail')}" th:errors="*{questDetail}" class="fieldError">
+
+                                    </p>
+                                </div>
+
+
+                                <!-- if 만약에 넘어오는 이미지 파일이 없다면-->
+                                <div th:if =  "${#lists.isEmpty(questFormDTO.questImgDTOList)}">
+                                    <div class="input-group mb-3" th:each="num: ${#numbers.sequence(1,5)}">
+                                        <input type="file" class="form-control cutom-file-input" name="questImgFile">
+                                        <label class="input-group-text cutom-file-label" th:text="상품이미지 + ${num}">Upload</label>
+                                    </div>
+                                </div>
+
+                                <div th:if =  "${not #lists.isEmpty(questFormDTO.questImgDTOList)}">
+                                    <div class="input-group  mb-3" th:each="questImgDTO, status: ${questFormDTO.questImgDTOList}">
+
+                                        <input type="file"  class="form-control form-control-file" th:id="${status.index+1}" name="questImgFile" >
+
+                                        <input type="text" class="form-control"  name="questImgIds" th:value="${questImgDTO.id}">
+
+
+                                        <label th:for="${status.index+1}" class="input-group-text form-control-label" th:text="${not #strings.isEmpty(questImgDTO.oriImgName)} ? ${questImgDTO.oriImgName} : '상품이미지'" >Upload</label>
+                                    </div>
+                                </div>
+
+
+<!--                                 넘어오는 이미지 파일이 있다면 , 데이터값 db-->
+                                <div th:if =  "${#strings.isEmpty(questFormDTO.id)}" style="text-align: center">
+
+                                    <button th:formaction="@{/quest/new}" type="submit" class="btn btn-danger">작성완료</button>
+
+                                </div>
+
+                                <div th:unless="${#strings.isEmpty(questFormDTO.id)}">
+                                    <button th:formaction="@{'/quest/modify/' + ${questFormDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>
+                                    <a th:href="@{'/quest/remove/' + ${questFormDTO.id} }" class="btn btn-danger btn-sm delBtn">
+                                        삭제
+                                    </a>
+                                </div>
+
+
+                            </form>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

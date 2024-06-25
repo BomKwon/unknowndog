@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout1}">
+    <head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 산책하개</title>
+
+        <th:block layout:fragment="script">
+            <script th:inline="javascript">
+
+                $(document).ready(function () {
+                    $(".search").on("click", function (e) {
+                        e.preventDefault();
+                        page(0)
+                    })
+                })
+
+                function page(page) {
+
+                    var searchDateType  = $("#searchDateType").val()
+
+                    var questStatus = $("#questStatus").val()
+
+                    var  searchBy = $("#searchBy").val()
+
+                    var searchQuery = $("#floatingInput").val()
+
+                    location.href= "/quest/list/" + page +
+                        "?searchDateType=" + searchDateType +
+                        "&itemSellStatus=" + itemSellStatus +
+                        "&searchBy=" + searchBy +
+                        "&searchQuery=" + searchQuery
+
+                }
+
+                $(".pagination").on("active", function () {
+
+                    background
+
+                })
+
+            </script>
+
+        </th:block>
+
+
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4 contentBox">
+
+        <div class="col">
+            <div class="card border">
+
+
+
+
+                <div class="card-body">
+
+
+                    <h4>🦮 산책하개</h4>
+
+                    <a href="/quest/new" class="btn btn-light newBtn"  sec:authorize="isAuthenticated()">글작성하개</a>
+
+                    집사를 고용할 수 있는 곳이라개
+                    <hr>
+
+                    <div class="row row-cols-2  row-cols-md-5">
+
+                        <th:block th:each="quest, status: ${quests.getContent()}">
+                        <div class="col mb-2">
+
+
+                            <div class="card border">
+
+
+
+                                <div class="card-body">
+
+
+                                    <div class="row row-cols-1  g-4 ">
+
+                                            <a class="card-link " th:href="'/quest/read/' + ${quest.id}" style="color: black">
+
+                                                <div class="card-photo mb-2 ratio ratio-1x1">
+                                                    <img alt="" th:src="${quest.imgUrl}" width="100%" class="card-img-top ratio ratio-1x1">
+                                                </div>
+
+                                                <div class="mb-1">
+                                                    <span th:if="${quest.questStatus.name() == 'UNSUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-success  mb-1 end">도와주개</span>
+                                                    <span th:if="${quest.questStatus.name() == 'SUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-danger mb-1 end">완료다개</span>
+                                                </div>
+
+                                                <div class="font-size small mb-1">
+                                                    [[${quest.area}]]
+                                                </div>
+                                                <div class="card-desc mb-1">
+                                                    <h2 class="card-title"></h2>
+                                                    [[${quest.title}]]
+                                                    <div class="card-price" text-align="right">
+                                                        [[${quest.salaryOption}]] <span th:if="${quest.salary} != 0">[[${quest.salary}]] 원</span>
+                                                    </div>
+                                                    <div class="card-counts">
+                                                    </div>
+                                                </div>
+                                            </a>
+
+
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+                        </th:block>
+
+
+
+                    </div>
+                </div>
+
+
+
+<!--                <div style="margin-top: 10px; margin-bottom: 10px; margin-left: auto; margin-right: auto">-->
+
+
+                            <!-- <li>이전 </li> <li>1~10 반복</li>, <li>다음</li>-->
+                            <div class="pagination justify-content-center en mb-0"  th:with="start=${(quests.number/maxPage) * maxPage + 1 } , end=${(quests.totalPages==0 ) ? 1 :  (start + (maxPage -1) < quests.totalPages ? start + (maxPage - 1): quests.totalPages) }">
+                                <div class="col-2">
+                                    <ul class="pagination">
+
+                                        <!--맨앞-->
+                                        <li class="page-item" th:classappend="${quests.first} ? 'disabled' : ''">
+                                            <a class="page-link"   th:onclick="'javascript:page(' + ${quests.first} + ')'  "> << </a>
+                                        </li>
+
+                                        <!--이전-->
+                                        <li class="page-item" th:classappend="${quests.first} ? 'disabled' : ''">
+                                            <a class="page-link"   th:onclick="'javascript:page(' + ${quests.number - 1} + ')'  "> < </a>
+                                        </li>
+
+                                        <!--반복-->
+                                        <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${quests.number eq page - 1} ? 'active' : ''">
+                                            <a class="page-link"  th:onclick="'javascript:page(' + ${page - 1} + ')'  ">[[${page}]]</a>
+                                        </li>
+
+                                        <!--다음-->
+                                        <li class="page-item" th:classappend="${quests.last} ? 'disabled' : ''">
+                                            <a class="page-link" th:onclick="'javascript:page(' + ${quests.number + 1} + ')'  "> > </a>
+                                        </li>
+
+                                        <!--맨마지막-->
+                                        <li class="page-item" th:classappend="${quests.last} ? 'disabled' : ''">
+                                            <a class="page-link" th:onclick="'javascript:page(' + ${quests.last} + ')'  "> >> </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

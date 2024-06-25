@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+
+    <link rel="stylesheet" href="/css/layout1.css" />
+
+
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 로그인하시개</title>
+
+    <th:block layout:fragment="css">
+        <style>
+            .error {
+                color: #A7D2FFFF;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+
+
+<div layout:fragment="content">
+
+
+
+    <div class="col loginBox content" style="margin: 0 auto; width: 50%">
+        <div class="card border-light shadow">
+
+            <div class="card-body">
+
+
+    <form action="/user/login" method="post">
+
+
+
+        <div class="mb-3">
+            <label for="email" class="form-label">ID</label>
+            <input type="email" class="form-control" id="email" name="email"  placeholder="이메일을 입력하라개">
+        </div>
+
+
+        <!-- 비밀번호-->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="text" class="form-control"  id="password" name="password"  placeholder="비밀번호를 입력하라개">
+        </div>
+
+        <p th:if="${loginErrorMsg}"  class="error" th:text="${loginErrorMsg}">
+        </p>
+
+
+
+        <font size="2px" color="#d3d3d3"> 아이디나 비밀번호를 잊으셨다면? </font> &ensp;
+
+        <a href="#"><font size="2.5px" color="#add8e6">ID / PW 찾기</font></a> &ensp;
+
+<!--        <font size="3px" color="#add8e6"> | </font> &ensp;-->
+
+<!--        <a href="/user/register"><font size="2.5px" color="#add8e6">회원가입</font></a>-->
+
+
+
+
+        <div style="text-align: center">
+            <br>
+
+            <button type="submit" class="btn btn-light"  style="background-color: honeydew">로그인</button>
+            <button type="button" class="btn btn-light" style="background-color: honeydew" onclick="location.href='/user/register'">회원가입</button>
+
+            <br>
+        </div>
+
+
+
+
+    </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 내 정보</title>
+
+    <th:block layout:fragment="script">
+
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                var errorMessage = [[${errorMessage}]];
+
+                if (errorMessage != null) {
+                    //모달로 띄우면 좀더 아름답지 않을까?
+                    alert(errorMessage);
+                }
+                bindDomEvent();
+
+            })
+
+
+        </script>
+
+
+    </th:block>
+
+</head>
+<body>
+
+    <div layout:fragment="content">
+
+        <div class="row row-cols-1  g-4">
+            <div class="col">
+                <div class="card border-light shadow">
+
+                    <div class="content">
+
+
+                            <form  method="post" th:object="${userDTO}">
+
+                                <input type="hidden" th:field="*{id}">
+
+
+                                <!-- 이메일-->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">이메일주소</label>
+                                    <input type="email" class="form-control" th:field="*{email}" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">이름</label>
+                                    <input type="text" class="form-control" th:field="*{name}" readonly>
+                                </div>
+
+                                <!-- 비밀번호-->
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">비밀번호</label>
+                                    <input type="password" class="form-control"  th:field="*{password}" >
+
+                                </div>
+
+                                <!-- 닉네임-->
+                                <div class="mb-3">
+                                    <label for="nickname" class="form-label">닉네임</label>
+                                    <input type="text" class="form-control"  th:field="*{nickname}" >
+                                </div>
+
+                                <!-- 주소-->
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">주소</label>
+                                    <input type="text" class="form-control" th:field="*{address}" >
+                                </div>
+
+
+                                <!--                                    삭제 수정버튼 만들깅-->
+                                <div>
+
+                                    <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-light btn-sm delBtn">
+                                        수정
+                                    </a>
+
+                                </div>
+
+
+                            </form>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

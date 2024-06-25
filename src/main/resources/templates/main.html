@@ -34,25 +34,27 @@
 <!--            </div>-->
 
             <div class="col">
-                <div class="card border-light shadow">
+                <div class="card border ">
 
 
 
                     <div class="card-body">
 
-                        <h4>🦮 산책하개</h4>
-                        <a href="/quest/list"> +) 더보기 </a>
+                        <h4>🦮 산책하개 최신글 !</h4>
+                        <div style="text-align: right">
+                            <a href="/quest/list"> +) 더보기 </a>
+                        </div>
 
                         <hr>
 
 
-                        <div class="row row-cols-2  row-cols-md-5 mt-2">
+                        <div class="row row-cols-2  row-cols-md-5 mt-2" >
 
                             <th:block th:each="quest, status: ${quests.getContent()}">
 
                                 <div class="col">
 
-                                    <div class="card border-light shadow">
+                                    <div class="card border">
 
                                         <div class="card-body">
 
@@ -123,82 +125,60 @@
 
 
 
-        <div class="row row-cols-2  g-4">
+        <div class="row row-cols-1 g-4 row-cols-md-2">
+
+            <div >
 
 
-            <!--            <div class="col">-->
-            <!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
-            <!--            </div>-->
+                <!--            <div class="col">-->
+                <!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
+                <!--            </div>-->
 
-            <div class="col">
-                <div class="card border-light shadow">
-
-
-
-                    <div class="card-body">
-
-                        <h4>🐶 공지하개</h4>
-                        <a href="/notice/list"> +) 더보기 </a>
-
-                        <hr>
-
-
-                        <div class="row row-cols-2  row-cols-md-5 mt-2">
-
-                            <th:block th:each="quest, status: ${quests.getContent()}">
-
-                                <div class="col">
-
-                                    <div class="card border-light shadow">
-
-                                        <div class="card-body">
-
-
-                                            <div class="row row-cols-1  g-4">
-
-                                                <a class="card-link " th:href="'/quest/read/' + ${quest.id}"  style="color: black">
-
-                                                    <div class="ratio ratio-1x1">
-                                                        <img alt="" th:src="${quest.imgUrl}" heigh="100%" class="card-img-top ratio ratio-1x1">
-                                                    </div>
-
-                                                    <span th:if="${quest.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-1 end">도와주개</span>
-                                                    <span th:if="${quest.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-1 end">완료다개</span>
-
-                                                    <div class="font-size small mb-1">
-                                                        [[${quest.area}]]
-                                                    </div>
-                                                    <div class="card-desc mb-1">
-                                                        <h2 class="card-title"></h2>
-                                                        <div class="card-desc mb-1">
-                                                            [[${quest.title}]]
-                                                        </div>
-                                                        <div class="card-price" text-align="right">
-                                                            [[${quest.salaryOption}]] <span th:if="${quest.salary} != 0">[[${quest.salary}]] 원</span>
-                                                        </div>
-                                                        <div class="card-counts">
-                                                        </div>
-                                                    </div>
-                                                </a>
-
-
-                                            </div>
+                <div class="col">
+                    <div class="card border ">
 
 
 
+                        <div class="card-body">
 
-                                        </div>
+                            <h4>🐶 공지하개 최신글 !</h4>
 
-                                    </div>
+                            <div style="text-align: right">
+                                <a href="/notice/list"> +) 더보기 </a>
+                            </div>
 
-                                </div>
+                            <hr>
 
 
-                            </th:block>
+                            <div style="margin-left: 10px; margin-bottom: 15px; margin-right: 10px; margin-top: 15px; font-size: small">
+                                <table class="table" style="width:100%; text-align: center">
+                                    <thead>
+                                    <tr class="table-danger">
+                                        <th scope="col" style="width:10%">글번호</th>
+                                        <th scope="col" style="width:55%">제  목</th>
+                                        <th scope="col" style="width:10%">작성자</th>
+                                        <th scope="col" style="width:15%">작성일</th>
+                                        <th scope="col" style="width:10%">조회수</th>
+                                    </tr>
+                                    </thead>
+                                    <th:block th:each="notice, status: ${notice.getContent()} ">
+                                        <tbody>
+                                        <tr role="row">
+                                            <th scope="row">[[${notice.id}]]</th>
+                                            <td style="text-align: left;">
+                                                <a  style="color: black" th:href="'/notice/read/'+ ${notice.id}">[[${notice.title}]]</a>
+                                            </td>
+                                            <td>[[${notice.writer}]]</td>
+                                            <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
+                                            <td>[[${notice.view}]]</td>
+                                        </tr>
+                                        </tbody>
+                                    </th:block>
+                                </table>
+                            </div>
 
 
                         </div>
-
 
                     </div>
 
@@ -206,12 +186,76 @@
 
             </div>
 
+            <div>
+
+
+                <!--            <div class="col">-->
+                <!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
+                <!--            </div>-->
+
+                <div class="col">
+                    <div class="card border ">
+
+
+
+                        <div class="card-body">
+
+                            <h4>👄 대화하개 최신글 !</h4>
+
+                            <div style="text-align: right">
+                                <a href="/board/list"> +) 더보기 </a>
+                            </div>
+
+                            <hr>
+
+
+                            <div style="margin-left: 10px; margin-bottom: 15px; margin-right: 10px; margin-top: 15px; font-size: small">
+                                <table class="table" style="width:100%; text-align: center">
+                                    <thead>
+                                    <tr class="table-danger">
+                                        <th scope="col" style="width:10%">글번호</th>
+                                        <th scope="col" style="width:55%">제  목</th>
+                                        <th scope="col" style="width:10%">작성자</th>
+                                        <th scope="col" style="width:15%">작성일</th>
+                                        <th scope="col" style="width:10%">조회수</th>
+                                    </tr>
+                                    </thead>
+                                    <th:block th:each="notice, status: ${notice.getContent()} ">
+                                        <tbody>
+                                        <tr role="row">
+                                            <th scope="row">[[${notice.id}]]</th>
+                                            <td style="text-align: left;">
+                                                <a  style="color: black" th:href="'/notice/read/'+ ${notice.id}">[[${notice.title}]]</a>
+                                            </td>
+                                            <td>[[${notice.writer}]]</td>
+                                            <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
+                                            <td>[[${notice.view}]]</td>
+                                        </tr>
+                                        </tbody>
+                                    </th:block>
+                                </table>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
         </div>
 
-
-
-
     </div>
+
+
+
+
+
+
 
 
 

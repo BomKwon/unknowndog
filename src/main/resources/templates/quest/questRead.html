@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout1}">
+        <head>
+        <link rel="stylesheet" href="/css/layout1.css" />
+        <meta charset="UTF-8">
+        <title>모르는 개 산책 :: 의뢰 정보</title>
+
+            <th:block layout:fragment="css">
+                <!--css-->
+                <style>
+                    .fieldError {
+                        color: red;
+                    }
+                </style>
+            </th:block>
+
+            <!-- 사용자 스크립트 추가-->
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+
+                    $(document).ready(function errMsg() {
+
+                        var errorMessage = [[${errorMessage}]];
+                        if (errorMessage != null) {
+                            alert(errorMessage);
+                        }
+
+                    })
+
+                        var salary = $(".salary").val()
+
+                        if (salary == 0) {
+                            salary.hide()
+                        }
+
+
+                        var regTime = $(".regTime").val()
+
+                    function timeForToday(regTime) {
+                        const today = new Date();
+                        const timeValue = new Date(regTime);
+
+
+                        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+                        if (betweenTime < 1) return '방금전';
+                        if (betweenTime < 60) {
+                            return `${betweenTime}분전`;
+                        }
+
+                        const betweenTimeHour = Math.floor(betweenTime / 60);
+                        if (betweenTimeHour < 24) {
+                            return `${betweenTimeHour}시간전`;
+                        }
+
+                        const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+                        if (betweenTimeDay < 365) {
+                            return `${betweenTimeDay}일전`;
+                        }
+
+                        return timeValue;
+                    }
+
+
+
+                </script>
+            </th:block>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row mb-3" >
+        <div class="col">
+            <div class="card border-light shadow">
+                <div class="card border-light ">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <div class="ratio ratio-1x1">
+                                <img th:src="${questFormDTO.questImgDTOList[0].imgUrl}" class="card-img-top ratio ratio-1x1" alt="${questFormDTO.title}" width="100%">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+<!--                                <span th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-3 ">도와주개</span>-->
+<!--                                <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료</span>-->
+                                <br>
+
+
+                                <div class="h4 mb-3">
+
+                                    <span th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-3 ">도와주개</span>
+                                    <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료</span>
+
+                                    <span style="display: inline-block; font-size: 13px; text-align: right; margin-right: 20px">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"></path>
+                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"></path>
+                                        </svg>
+
+                                        [[${questFormDTO.view}]]
+                                    </span>
+
+
+                                    <h3 th:text="${questFormDTO.title}"></h3>
+
+                                </div>
+
+
+
+                                <div class="mb-3">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"></path>
+                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path>
+                                    </svg>
+
+                                    <span  th:text="${questFormDTO.area}"></span>
+
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">-->
+                                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"></path>-->
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"></path>-->
+                                    </svg>
+                                    <label class="regDate">
+                                        <td>[[${#temporals.format(questFormDTO.regTime, 'yyyy년 MM월 dd일')}]]</td>
+                                    </label>
+
+                                    <input type="hidden" class="regTime" th:value="${questFormDTO.regTime}">
+
+                                </div>
+
+
+                                <a href="/user/view">
+                                    <div class="mb-3" style="color: black">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
+                                        <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4m13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"></path>
+                                    </svg>
+
+                                    <span  th:text="${questFormDTO.writer}"></span>
+
+                                    </div>
+                                </a>
+
+
+                                <br>
+
+                                <div class="h4 mb-3">
+                                    <span class="badge rounded-pill text-bg-light" style="background-color: honeydew" th:text="${questFormDTO.salaryOption}">Light</span>
+                                    <span class="salary" th:text="${questFormDTO.salary}"></span> 원
+                                </div>
+
+
+                                <br>
+
+
+                                <hr>
+                                <div class="text-end mt-3 mb-3 me-3" >
+
+                                    <div th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}">
+                                        <div th:if="${questFormDTO.stockNumber > 0}" class="">
+                                            <button type="button" class="btn btn-light btn-lg" onclick="addCart()">❤ 찜</button>
+                                            <button type="button" class="btn btn-light btn-lg" onclick="order()">✔ 수락하기</button>
+                                        </div>
+
+                                                                                <!--1 onclick를 이용해서 함수만든후에 실행-->
+                                        <!--2 add이벤트리스너를 이용해서 버튼을 클릭했을때 작동하는 함수만들기 -->
+
+
+                                        <!--<form action="/order" method="post">
+                                            수량<input name="count" type="number">
+                                            상품아이디 <input name="itemId" th:value="${itemId}">
+                                            <button type="submit" class="btn btn-light">주문하기</button>
+                                        </form>-->
+                                    </div>
+
+
+                                    <div th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}">
+                                        <h1>완료했다개</h1>
+                                    </div>
+
+<!--                                    <div th:unless="${questFormDTO.questStatus.name() == 'SUCCESS'}">-->
+<!--                                        &lt;!&ndash;변경 예정 안팔고 있으니까 품절 표시??&ndash;&gt;-->
+<!--                                        <h1>완료</h1>-->
+<!--                                    </div>-->
+
+                                    <br>
+                                    <br>
+
+<!--                                    삭제 수정버튼 만들깅-->
+                                    <div th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">
+
+                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
+                                            삭제
+                                        </a>
+
+                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
+                                            수정
+                                        </a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!--    <div class="row mb-3">-->
+<!--        <div class="col ">-->
+
+<!--            <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">-->
+<!--                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">상세정보</button>-->
+<!--                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" tabindex="-1">상품평</button>-->
+<!--            </div>-->
+
+<!--            <div class="tab-content" id="nav-tabContent">-->
+<!--                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">-->
+<!--                    <p th:text="${item.itemDetail}">홍길동</p>-->
+<!--                </div>-->
+<!--                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">-->
+<!--                    &lt;!&ndash;댓글&ndash;&gt;-->
+<!--                    <div class="panel panel-default">-->
+<!--                        <div class="panel-heading">-->
+<!--                            &lt;!&ndash;로그인시 리뷰 등록버튼 보이도록 아니면 안보이게&ndash;&gt;-->
+
+<!--                            <button type="button" class="btn btn-primary reviewRegister" data-bs-toggle="modal" data-bs-target="#new-modal">-->
+<!--                                New Reply-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; /.panel-heading &ndash;&gt;-->
+<!--                        <div class="panel-body">-->
+<!--                            <ul class="chat reviewlist">-->
+<!--                                <li class="clearfix">-->
+
+<!--                                    <div class="chat-body clearfix">-->
+<!--                                        <div class="header">-->
+<!--                                            <strong class="primary-font">aaaaaa</strong>-->
+<!--                                            <small class="pull-right text-muted">-->
+<!--                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago-->
+<!--                                            </small>-->
+<!--                                        </div>-->
+<!--                                        <p>-->
+<!--                                            aaaaaa-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+<!--                                </li>-->
+
+<!--                            </ul>-->
+
+<!--                            <div class="col-sm-6">-->
+<!--                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">-->
+<!--                                    <ul class="pagination">-->
+
+<!--                                    </ul>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+
+
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <div class="row">
+        <div class="col ">
+            <div class="card border-light shadow">
+
+                <br>
+
+                <div class="h5 mb-1">
+                    &nbsp;<span> 💌 산책 정보</span>
+                    &nbsp; <hr> &nbsp;
+                </div>
+
+                <div class="mb-3 mt-2">
+                    &nbsp;&nbsp;<span th:text="${questFormDTO.questDetail}"></span>
+                </div>
+
+
+                <div class="card-body" th:each="questImg: ${questFormDTO.questImgDTOList}"> <!--style="text-align: center">-->
+                    <img width="80%" th:if="${not #strings.isEmpty(questImg.imgUrl)}" th:src="${questImg.imgUrl}" th:alt="${questImg.imgName}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <label class="reviewText1">내용</label>-->
+<!--                    <input class="form-control reviewText reviewText1">-->
+
+<!--                    <label class="writer1">작성자</label>-->
+<!--                    <input class="form-control writer writer1">-->
+
+<!--                    <label class="regtiem1">등록일자</label>-->
+<!--                    <input class="form-control regtiem regtiem1">-->
+
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default saveBtn">Save</button>-->
+<!--                    <button type="button" class="btn btn-default modBtn">modify</button>-->
+<!--                    <button type="button" class="btn btn-default removeBtn">삭제</button>-->
+<!--                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /.modal-content &ndash;&gt;-->
+<!--        </div>-->
+<!--        &lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+<!--    </div>-->
+
+</div>
+
+</body>
+</html>

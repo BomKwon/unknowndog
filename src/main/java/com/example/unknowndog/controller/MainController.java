@@ -1,11 +1,10 @@
 package com.example.unknowndog.controller;
 
 
-import com.example.unknowndog.dto.MainQuestDTO;
-import com.example.unknowndog.dto.QuestFormDTO;
-import com.example.unknowndog.dto.QuestSearchDTO;
-import com.example.unknowndog.dto.UserDTO;
+import com.example.unknowndog.dto.*;
+import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.Quest;
+import com.example.unknowndog.service.NoticeService;
 import com.example.unknowndog.service.QuestService;
 import com.example.unknowndog.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +30,18 @@ public class MainController {
 
     private final UserService userService;
     private final QuestService questService;
+    private final NoticeService noticeService;
 
     @GetMapping(value = {"/", "/{page}"})
     public String main(UserDTO userDTO, Principal principal, Model model,
                        QuestSearchDTO questSearchDTO,
                        @PathVariable Optional<Integer> page,
-                       QuestFormDTO questFormDTO) {
+                       QuestFormDTO questFormDTO,
+                       NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO) {
 
-        if (principal == null){
+        if (principal == null){  //비회원도 봐야하니까
+
+            /*의뢰*/
             Pageable pageable = PageRequest
                     .of(page.isPresent() ? page.get() : 0 , 5);
 
@@ -49,6 +52,18 @@ public class MainController {
 
             model.addAttribute("quests", quests);
             model.addAttribute("questSearchDTO", questSearchDTO);
+
+
+
+            /*공지*/
+
+            Pageable pageable1 = PageRequest
+                    .of(page.isPresent() ? page.get() : 0 , 10);
+
+            Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
+
+            model.addAttribute("notice", notice);
+            model.addAttribute("noticeDTO", noticeDTO);
 
             return "main";
         }
@@ -63,7 +78,7 @@ public class MainController {
 
         //산책하개 최신 5글만 보이게 하는
 
-
+        /*의뢰*/
         Pageable pageable = PageRequest
                 .of(page.isPresent() ? page.get() : 0 , 5);
 
@@ -74,6 +89,16 @@ public class MainController {
 
         model.addAttribute("quests", quests);
         model.addAttribute("questSearchDTO", questSearchDTO);
+
+
+        /*공지*/
+        Pageable pageable1 = PageRequest
+                .of(page.isPresent() ? page.get() : 0 , 10);
+
+        Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
+
+        model.addAttribute("notice", notice);
+        model.addAttribute("noticeDTO", noticeDTO);
 
 
         return "main";

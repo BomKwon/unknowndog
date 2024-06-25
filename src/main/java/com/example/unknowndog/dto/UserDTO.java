@@ -42,7 +42,7 @@ public class UserDTO {
     @Length(min = 2, max = 10, message = "별명은 2자 이상, 10자 이하로 입력해주세요.")
     private String nickname;    //별명
 
-    @NotEmpty(message = "생일은 필수 입력 값이개")
+    
     private LocalDate birth;    //별명
 
 

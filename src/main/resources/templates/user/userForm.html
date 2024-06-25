@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 가입하개</title>
+
+
+    <th:block layout:fragment="css">
+        <!--css-->
+        <style>
+            .fieldError {
+                color: red;
+            }
+        </style>
+    </th:block>
+
+    <!-- 사용자 스크립트 추가-->
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+            $(document).ready(function errMsg() {
+
+                var errorMessage = [[${errorMessage}]]
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+
+
+
+                $("#emailChk").hide()
+                $("#nNameChk").hide()
+
+
+                var name = $("#name").val()
+                var password = $("#password").val()
+                var pw2 = $("#password2").val()
+                var address = $("#address").val()
+
+
+
+
+                //입력했는지 안했는지 보는 검사
+
+                // $("#name").focusout()(function () {
+                //     if (name == '' || name.length == 0) {
+                //         alert("이름을 입력해주개")
+                //         return false
+                //     }
+                // })
+                //
+                //
+                // $("#password").focusout()(function () {
+                //
+                //     if (password == '' || password.length == 0 ) {
+                //         alert("비밀번호를 입력해주개")
+                //         return false
+                //     } else if (16 < password.length < 8) {
+                //         $("#label3").css("color", "lightcoral")
+                //             .text("비밀번호는 8자 이상, 16자 이하로 입력해주개");
+                //         return false
+                //     }
+                // })
+
+                //비밀번호 확인
+                // $("#password2").focusout(function() {
+                //
+                //     var param1 = {
+                //         password : password,
+                //         password2 : pw2
+                //     }
+                //
+                //     //Ajax로 전송
+                //     $.ajax({
+                //         url: '/user/passwordChk',
+                //         data: param1,
+                //         type: 'POST',
+                //         dataType: 'text',
+                //         success: function (result) {
+                //             console.log(result)
+                //             $("#label3").css("color", "lightblue").text(result);
+                //         },
+                //         error : function (error) {
+                //             alert("비밀번호 확인 에러발생! " + error)
+                //         }
+                //     })
+                //
+                // })
+
+
+
+
+
+                // $("#address").focusout()(function () {
+                //     if (address == '', address.length == 0) {
+                //         alert("주소를 입력해주개")
+                //         return false
+                //     }
+                // })
+
+
+
+
+
+
+
+
+
+                //     이메일 중복체크
+                $("#email").focusout(function() {
+
+
+                    console.log("이메일 유효성검사")
+
+                    var email = $("#email").val()
+
+                    var param = {
+                        email : email
+                    }
+
+                    //입력했는지 안했는지 보는 검사
+                    if (email == '' || email.length == 0) {
+                        $("#label1").css("color", "lightcoral").text("이메일을 입력하개!!!!");
+                        return false;
+                    }
+
+                    // 이메일 유효성검사
+                        email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+
+                        if (!email_regex.test(email)) {
+                            $("#label1").css("color", "lightcoral").text("유효하지 않은 이메일 주소다개");
+                            $("#emailChk").hide()
+                            return false;
+                        } else if (email_regex.test(email)) {
+
+                            $("#emailChk").show()
+                            $("#label1").css("color", "lightblue").text("유효한 이메일 주소다개");
+                            $("#emailChk").on("click" , function () {
+
+                                //Ajax로 전송
+                                $.ajax({
+                                    url: '/user/duplicateE',
+                                    data: param,
+                                    type: 'POST',
+                                    dataType: 'text',
+                                    success: function (result) {
+                                        console.log(result)
+                                        $("#label1").css("color", "lightblue").text(result);
+                                    },
+                                    error : function (error) {
+                                        alert("이메일 중복확인 에러발생! " + error)
+                                    }
+                                })//End Ajax
+
+                            })//end emailChkBtn function
+
+                        }// end else if
+
+
+                })//end focusout function
+
+
+                //     별명 중복체크
+                $("#nickname").focusout(function() {
+
+
+                    console.log("별명 유효성검사")
+
+                    var nickname = $("#nickname").val()
+
+                    var param = {
+                        nickname : nickname
+                    }
+
+                    //입력했는지 안했는지 보는 검사
+                    if (nickname == '' || nickname.length == 0) {
+                        $("#label2").css("color", "lightcoral").text("별명을 입력하개!!!!");
+                        return false;
+                    }
+
+
+                    $("#nNameChk").show()
+
+                    $("#nNameChk").on("click" , function () {
+
+                            //Ajax로 전송
+                            $.ajax({
+                                url: '/user/duplicateN',
+                                data: param,
+                                type: 'POST',
+                                dataType: 'text',
+                                success: function (result) {
+                                    console.log(result)
+                                    $("#label2").css("color", "lightblue").text(result);
+                                },
+                                error : function (error) {
+                                    alert("별명 중복확인 에러발생! " + error)
+                                }
+                            })//End Ajax
+
+                    })//end nNameChkBtn function
+
+                })//end focusout function
+
+
+
+
+
+
+                $(".regiBtn").on("click", function () {
+
+
+
+                })
+
+
+
+            });
+
+
+
+
+        </script>
+
+
+    </th:block>
+
+
+</head>
+<body>
+
+
+<div layout:fragment="content">
+
+    <div class="col">
+        <div class="card border-light shadow">
+
+            <div class="card-body">
+
+                <h4>🐣 가입하개</h4>
+
+                <hr>
+
+                <div class="row row-cols-1  row-cols-md-1">
+                    <div class="col">
+
+                            <div class="card-body">
+
+
+
+                                <form action="/user/register" method="post" th:object="${userFormDTO}" >
+                                    <!-- th:object는 th:field=*{필드값}-->
+
+                                    <!-- 이름-->
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="name" class="form-label">이  름</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" class="form-control" th:field="*{name}" > <!--placeholder="이름을 입력하라개"-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <span id="nameHelpInline" class="form-text">
+                                                <p th:if="${#fields.hasErrors('name')}"    th:errors="*{name}" class="fieldError" ></p>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+
+
+                                    <!-- 이메일-->
+                                    <div class="row g-4 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="email" class="form-label">이 메 일</label>
+                                        </div>
+
+                                        <div class="col-auto" style="display:inline;">
+                                            <input type="email" class="form-control" th:field="*{email}" ><!--placeholder="이메일을 입력하라개">-->
+                                        </div>
+
+
+                                        <div class="col-auto">
+                                            <button type="button" value="dupCheckE" id="emailChk" class="btn btn-light text-nowrap"  style="background-color: honeydew; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">중복확인</button>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label id="label1"></label>
+                                        </div>
+
+                                        <span id="emailHelpInline" class="form-text">
+                                            <p th:if="${#fields.hasErrors('email')}"    th:errors="*{email}" class="fieldError" ></p>
+                                        </span>
+
+                                    </div>
+
+                                    <br>
+
+
+                                    <!-- 비밀번호-->
+                                    <div class="row g-4 align-items-center">
+                                        <div class="col-auto">
+                                        <label for="password" class="form-label">비밀번호</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                        <input type="text" class="form-control"  th:field="*{password}" ><!--placeholder="비밀번호를 입력하라개">-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label for="password2" class="form-label">비밀번호 확인</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" class="form-control"  th:field="*{password2}" ><!--placeholder="비밀번호를 입력하라개">-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label id="label3"></label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <span id="passwordHelpInline" class="form-text">
+                                                <p th:if="${#fields.hasErrors('password')}"    th:errors="*{password}" class="fieldError" ></p>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+                                    <br>
+
+
+                                    <!-- 닉네임-->
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="nickname" class="form-label">별  명</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" class="form-control" th:field="*{nickname}" ><!--placeholder="별명을 입력하라개">-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <button type="button" value="dupCheckN" id="nNameChk" class="btn btn-light"  style="background-color: honeydew; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">중복확인</button>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label id="label2"></label>
+                                        </div>
+
+                                        <span id="nicknameHelpInline" class="form-text">
+                                            <p th:if="${#fields.hasErrors('nickname')}"    th:errors="*{nickname}" class="fieldError" ></p>
+                                        </span>
+
+                                    </div>
+
+
+
+
+
+                                    <br>
+
+
+                                    <div class="row g-4 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="birth" class="form-label">생년월일</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="date" class="form-control" th:field="*{birth}" ><!--placeholder="주소를 입력하라개">-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <span id="birthHelpInline" class="form-text">
+                                                <p th:if="${#fields.hasErrors('birth')}"    th:errors="*{birth}" class="fieldError" ></p>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <br>
+
+
+
+                                    <!-- 주소 추후 셀렉트 박스로 바꿀 것 -->
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="address" class="form-label">주  소</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="text" class="form-control" th:field="*{address}" ><!--placeholder="주소를 입력하라개">-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <span id="addHelpInline" class="form-text">
+                                                동까지 입력해주시개
+                                                <p th:if="${#fields.hasErrors('address')}"    th:errors="*{address}" class="fieldError" ></p>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div style="text-align: center">
+                                        <button type="submit" value="submit" class="btn btn-danger regiBtn">회원가입</button>
+                                    </div>
+
+
+                                    <div th:unless="${#strings.isEmpty(userFormDTO.id)}">
+                                        <button th:formaction="@{'/quest/modify/' + ${questFormDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>
+                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
+                                            삭제
+                                        </a>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+</body>
+</html>

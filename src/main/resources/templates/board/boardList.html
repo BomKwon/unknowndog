@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 대화하개</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4">
+
+        <div class="col">
+            <div class="card border">
+
+
+
+
+                <div class="card-body">
+
+                    <h4>👄 대화하개</h4>
+
+                    집사들이 자유롭게 떠들 수 있는 공간이개
+                    <hr>
+
+                    <div style="margin-left: 10px; margin-bottom: 15px; margin-right: 10px; margin-top: 15px">
+                        <table class="table" style="width:100%; text-align: center">
+                            <thead>
+                            <tr class="table-danger">
+                                <th scope="col" style="width:10%">글번호</th>
+                                <th scope="col" style="width:55%">제  목</th>
+                                <th scope="col" style="width:10%">작성자</th>
+                                <th scope="col" style="width:15%">작성일</th>
+                                <th scope="col" style="width:10%">조회수</th>
+                            </tr>
+                            </thead>
+                            <th:block>
+                                <tbody>
+                                <tr>
+                                    <td>가져올게 없다면?</td>
+                                </tr>
+                                </tbody>
+                            </th:block>
+                            <th:block>
+                                <tbody>
+                                <tr>
+                                    <td>가져올게 있다면?</td>
+                                </tr>
+                                </tbody>
+                            </th:block>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
