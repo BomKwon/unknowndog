@@ -2,8 +2,10 @@ package com.example.unknowndog.controller;
 
 
 import com.example.unknowndog.dto.*;
+import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.Quest;
+import com.example.unknowndog.service.BoardService;
 import com.example.unknowndog.service.NoticeService;
 import com.example.unknowndog.service.QuestService;
 import com.example.unknowndog.service.UserService;
@@ -31,11 +33,13 @@ public class MainController {
     private final UserService userService;
     private final QuestService questService;
     private final NoticeService noticeService;
+    private final BoardService boardService;
 
     @GetMapping(value = {"/", "/{page}"})
     public String main(UserDTO userDTO, Principal principal, Model model,
                        QuestSearchDTO questSearchDTO,
                        @PathVariable Optional<Integer> page,
+                       BoardSearchDTO boardSearchDTO, BoardDTO boardDTO,
                        QuestFormDTO questFormDTO,
                        NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO) {
 
@@ -53,17 +57,18 @@ public class MainController {
             model.addAttribute("quests", quests);
             model.addAttribute("questSearchDTO", questSearchDTO);
 
-
-
             /*공지*/
-
-            Pageable pageable1 = PageRequest
-                    .of(page.isPresent() ? page.get() : 0 , 10);
-
-            Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
+            Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable);
 
             model.addAttribute("notice", notice);
             model.addAttribute("noticeDTO", noticeDTO);
+
+            /*자유게시판*/
+            Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
+
+            model.addAttribute("boards", boards);
+            model.addAttribute("boardDTO", boardDTO);
+
 
             return "main";
         }
@@ -92,13 +97,17 @@ public class MainController {
 
 
         /*공지*/
-        Pageable pageable1 = PageRequest
-                .of(page.isPresent() ? page.get() : 0 , 10);
-
-        Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
+        Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable);
 
         model.addAttribute("notice", notice);
         model.addAttribute("noticeDTO", noticeDTO);
+
+
+        /*자유게시판*/
+        Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
+
+        model.addAttribute("boards", boards);
+        model.addAttribute("boardDTO", boardDTO);
 
 
         return "main";

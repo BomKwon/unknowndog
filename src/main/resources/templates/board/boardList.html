@@ -23,6 +23,8 @@
 
                     <h4>👄 대화하개</h4>
 
+                    <a href="/board/new" class="btn btn-light newBtn" sec:authorize="isAuthenticated()">글작성하개</a>
+
                     집사들이 자유롭게 떠들 수 있는 공간이개
                     <hr>
 
@@ -37,18 +39,26 @@
                                 <th scope="col" style="width:10%">조회수</th>
                             </tr>
                             </thead>
-                            <th:block>
+                            <th:block th:each="board, status: ${boards.getContent()} ">
                                 <tbody>
-                                <tr>
-                                    <td>가져올게 없다면?</td>
-                                </tr>
-                                </tbody>
-                            </th:block>
-                            <th:block>
-                                <tbody>
-                                <tr>
-                                    <td>가져올게 있다면?</td>
-                                </tr>
+                                    <tr role="row">
+                                        <th scope="row">[[${board.id}]]</th>
+                                        <td style="text-align: left;">
+                                            <a style="color: black;" th:href="'/board/read/'+ ${board.id}">
+                                                &nbsp;
+
+                                                [ <span th:if="${board.boardCategory.name() == 'FREE_TALK'}" th:id="${board.boardCategory}" class="mb-1 end">자유</span>
+                                                <span th:if="${board.boardCategory.name() == 'QUESTION'}" th:id="${board.boardCategory}" class="mb-1 end">질문</span>
+                                                <span th:if="${board.boardCategory.name() == 'SHARE'}" th:id="${board.boardCategory}" class="mb-1 end">나눔</span>
+                                                <span th:if="${board.boardCategory.name() == 'REVIEW'}" th:id="${board.boardCategory}" class="mb-1 end">후기</span> ]
+
+                                                [[${board.title}]]
+                                            </a>
+                                        </td>
+                                        <td>[[${board.writer}]]</td>
+                                        <td>[[${#temporals.format(board.regTime, 'yyyy-MM-dd')}]]</td>
+                                        <td>[[${board.view}]]</td>
+                                    </tr>
                                 </tbody>
                             </th:block>
                         </table>

@@ -300,6 +300,7 @@
                 <div class="card-body" th:each="questImg: ${questFormDTO.questImgDTOList}"> <!--style="text-align: center">-->
                     <img width="80%" th:if="${not #strings.isEmpty(questImg.imgUrl)}" th:src="${questImg.imgUrl}" th:alt="${questImg.imgName}">
                 </div>
+
             </div>
         </div>
     </div>

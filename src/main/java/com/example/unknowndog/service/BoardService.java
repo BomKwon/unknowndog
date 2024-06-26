@@ -31,7 +31,7 @@ public class BoardService {
     private final BoardImgService boardImgService;
 
     //글 등록
-    public Long newboard(BoardDTO boardDTO, Principal principal,
+    public Long newboard(BoardDTO boardDTO,
                          List<MultipartFile> multipartFiles) throws Exception{
 
 

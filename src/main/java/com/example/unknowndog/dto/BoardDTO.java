@@ -8,6 +8,8 @@ import lombok.*;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -52,5 +54,17 @@ public class BoardDTO {
     public static BoardDTO of(Board board){
 
         return modelMapper.map(board, BoardDTO.class);
+
     }
+
+    private List<BoardImgDTO> boardImgDTOList = new ArrayList<>();
+    // 여기 이미지 넣은것처럼
+    // 댓글, 리뷰등을 넣을까?
+    // 상세정보보는 칸에 상단을 부트스트랩에서 텝으로 여러개 띄울수있게
+
+    //QuestImgIds
+    //이미 저장되어서 수정할때 불러온 사진들의 아이디 삭제할 이미지들
+    private List<Long> boardImgIds = new ArrayList<>();
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.unknowndog.dto;
 
+import com.example.unknowndog.entity.BoardImg;
 import com.example.unknowndog.entity.QuestImg;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,9 @@ public class BoardImgDTO {
 
 
 
-    public static BoardImgDTO of(QuestImg questImg){
+    public static BoardImgDTO of(BoardImg boardImg){
 
-        return modelMapper.map(questImg, BoardImgDTO.class);
+        return modelMapper.map(boardImg, BoardImgDTO.class);
     }
 
 

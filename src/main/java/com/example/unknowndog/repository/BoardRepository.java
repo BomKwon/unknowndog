@@ -23,16 +23,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> , QuerydslPr
     int updateViews(@Param("id") Long id);
 
 
-    List<Board> findByTitleOrBoardDetail(String title, String content);
+    List<Board> findByTitleOrContent(String title, String content);
 
     @Query("select b from Board b where b.title = :title or b.content = :content")
-    List<Board> findBybTitleOrbDetail (@Param("title") String title,@Param("BoardDetail") String content);
+    List<Board> findBybTitleOrbDetail (@Param("title") String title,@Param("content") String content);
 
     @Query( "select i from Board i where i.content like %:content% order by i.writer desc ")
-    List<Board> findbyBoarddeta (@Param("BoardDetail") String content );
+    List<Board> findbyBoarddeta (@Param("content") String content );
 
     @Query( value = "select * from Board b where b.content like %:content% order by b.writer desc ", nativeQuery = true )
-    List<Board> findbyBoarddetaNative (@Param("BoardDetail") String content );
+    List<Board> findbyBoarddetaNative (@Param("content") String content );
 
 
 

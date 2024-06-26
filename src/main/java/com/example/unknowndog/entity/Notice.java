@@ -38,5 +38,6 @@ public class Notice extends BaseEntity {
         this.title = noticeDTO.getTitle();
         this.content = noticeDTO.getContent();
         this.writer = noticeDTO.getWriter();
+        this.view = noticeDTO.getView();
     }
 }
