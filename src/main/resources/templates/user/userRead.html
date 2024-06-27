@@ -36,65 +36,167 @@
             <div class="col">
                 <div class="card border-light shadow">
 
-                    <div class="content">
+                    <div class="card-body">
+
+                        <div style="margin-top: 10px">
+                            <h4>🐶 내 정보 보개</h4>
+
+                            <span style="text-align: right">
+                        </span>
+
+                        </div>
 
 
-                            <form  method="post" th:object="${userDTO}">
-
-                                <input type="hidden" th:field="*{id}">
+                        <hr>
 
 
-                                <!-- 이메일-->
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">이메일주소</label>
-                                    <input type="email" class="form-control" th:field="*{email}" readonly>
+                        <form  method="post" th:object="${userDTO}">
+
+                            <input type="hidden" th:field="*{id}">
+
+
+                            <!-- 이름-->
+                            <div class="row g-5 align-items-center">
+                                <div class="col-auto">
+                                    <label for="name" class="form-label">이  름</label>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">이름</label>
-                                    <input type="text" class="form-control" th:field="*{name}" readonly>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" th:field="*{name}" > <!--placeholder="이름을 입력하라개"-->
                                 </div>
 
-                                <!-- 비밀번호-->
-                                <div class="mb-3">
+                                <div class="col-auto">
+                                            <span id="nameHelpInline" class="form-text">
+                                                <p th:if="${#fields.hasErrors('name')}"    th:errors="*{name}" class="fieldError" ></p>
+                                            </span>
+                                </div>
+
+                            </div>
+
+                            <br>
+
+
+                            <!-- 이메일-->
+                            <div class="row g-4 align-items-center">
+                                <div class="col-auto">
+                                    <label for="email" class="form-label">이 메 일</label>
+                                </div>
+
+                                <div class="col-auto" style="display:inline;">
+                                    <input type="email" class="form-control" th:field="*{email}" readonly><!--placeholder="이메일을 입력하라개">-->
+                                </div>
+
+                            </div>
+
+                            <br>
+
+
+                            <!-- 비밀번호-->
+                            <div class="row g-4 align-items-center">
+                                <div class="col-auto">
                                     <label for="password" class="form-label">비밀번호</label>
-                                    <input type="password" class="form-control"  th:field="*{password}" >
-
                                 </div>
 
-                                <!-- 닉네임-->
-                                <div class="mb-3">
-                                    <label for="nickname" class="form-label">닉네임</label>
-                                    <input type="text" class="form-control"  th:field="*{nickname}" >
+                                <div class="col-auto">
+                                    <input type="text" class="form-control"  th:field="*{password}" ><!--placeholder="비밀번호를 입력하라개">-->
                                 </div>
 
-                                <!-- 주소-->
-                                <div class="mb-3">
-                                    <label for="address" class="form-label">주소</label>
-                                    <input type="text" class="form-control" th:field="*{address}" >
+                                <div class="col-auto">
+                                    <label for="password2" class="form-label">비밀번호 확인</label>
                                 </div>
 
-
-                                <!--                                    삭제 수정버튼 만들깅-->
-                                <div>
-
-                                    <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-light btn-sm delBtn">
-                                        수정
-                                    </a>
-
+                                <div class="col-auto">
+                                    <input type="text" class="form-control"  th:field="*{password2}" ><!--placeholder="비밀번호를 입력하라개">-->
                                 </div>
 
+                                <div class="col-auto">
+                                    <label id="label3"></label>
+                                </div>
 
-                            </form>
+                                <div class="col-auto">
+                                            <span id="passwordHelpInline" class="form-text">
+                                                <p th:if="${#fields.hasErrors('password')}"    th:errors="*{password}" class="fieldError" ></p>
+                                            </span>
+                                </div>
+                            </div>
+
+
+                            <br>
+
+
+                            <!-- 닉네임-->
+                            <div class="row g-5 align-items-center">
+                                <div class="col-auto">
+                                    <label for="nickname" class="form-label">별  명</label>
+                                </div>
+
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" th:field="*{nickname}" ><!--placeholder="별명을 입력하라개">-->
+                                </div>
+
+                                <div class="col-auto">
+                                    <button type="button" value="dupCheckN" id="nNameChk" class="btn btn-light"  style="background-color: honeydew; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">중복확인</button>
+                                </div>
+
+                                <div class="col-auto">
+                                    <label id="label2"></label>
+                                </div>
+
+                                <span id="nicknameHelpInline" class="form-text">
+                                            <p th:if="${#fields.hasErrors('nickname')}"    th:errors="*{nickname}" class="fieldError" ></p>
+                                        </span>
+
+                            </div>
+
+
+
+
+
+                            <br>
+
+
+                            <!-- 주소 추후 셀렉트 박스로 바꿀 것 -->
+                            <div class="row g-5 align-items-center">
+                                <div class="col-auto">
+                                    <label for="address" class="form-label">주  소</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" th:field="*{address}" ><!--placeholder="주소를 입력하라개">-->
+                                </div>
+
+                                <div class="col-auto">
+                                            <span id="addHelpInline" class="form-text">
+                                                동까지 입력해주시개
+                                                <p th:if="${#fields.hasErrors('address')}"    th:errors="*{address}" class="fieldError" ></p>
+                                            </span>
+                                </div>
+
+                            </div>
+
+
+                            <!--                                    삭제 수정버튼 만들깅-->
+                            <div style="margin: 0 auto; text-align: right">
+
+                                <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-light regiBtn">
+                                    수정
+                                </a>
+
+                                <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-danger">
+                                    탈퇴
+                                </a>
+
+                            </div>
+
+
+                        </form>
+
+
 
 
                     </div>
-
-
                 </div>
             </div>
         </div>
-
     </div>
 
 </body>

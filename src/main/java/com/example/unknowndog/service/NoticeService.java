@@ -83,6 +83,22 @@ public class NoticeService {
     }
 
 
+    //공지사항 수정
+    public Long updateNotice (NoticeDTO noticeDTO) {
+
+        //상품정보가져오기
+        Notice notice = noticeRepository.findById(noticeDTO.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        //상품정보 업데이트  repository.save(item) 이것 수정이다 >
+        // 영속성 상태일때는 변경감지를 이용 update > 트랜잭션이 종료될때
+        notice.updateNotice(noticeDTO);
+
+        return notice.getId();
+    }
+
+
+
+
 
     public Page<Notice> getNoticePage(NoticeSearchDTO noticeSearchDTO, Pageable pageable) {
         return noticeRepository.getNoticePage(noticeSearchDTO, pageable);

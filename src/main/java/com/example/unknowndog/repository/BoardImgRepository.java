@@ -12,8 +12,8 @@ public interface BoardImgRepository extends JpaRepository<BoardImg, Long> {
 
     List<BoardImg> findByBoardIdOrderByIdAsc(Long boardId);
 
-    //상품의 대표이미지를 찾는 쿼리 메소드
-    Board findByBoardIdAndRepimgYn (Long boardId, String repimgYn);
+//    //상품의 대표이미지를 찾는 쿼리 메소드
+//    Board findByBoardIdAndRepimgYn (Long boardId, String repimgYn);
 
 
 }

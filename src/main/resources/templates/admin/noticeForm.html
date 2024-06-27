@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layouts/layout2}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>모르는 개 산책 :: 공지쓰개</title>
+
+    <th:block layout:fragment="script">
+
+        <script th:inline="javascript">
+
+            $(document).ready(function errMsg() {
+
+                var errorMessage = [[${errorMessage}]]
+                if (errorMessage != null) {
+                    alert(errorMessage);
+                }
+            })
+
+        </script>
+    </th:block>
+
 </head>
 <body>
 
@@ -53,7 +69,7 @@
                                 <!--                                 넘어오는 이미지 파일이 있다면 , 데이터값 db-->
                                 <div th:if =  "${#strings.isEmpty(noticeDTO.id)}" style="text-align: center">
 
-                                    <button th:formaction="@{/admin/notice/new}" type="submit" class="btn btn-danger">작성완료</button>
+                                    <button th:formaction="@{/admin/notice/new}" type="submit" class="btn btn-success">작성완료</button>
 
                                 </div>
 

@@ -93,7 +93,7 @@
                                 <div class="h4 mb-3">
 
                                     <span th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-3 ">도와주개</span>
-                                    <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료</span>
+                                    <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료다개</span>
 
                                     <span style="display: inline-block; font-size: 13px; text-align: right; margin-right: 20px">
 
@@ -138,7 +138,7 @@
                                 </div>
 
 
-                                <a href="/user/view">
+                                <a href="/user/read/">
                                     <div class="mb-3" style="color: black">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
@@ -195,8 +195,34 @@
                                     <br>
                                     <br>
 
-<!--                                    삭제 수정버튼 만들깅-->
-                                    <div th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">
+                                    <!--삭제 수정버튼 만들깅 기존-->
+<!--                                    <div th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">-->
+
+<!--                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">-->
+<!--                                            삭제-->
+<!--                                        </a>-->
+
+<!--                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">-->
+<!--                                            수정-->
+<!--                                        </a>-->
+
+<!--                                    </div>-->
+
+                                    <!-- 삭제 수정버튼 만들깅 관리자용-->
+                                    <div sec:authorize="hasRole('ADMIN')">
+
+                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
+                                            삭제
+                                        </a>
+
+                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
+                                            수정
+                                        </a>
+
+                                    </div>
+
+<!--                                   삭제 수정버튼 만들깅 일반-->
+                                    <div sec:authorize="hasRole('USER')" th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">
 
                                         <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
                                             삭제
@@ -336,6 +362,11 @@
 <!--        </div>-->
 <!--        &lt;!&ndash; /.modal-dialog &ndash;&gt;-->
 <!--    </div>-->
+
+    <div style="text-align: right; margin-top: 30px; margin-left: 10px">
+        <a href="/notice/list" class="btn btn-danger">목록</a>
+        <a href="/" class="btn btn-light">메인</a>
+    </div>
 
 </div>
 

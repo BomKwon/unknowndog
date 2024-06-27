@@ -1,10 +1,8 @@
 package com.example.unknowndog.service;
 
-import com.example.unknowndog.dto.BoardDTO;
-import com.example.unknowndog.dto.BoardSearchDTO;
-import com.example.unknowndog.entity.Board;
-import com.example.unknowndog.entity.BoardImg;
-import com.example.unknowndog.entity.User;
+import com.example.unknowndog.dto.*;
+import com.example.unknowndog.entity.*;
+import com.example.unknowndog.repository.BoardImgRepository;
 import com.example.unknowndog.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +28,8 @@ public class BoardService {
     private final UserService userService;
 
     private final BoardImgService boardImgService;
+
+    private final BoardImgRepository boardImgRepository;
 
     //글 등록
     public Long newboard(BoardDTO boardDTO,
@@ -78,7 +79,7 @@ public class BoardService {
     @Transactional
     public int updateViews(Long boardId) { //조회수
 
-        // TODO: 2024-06-24 자기자신이 보면 조회수가 늘어나지 않도록 추후 추가하기
+        // TODO: 2024-06-24 자기자신이 보면 조회수가 늘어나지 않도록 추후 추가하기- 컨트롤러에서 완
 
         return boardRepository.updateViews(boardId);
     }
@@ -86,11 +87,28 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardDTO getboardDetail(Long boardId){  //읽기
 
-        //아이디로 상품정보 가져오고
+        //1. 게시글 아이디로 이미지가져오기
+        List<BoardImg> boardImgList =
+                boardImgRepository.findByBoardIdOrderByIdAsc(boardId);
+        //select * from ItemImg where itemid = :itemid order by id asc;
+        //2. 이미지 entity list를 dto list로 변환
+        List<BoardImgDTO> boardImgDTOList = new ArrayList<>();
+//        private static ModelMapper modelMapper = new ModelMapper();
+        for(BoardImg boardImg : boardImgList){
+
+
+            BoardImgDTO boardImgDTO = BoardImgDTO.of(boardImg);
+            boardImgDTOList.add(boardImgDTO);
+        }
+
+        //아이디로 글 가져오고
         Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
         //select * from item  where item_id = :item_id
         //글 정보를 dto로 변환
         BoardDTO boardDTO = BoardDTO.of(board);
+
+        //게시판 dto 에 이미지들을 set!!
+        boardDTO.setBoardImgDTOList(boardImgDTOList);
 
         return boardDTO;
     }

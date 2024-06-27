@@ -35,6 +35,20 @@ public class MainController {
     private final NoticeService noticeService;
     private final BoardService boardService;
 
+
+//    @GetMapping("/admin")
+//    public String adminMain(Model model, Principal principal) {
+//
+//        if () {
+//            model.addAttribute("adminErr", "접속 권한이 없다개 메인화면으로 돌아간다개");
+//
+//            return "main";
+//        }
+//
+//        return "main";
+//    }
+
+
     @GetMapping(value = {"/", "/{page}"})
     public String main(UserDTO userDTO, Principal principal, Model model,
                        QuestSearchDTO questSearchDTO,
@@ -72,6 +86,10 @@ public class MainController {
 
             return "main";
         }
+
+
+        //로그인시
+
 
         userDTO = UserDTO.of(userService.findByEmail(principal.getName()));
 

@@ -28,7 +28,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/view/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
+
+                                //글쓰기 회원전용 제한
+                                .requestMatchers("/notice/new/**").authenticated()
+                                .requestMatchers("/board/new/**").authenticated()
+
+                                .requestMatchers("/user/view/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
 //                                .requestMatchers("/templates/cart/**").authenticated()
 //                                .requestMatchers("/order/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음
 //                                .requestMatchers("/orders/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음

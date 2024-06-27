@@ -5,15 +5,15 @@ import com.example.unknowndog.constant.QuestStatus;
 import com.example.unknowndog.dto.NoticeDTO;
 import com.example.unknowndog.entity.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "board")
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
 public class Board extends BaseEntity {
 
     @Id
@@ -41,9 +41,13 @@ public class Board extends BaseEntity {
     private BoardCategory boardCategory; // 상품 판매 상태
 
 
-    public void Board(NoticeDTO noticeDTO) {
-        this.title = noticeDTO.getTitle();
-        this.content = noticeDTO.getContent();
-        this.writer = noticeDTO.getWriter();
+    public Board(Long id, String title, String content, String writer, int view, User user, BoardCategory boardCategory) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+        this.view = view;
+        this.user = user;
+        this.boardCategory = boardCategory;
     }
 }

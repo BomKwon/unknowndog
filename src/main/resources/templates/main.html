@@ -15,10 +15,18 @@
                 e.preventDefault();
                 page(0)
             })
+
+            const adminErr = [[${adminErr}]]
+            if (adminErr){
+                alert(adminErr)
+            }
+
+            function page(page) {
+                location.href= "/" + page;
+            }
+
         })
-        function page(page) {
-            location.href= "/" + page;
-        }
+
     </script>
 
 </head>
@@ -41,8 +49,8 @@
                     <div class="card-body">
 
                         <h4>🦮 산책하개 최신글 !</h4>
-                        <div style="text-align: right">
-                            <a href="/quest/list"> +) 더보기 </a>
+                        <div style="display: inline-block; text-align: right">
+                            <a href="/quest/list" style="display: inline-block; color: black"> +) 더보기 </a>
                         </div>
 
                         <hr>
@@ -63,14 +71,14 @@
 
                                                 <a class="card-link " th:href="'/quest/read/' + ${quest.id}"  style="color: black">
 
-                                                    <div class="ratio ratio-1x1">
+                                                    <div class="ratio ratio-1x1 mb-1">
                                                         <img alt="" th:src="${quest.imgUrl}" heigh="100%" class="card-img-top ratio ratio-1x1">
                                                     </div>
 
                                                     <span th:if="${quest.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-1 end">도와주개</span>
                                                     <span th:if="${quest.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-1 end">완료다개</span>
 
-                                                    <div class="font-size small mb-1">
+                                                    <div class="font-size small">
                                                         [[${quest.area}]]
                                                     </div>
                                                     <div class="card-desc mb-1">
@@ -144,7 +152,7 @@
                             <h4>🐶 공지하개 최신글 !</h4>
 
                             <div style="text-align: right">
-                                <a href="/notice/list"> +) 더보기 </a>
+                                <a href="/notice/list" style="color: black"> +) 더보기 </a>
                             </div>
 
                             <hr>
@@ -154,7 +162,7 @@
                                 <table class="table" style="width:100%; text-align: center">
                                     <thead>
                                     <tr class="table-danger">
-                                        <th scope="col" style="width:10%">글번호</th>
+                                        <th scope="col" style="width:10%">번호</th>
                                         <th scope="col" style="width:55%">제  목</th>
                                         <th scope="col" style="width:10%">작성자</th>
                                         <th scope="col" style="width:15%">작성일</th>
@@ -203,7 +211,7 @@
                             <h4>👄 대화하개 최신글 !</h4>
 
                             <div style="text-align: right">
-                                <a href="/board/list"> +) 더보기 </a>
+                                <a href="/board/list" style="color: black"> +) 더보기 </a>
                             </div>
 
                             <hr>
@@ -213,9 +221,9 @@
                                 <table class="table" style="width:100%; text-align: center">
                                     <thead>
                                     <tr class="table-danger">
-                                        <th scope="col" style="width:10%">글번호</th>
+                                        <th scope="col" style="width:8%">번호</th>
                                         <th scope="col" style="width:55%">제  목</th>
-                                        <th scope="col" style="width:10%">작성자</th>
+                                        <th scope="col" style="width:12%">작성자</th>
                                         <th scope="col" style="width:15%">작성일</th>
                                         <th scope="col" style="width:10%">조회수</th>
                                     </tr>

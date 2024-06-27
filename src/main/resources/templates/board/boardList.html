@@ -39,10 +39,28 @@
                                 <th scope="col" style="width:10%">조회수</th>
                             </tr>
                             </thead>
+                            <th:block th:each="notice, status: ${notice.getContent()} ">
+                                <tbody>
+                                <tr role="row" class="table-light">
+                                    <th scope="row" style="font-size: small">[[${notice.id}]]</th>
+                                    <td style="text-align: left;">
+                                        <a style="color: black;" th:href="'/notice/read/'+ ${notice.id}">
+                                            &nbsp;
+                                            [ 공지 ] [[${notice.title}]]
+
+                                        </a>
+                                    </td>
+                                    <td>[[${notice.writer}]]</td>
+                                    <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
+                                    <td>[[${notice.view}]]</td>
+                                </tr>
+                                </tbody>
+                            </th:block>
+
                             <th:block th:each="board, status: ${boards.getContent()} ">
                                 <tbody>
                                     <tr role="row">
-                                        <th scope="row">[[${board.id}]]</th>
+                                        <th scope="row" style="font-size: small">[[${board.id}]]</th>
                                         <td style="text-align: left;">
                                             <a style="color: black;" th:href="'/board/read/'+ ${board.id}">
                                                 &nbsp;
@@ -65,6 +83,39 @@
                     </div>
 
                 </div>
+
+                <div class="pagination justify-content-center en mb-0"  th:with="start=${(boards.number/maxPage) * maxPage + 1 } , end=${(boards.totalPages==0 ) ? 1 :  (start + (maxPage -1) < boards.totalPages ? start + (maxPage - 1): boards.totalPages) }">
+                    <div class="col-2">
+                        <ul class="pagination">
+
+                            <!--맨앞-->
+                            <li class="page-item" th:classappend="${boards.first} ? 'disabled' : ''">
+                                <a class="page-link"   th:onclick="'javascript:page(' + ${boards.first} + ')'  "> << </a>
+                            </li>
+
+                            <!--이전-->
+                            <li class="page-item" th:classappend="${boards.first} ? 'disabled' : ''">
+                                <a class="page-link"   th:onclick="'javascript:page(' + ${boards.number - 1} + ')'  "> < </a>
+                            </li>
+
+                            <!--반복-->
+                            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${boards.number eq page -1 } ? 'active' : ''">
+                                <a class="page-link"  th:onclick="'javascript:page(' + ${page - 1} + ')'  ">[[${page}]]</a>
+                            </li>
+
+                            <!--다음-->
+                            <li class="page-item" th:classappend="${boards.last} ? 'disabled' : ''">
+                                <a class="page-link" th:onclick="'javascript:page(' + ${boards.number + 1} + ')'  "> > </a>
+                            </li>
+
+                            <!--맨마지막-->
+                            <li class="page-item" th:classappend="${boards.last} ? 'disabled' : ''">
+                                <a class="page-link" th:onclick="'javascript:page(' + ${boards.last} + ')'  "> >> </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

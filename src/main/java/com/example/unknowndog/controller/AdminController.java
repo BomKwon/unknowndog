@@ -1,22 +1,29 @@
 package com.example.unknowndog.controller;
 
+import com.example.unknowndog.dto.UserSearchDTO;
 import com.example.unknowndog.dto.NoticeDTO;
 import com.example.unknowndog.dto.UserDTO;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
 import com.example.unknowndog.service.NoticeService;
 import com.example.unknowndog.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @Log4j2
@@ -27,6 +34,18 @@ public class AdminController {
 
     private final NoticeService noticeService;
     private final UserService userService;
+
+    @GetMapping("/")
+    public String adminMain(Model model, Principal principal){
+
+        if(!principal.getName().equals("00bom00@naver.com")) {
+            model.addAttribute("adminErr", "접속 권한이 없다개 메인화면으로 돌아간다개");
+            return "redirect:/";
+        }
+
+        return "/admin/adminMain";
+    }
+
 
     //글 작성
     @GetMapping("/notice/new")
@@ -73,5 +92,71 @@ public class AdminController {
         return "redirect:/notice/list";
 
     }
+
+
+    //회원리스트
+    @GetMapping("/user/list")
+    public String userList(UserSearchDTO userSearchDTO, UserDTO userDTO,
+                           @PathVariable("page") Optional<Integer> page, Model model){
+
+        Pageable pageable = PageRequest
+                .of(page.isPresent() ? page.get() : 0 , 10);
+
+        Page<User> users = userService.getUserList(userSearchDTO, pageable);
+
+        model.addAttribute("users", users);
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("maxPage", 10);
+
+        return "/admin/userList";
+    }
+
+
+    @GetMapping("/notice/{noticeId}")
+    public String noticeMo(@PathVariable Long noticeId, Model model) {
+
+
+        noticeService.updateViews(noticeId);
+
+        try {
+            NoticeDTO noticeDTO = noticeService.getNoticeDetail(noticeId);
+            model.addAttribute("noticeDTO" , noticeDTO);
+            // html에서 thyleaf  th:object="${questFormDto}"
+
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage",
+                    "존재하지 않는 공지다개");
+
+            return "/notice/noticeList";
+
+        }
+
+        return "/notice/noticeForm";
+    }
+
+
+
+    @PostMapping("/notice/{noticeId}")
+    public String itemUpdate(@Valid NoticeDTO noticeDTO,
+                             BindingResult bindingResult,
+                             Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/notice/noticeForm";
+        }
+
+        try {
+            noticeService.updateNotice(noticeDTO);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "공지 수정 중 에러가 발생하였다개");
+            return "/notice/noticeForm";
+        }
+
+        model.addAttribute("result", "공지 수정이 완료되었다개");
+
+        return "redirect:/notice/read/{noticeId}";
+
+    }
+
 
 }

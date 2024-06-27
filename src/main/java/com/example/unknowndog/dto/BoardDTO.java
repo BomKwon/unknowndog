@@ -4,7 +4,9 @@ import com.example.unknowndog.constant.BoardCategory;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -21,8 +23,12 @@ public class BoardDTO {
 
     private Long id;
 
+    @NotBlank(message = "제목은 필수 입력값이다개")
+    @Length(min = 1, max = 20,
+            message = "제목은 20자 이내로 작성해주개")
     private String title;
 
+    @NotBlank(message = "내용은 필수 입력값이다개")
     private String content;
 
     private String writer;

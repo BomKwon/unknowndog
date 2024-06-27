@@ -117,6 +117,7 @@ public class QuestController {
 
 
         try {
+
             QuestFormDTO questFormDTO = questService.getQuestDetail(questId);
             model.addAttribute("questFormDTO" , questFormDTO);
             // html에서 thyleaf  th:object="${questFormDto}"
@@ -161,47 +162,19 @@ public class QuestController {
 
     // TODO: 2024-06-21 글 삭제 작동 안되니까 수정하셈 케스케이트 사용해라
 
-    @GetMapping("/remove/{questId}")        //   /quest/3  3번이미지 보여줘
-    public String questRemoveGet(@PathVariable("questId") Long questId
-            , Model model) {
 
-
-        try {
-            QuestFormDTO questFormDTO = questService.getQuestDetail(questId);
-            model.addAttribute("questFormDTO" , questFormDTO);
-            // html에서 thyleaf  th:object="${questFormDto}"
-
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("errorMessage",
-                    "존재하지 않는 의뢰다개");
-
-            return "/quest/questForm";
-
-        }
-
-        return "/quest/questForm";
-
-    }
-
-
-    @PostMapping("/remove/{questId}")
+    @DeleteMapping("/remove/{questId}")
     public String questRemove(Long questId, RedirectAttributes redirectAttributes){
 
-        questService.remove(questId);
+        String quest = questService.remove(questId);
         redirectAttributes.addFlashAttribute("result", questId + "번 글이 삭제됐다개");
 
-        return "redirect:/quest/questList";
+        return "redirect:/quest/List";
+
     }
 
 
 
-//    @GetMapping("/{questId}")        // quest/3       pk 검색용
-//    public String questDtl(Model model, @PathVariable("questId") Long qusetId) {
-//
-//        QuestFormDTO questFormDTO = questService.getQuestDetail(qusetId);
-//        model.addAttribute("quest", questFormDTO);    //아이템 정보
-//        return "/quest/view";
-//    }
 
 
 

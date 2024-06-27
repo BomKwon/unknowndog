@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
+<head>
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 관리자 전용 메인페이지</title>
+</head>
+<body>
+
+
+    <div layout:fragment="content">
+
+        <div class="row row-cols-1  g-4">
+
+            <div class="col">
+                <div class="card border">
+
+
+
+
+                    <div class="card-body">
+
+                        <div >
+                            <h4>😎 관리자 전용 페이지</h4>
+                        </div>
+
+                        <hr>
+
+                        <div style="margin:15px auto">
+
+                            <div style="text-align: center">
+                                <a href="/admin/notice/new" class="btn btn-success">공지작성</a>
+                                <a href="/admin/user/list" class="btn btn-success">회원관리</a>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>

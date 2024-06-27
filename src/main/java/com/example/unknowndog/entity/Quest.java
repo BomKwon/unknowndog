@@ -12,6 +12,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity //jpa에서 관리를 할수 있습니다. 엔티티매니저
 @Table(name = "quest")   //jpa를 이용할 때 자동으로 데이터베이스 설정과 데이터베이스 내 테이블을 같이 확인하기때문에 에러 나올수 있음
                         // 데이터베이스상 어떤 테이블로 생성할 것인 정보를 담기 위한 어노테이션
@@ -59,15 +62,19 @@ public class Quest extends BaseEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;   //조회수
 
+    //앞 나 to 뒤 데려오는애
+    @OneToMany(mappedBy = "quest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<QuestImg> questImgList = new ArrayList<>();
+
 
     public void updateQuest(QuestFormDTO questFormDto) {
         this.title = questFormDto.getTitle();
-        this.writer = questFormDto.getWriter();
         this.salary = questFormDto.getSalary();
         this.salaryOption = questFormDto.getSalaryOption();
         this.area = questFormDto.getArea();
         this.questDetail = questFormDto.getQuestDetail();
         this.questStatus = questFormDto.getQuestStatus();
+        this.user = questFormDto.getUserId();
     }
 
     //수량을 입력받아서 db의 저장된 개수확인과 , 수량변경

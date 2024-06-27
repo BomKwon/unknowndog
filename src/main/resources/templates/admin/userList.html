@@ -1,10 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>모르는 개 산책 :: 회원 관리</title>
+
+    <th:block layout:fragment="script">
+
+        <script th:inline="javascript">
+
+            $(document).ready(function errMsg() {
+
+                var errorMessage = [[${errorMessage}]]
+                if (errorMessage != null) {
+                    alert(errorMessage);
+                }
+
+                $(".delBtn").on("click", function () {
+
+
+                    $.ajax({
+                        url: '/admin/user/',
+                        data: param,
+                        type: 'POST',
+                        dataType: 'text',
+                        success: function (result) {
+                            console.log(result)
+                            $("#label1").css("color", "lightblue").text(result);
+                            alert("회원이 강퇴되었습니다.")
+                        },
+                        error : function (error) {
+                            alert("회원 강퇴 중 에러 발생! " + error)
+                        }
+                    })//End Ajax
+
+                })//End delBtn function
+
+
+
+            })//end fuction
+
+        </script>
+
+    </th:block>
+
+
 </head>
 <body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4">
+
+        <div class="col">
+            <div class="card border">
+
+
+
+
+                <div class="card-body">
+
+                    <div >
+                        <h4>😎 회원관리</h4>
+                    </div>
+
+                    <hr>
+
+                    <div style="margin:15px auto">
+                        <table class="table" style="text-align: center">
+                            <thead>
+                            <tr class="table-success">
+                                <th scope="col" style="width:7%">번호</th>
+                                <th scope="col" style="width:22%">별명 (이메일)</th>
+                                <th scope="col" style="width:10%">이름</th>
+                                <th scope="col" style="width:16%">주소</th>
+                                <th scope="col" style="width:15%">생년월일</th>
+                                <th scope="col" style="width:15%">가입일</th>
+                                <th scope="col" style="width:10%">관리</th>
+                            </tr>
+                            </thead>
+                            <th:block th:each="user, status: ${users.getContent()} ">
+                                <tbody>
+                                <tr role="row">
+                                    <th scope="row">[[${user.id}]]</th>
+                                    <td>[[${user.nickname}]] ([[${user.email}]])</td>
+                                    <td>[[${user.name}]]</td>
+                                    <td>[[${user.address}]]</td>
+                                    <td>[[${#temporals.format(user.birth, 'yyyy-MM-dd')}]]</td>
+                                    <td>[[${#temporals.format(user.regTime, 'yyyy-MM-dd')}]]</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger delBtn"
+                                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        탈퇴 </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </th:block>
+                        </table>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
 
 </body>
 </html>

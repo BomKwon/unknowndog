@@ -3,6 +3,8 @@ package com.example.unknowndog.dto;
 import com.example.unknowndog.constant.BoardCategory;
 import com.example.unknowndog.constant.QuestStatus;
 import com.querydsl.core.annotations.QueryProjection;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 

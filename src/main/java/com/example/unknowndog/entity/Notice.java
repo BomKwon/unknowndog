@@ -40,4 +40,9 @@ public class Notice extends BaseEntity {
         this.writer = noticeDTO.getWriter();
         this.view = noticeDTO.getView();
     }
+
+    public void updateNotice(NoticeDTO noticeDTO) {
+        this.title = noticeDTO.getTitle();
+        this.content = noticeDTO.getContent();
+    }
 }

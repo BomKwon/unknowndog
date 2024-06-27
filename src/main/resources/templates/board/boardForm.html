@@ -5,6 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <th:block layout:fragment="script">
+
+        <script th:inline="javascript">
+
+            $(document).ready(function errMsg() {
+
+                var errorMessage = [[${errorMessage}]]
+                if (errorMessage != null) {
+                    alert(errorMessage);
+                }
+            })
+
+        </script>
+    </th:block>
+
 </head>
 <body>
 
@@ -16,7 +32,7 @@
 
                 <div class="card-body">
 
-                    <h4>공지쓰개</h4>
+                    <h4>대화하개</h4>
 
                     <hr>
 

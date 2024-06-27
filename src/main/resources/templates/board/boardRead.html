@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layouts/layout1}">
 <head>
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
-    <title>모르는 개 산책 :: 떠들개 상세보기</title>
+    <title>모르는 개 산책 :: 대화하개 상세보기</title>
 
     <th:block layout:fragment="script">
 
@@ -39,7 +40,10 @@
                 <div class="card-body">
 
                     <div style="margin-top: 10px">
-                        <h4>🐶 공지하개</h4>
+                        <a href="/board/list" style="color: black">
+                            <h4>👄 대화하개</h4>
+                        </a>
+
 
                         <span style="text-align: right">
                         </span>
@@ -60,7 +64,8 @@
                             [[${boardDTO.writer}]]
                         </span>
 
-                        <span style="display: inline-block; font-size: 13px; text-align: right;">
+                        <div style="display: inline-block; margin-right: 5%">
+                            <span style="display: inline-block; font-size: 13px; text-align: right;">
                             [[${#temporals.format(boardDTO.regTime, 'yyyy-MM-dd')}]]
                         </span>
 
@@ -73,6 +78,7 @@
 
                             [[${boardDTO.view}]]
                         </span>
+                        </div>
 
                     </span>
 
@@ -85,6 +91,7 @@
                         [[${boardDTO.content}]]
 
                         <br>
+                        <br>
 
                         <div th:each="boardImg: ${boardDTO.boardImgDTOList}"> <!--style="text-align: center">-->
                             <img width="80%" th:if="${not #strings.isEmpty(boardImg.imgUrl)}" th:src="${boardImg.imgUrl}" th:alt="${boardImg.imgName}">
@@ -93,19 +100,173 @@
                         <br>
                         <br>
                         <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
 
                     </div>
+
+                    <!-- 삭제 수정버튼 만들깅 관리자용-->
+                    <div sec:authorize="hasRole('ADMIN')" style="text-align: right">
+
+                        <a th:href="@{'/board/remove/' + ${boardId} }" class="btn btn-light btn-sm delBtn">
+                            삭제
+                        </a>
+
+                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm delBtn">
+                            수정
+                        </a>
+
+                    </div>
+
+                    <!--                                   삭제 수정버튼 만들깅 일반-->
+                    <div sec:authorize="hasRole('USER')" th:if="${boardDTO.createBy} == ${#authentication.principal.username}" style="text-align: right">
+
+                        <a th:href="@{'/board/remove/' + ${boardId} }" class="btn btn-danger btn-sm delBtn">
+                            삭제
+                        </a>
+
+                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm delBtn">
+                            수정
+                        </a>
+
+                    </div>
+
+                    <hr>
+
+
+<!--                    &lt;!&ndash;댓글&ndash;&gt;-->
+<!--                    <div class="panel panel-default" style="margin-top: 20px;" sec:authorize="isAuthenticated()">-->
+<!--                        <div class="panel-heading">-->
+<!--                            <form class="row g-3" style="margin: auto">-->
+
+<!--                                <div>-->
+<!--                                <input type="text" class="form-control" id="inputReply1" style="display: inline-block; width: 150px; height: 40px; margin: auto">-->
+<!--                                </div>-->
+
+<!--                                <div style="margin-bottom: 20px">-->
+<!--                                    <input  id="exampleFormControlTextarea1" class="form-control" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;-->
+<!--                                    <button type="submit" class="btn btn-light replyRegister" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>-->
+<!--                                </div>-->
+
+<!--                            </form>-->
+
+
+<!--                        </div>-->
+
+<!--                        <br>-->
+<!--                        <br>-->
+
+<!--                        &lt;!&ndash; /.panel-heading &ndash;&gt;-->
+<!--                        <div class="panel-body">-->
+<!--                            <ul class="replylist">-->
+
+
+<!--                                    <div style="text-align: center">-->
+<!--&lt;!&ndash;                                        <div class="header">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <strong class="primary-font">aaaaaa</strong>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <small class="pull-right text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </small>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <p>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            aaaaaa&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </p>&ndash;&gt;-->
+
+<!--                                        <p>작성된 댓글이 없다개 🥵</P>-->
+
+<!--                                    </div>-->
+<!--                                <br>-->
+<!--                                <br>-->
+
+<!--                            </ul>-->
+
+<!--                            <div class="col-sm-6">-->
+<!--                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">-->
+<!--                                    <ul class="pagination">-->
+
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+
+
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <button type="button" class="btn btn-primary replyRegister" data-bs-toggle="modal" data-bs-target="#new-modal">
+                                New Reply
+                            </button>
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="chat replylist">
+                                <li class="clearfix">
+
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">aaaaaa</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            aaaaaa
+                                        </p>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                            <div class="col-sm-6">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+                                    <ul class="pagination">
+
+                                    </ul>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label class="replyText1">내용</label>
+                                    <input class="form-control replyText replyText1">
+
+                                    <label class="replyer1">작성자</label>
+                                    <input class="form-control replyer replyer1">
+
+                                    <label class="regtiem1">등록일자</label>
+                                    <input class="form-control regtiem regtiem1">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default saveBtn">Save</button>
+                                    <button type="button" class="btn btn-default modBtn">modify</button>
+                                    <button type="button" class="btn btn-default removeBtn">삭제</button>
+                                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+
+
+                    <script src="/js/reply.js"></script>
+
 
 
 
@@ -118,17 +279,245 @@
 
 
 
-
             </div>
 
+
+
+
+
+
+
             <div style="text-align: right; margin-top: 30px; margin-right: 10px">
-                <a href="/notice/list" class="btn btn-danger">목록</a>
+                <a href="/notice/list" class="btn btn-light">목록</a>
+                <a href="/" class="btn btn-light">메인</a>
             </div>
 
 
         </div>
     </div>
 </div>
+
+
+
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        const result = [[${result}]]
+
+
+
+        if (result){
+            alert(result)
+        }
+
+        ///////////////////////////
+
+        let id = [[${boardDTO.id}]]; //현재 몇 번 글의 댓글인지 알기 위해서
+        console.log(id);
+
+
+        let str = ""; //ul 태그 안에 들어갈 html
+        let replylist = $(".replylist") //댓글이 달리는 ul태그
+        let pagination = $(".pagination") //댓글의 페이징처리 ul태그
+        let str2 = ""; //댓글 페이징 처리를 위한 str2
+        let replyRegister = $(".replyRegister"); //댓글 등록 버튼 모달 open
+
+        let replyText1 = $(".replyText1"); //label + input
+        let replyer1 = $(".replyer1"); //label + input
+        let regtime1 = $(".regtime1"); //label + input
+
+        let replyText = $(".replyText"); //작성내용 input
+        let replyer = $(".replyer"); //작성자 input
+        let regtime = $(".regtime"); //input 등록일자
+
+        let modal = $("#new-modal"); //모달전체
+        let saveBtn = $(".saveBtn"); // 저장버튼
+        let modBtn = $(".modBtn"); //수정버튼
+        let removeBtn = $(".removeBtn"); //삭제버튼
+
+        let thispage = 1;
+
+
+        //저장버튼 클릭시
+        saveBtn.on("click", function (){
+            console.log(replyText.val())
+            console.log(replyer.val())
+
+            let reply = {"id" : id, "replyText" : replyText.val(), "replyer" : replyer.val() }
+
+            let url =  "/replies/new"
+
+            replyservice.register(reply,url, function (data) {
+                console.log(data)
+                alert(data.rno + "번 댓글이 등록되었습니다.")
+                showList(1);
+            })
+            modal.modal("hide")
+
+        })
+
+        //수정버튼 클릭시
+        modBtn.on("click", function (){
+
+            let reply = {"rno" : modal.data("rno"), "replyText" : replyText.val()}
+
+            let url = "/replies/modify/"
+            replyservice.modify(reply, url, function (data) {
+                alert(data.rno)
+                showList(thispage);
+            })
+            modal.modal("hide")
+        })
+
+        //삭제버튼 클릭시
+        removeBtn.on("click", function (){
+
+            let url = "/replies/remove/"
+
+            replyservice.delete(modal.data("rno"), url,  function (data){
+
+                alert(data.rno)
+                showList(1);
+
+            })
+            modal.modal("hide")
+
+        })
+
+
+
+
+        //등록
+        replyRegister.on("click", function () {
+            console.log("홍길동")
+            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
+            modal.find("input").hide(); //input 태그 전부 숨긴다.
+            modal.find("label").hide();
+
+            replyText.val("");
+            replyer.val("");
+            regtime.val("");
+
+            replyText1.show()
+
+            $(".btn-close").show()
+
+            saveBtn.show()
+        })
+
+        //댓글 리스트 클릭시 수정 모달창 오픈
+        //수정
+        replylist.on("click", "li", function (e) {
+            modal.modal("show");
+
+            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
+            modal.find("input").hide(); //input 태그 전부 숨긴다.
+            modal.find("label").hide();
+
+            //input 태그 벨류값 전부 "" 빈문자열로 초기화
+            replyText.val("");
+            replyer.val("");
+            regtime.val("");
+
+            //내용, 작성자, 일자
+            replyText1.show()
+            replyer1.show()
+            regtime1.show()
+
+
+
+            replyer.attr("readonly", true)
+            regtime.attr("readonly", true)
+
+            let rno = $(this).data("num");
+
+            let url = "/replies/get/"
+
+            replyservice.read(rno, url, function (data) {
+
+                console.log(data)
+                let email = [[${#authentication.getName()}]]
+
+                if(data.createBy == email){
+                    modBtn.show()
+                    removeBtn.show()
+                }
+
+                replyText.val(data.replyText)
+                replyer.val(data.replyer)
+                regtime.val(data.regTime)
+                modal.data("rno", data.rno);
+                console.log(modal.data("rno"))
+            });
+
+        })
+
+
+
+        let showList = function (page) {
+            str = "";
+            str2 = "";
+
+            let url = "/replies/list/"
+
+            replyservice.list(page, url, id, function (data) {
+                console.log(data);
+                console.log(data.start);
+                thispage = data.page
+                if ( data== null || data.dtoList == null || data.dtoList.length == null  ) {
+                    return null;
+                } else {
+
+                    for (let i = 0; i < data.dtoList.length; i++) {
+                        str += `<li  data-num="${data.dtoList[i].rno}" class="clearfix"><div class="chat-body clearfix"><div class="header">
+                    <strong class="primary-font">${data.dtoList[i].replyer}</strong><small class="pull-right text-muted">
+                    <i class="fa fa-clock-o fa-fw"></i> 12 mins ago</small>
+                    </div><p>${data.dtoList[i].replyText}</p></div></li>`;
+                    }
+                    if (data.prev) {
+                        str2 += `<li class="page-item previous " aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
+                <a class="page-link" data-num="${data.start - 1}">이전</a>
+            </li>`;
+                    }
+                    for (let i = data.start, j = data.end; i <= j; i++) {
+                        str2 += `<li class="page-item ${i == data.page ? 'active' : ''}" aria-controls="dataTables-example" tabIndex="0">
+                    <a class="page-link" data-num="${i}">${i}</a>
+                </li>`;
+
+                    }
+                    if (data.next) {
+                        str2 += `<li class="page-item" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next">
+                <a class="page-link" data-num="${data.end + 1}">Next</a>
+            </li>`
+                    }
+
+                    pagination.html(str2);
+                    replylist.html(str);
+
+                }
+            })
+
+
+        }
+
+        pagination.on("click", "a", function (e){
+
+            let datanum = $(e.target).data("num")
+
+            showList(datanum)
+
+        })
+
+        showList(1);
+
+
+
+
+
+    </script>
+</th:block>
+
 
 
 </body>

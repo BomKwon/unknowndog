@@ -190,6 +190,38 @@ public class UserController {
 
 
 
+    @GetMapping("/read")        //   /user/3  3번이미지 보여줘
+    public String userInfo(@PathVariable("email") String email, Long userId
+            , Model model) {
+
+
+//        try {
+//
+//
+//
+//            UserDTO userDTO = userService.getUserDtl(userId);
+//
+//
+//            model.addAttribute("userDTO" , userDTO);
+//            // html에서 thyleaf  th:object="${questFormDto}"
+//
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("errorMessage",
+//                    "존재하지 않는 회원이개");
+//
+//            return "/quest/questList";
+//
+//        }
+
+        return "/user/userView";
+
+    }
+
+
+
+
+
+
     //// TODO: 2024-06-21 탈퇴 만드셈
 
 

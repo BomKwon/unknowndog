@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -172,9 +173,18 @@ public class QuestService {
 
 
     // TODO: 2024-06-21 이게 문제인지..
-    public void remove(Long questId) {
+    public String remove(Long questId) {
 
+
+        Quest quest
+                = questRepository
+                .findById(questId)
+                .orElseThrow(EntityNotFoundException::new);
+        String questNm = quest.getTitle();
         questRepository.deleteById(questId);
+
+
+        return questNm;
 
     }
 

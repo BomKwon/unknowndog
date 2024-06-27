@@ -3,10 +3,13 @@ package com.example.unknowndog.dto;
 import com.example.unknowndog.constant.QuestStatus;
 import com.example.unknowndog.entity.Quest;
 import com.example.unknowndog.entity.User;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class QuestFormDTO {
     private String writer; //작성자(회원별명)
 
     @NotBlank(message = "제목은 필수 입력 값이다개")
+    @Length(min = 1, max = 25,
+            message = "제목은 25자 이내로 작성해주개")
     private String title; //글 제목
 
     @NotBlank(message = "급여옵션은 필수 입력 값이다개")
@@ -46,7 +51,7 @@ public class QuestFormDTO {
     // 메소드  EntityToDto // DtoToEntity
     private static ModelMapper modelMapper = new ModelMapper();
 
-    private User user;
+    private User userId;
 
     private LocalDateTime regTime;
     private LocalDateTime updateTime;

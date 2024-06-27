@@ -1,5 +1,6 @@
 package com.example.unknowndog.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -13,6 +14,11 @@ public class AuditConfig {
     @Bean
     public AuditorAware<String> auditorProvider(){
         return  new AuditorAwareImpl();
+    }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 
 

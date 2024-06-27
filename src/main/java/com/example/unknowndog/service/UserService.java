@@ -1,18 +1,25 @@
 package com.example.unknowndog.service;
 
 import com.example.unknowndog.constant.Role;
+import com.example.unknowndog.dto.NoticeDTO;
+import com.example.unknowndog.dto.NoticeSearchDTO;
 import com.example.unknowndog.dto.UserDTO;
+import com.example.unknowndog.dto.UserSearchDTO;
+import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.repository.UserRepository;
 import com.example.unknowndog.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -111,6 +118,17 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public String getUser(Principal principal){
+
+        String email = principal.getName();
+        User user = this.findByEmail(email);
+
+        String nickname = user.getNickname();
+
+        return nickname;
+    }
+
+
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public UserDTO getUserDtl(Long userId){ //pk 상품번호
         //itemImgRepository.findById(itemId); 이거면된다.
@@ -140,6 +158,11 @@ public class UserService implements UserDetailsService {
         user.updateUser(userDTO);
 
         return user.getId();
+    }
+
+
+    public Page<User> getUserList(UserSearchDTO userSearchDTO, Pageable pageable) {
+        return userRepository.getUserPage(userSearchDTO, pageable);
     }
 
 
