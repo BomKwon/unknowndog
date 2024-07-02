@@ -1,11 +1,13 @@
 package com.example.unknowndog.service;
 
 
+import com.example.unknowndog.dto.BoardDTO;
 import com.example.unknowndog.dto.PageRequestDTO;
 import com.example.unknowndog.dto.PageResponseDTO;
 import com.example.unknowndog.dto.ReplyDTO;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Reply;
+import com.example.unknowndog.entity.User;
 import com.example.unknowndog.repository.ReplyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,21 @@ public class ReplyServiceImpl implements ReplyService {
 
   private final ReplyRepository replyRepository;
   private final ModelMapper modelMapper;
+  private final UserService userService;
+
+
+  //글을 쓰려는 회원의 닉네임을 가져오는것인데..
+  public String getUserName(ReplyDTO replyDTO, Principal principal){
+
+    String email = principal.getName();
+    User user = userService.findByEmail(email);
+
+    String userName = user.getNickname();
+
+    return userName;
+
+  }
+
 
   @Override
   public Long register(ReplyDTO replyDTO) {

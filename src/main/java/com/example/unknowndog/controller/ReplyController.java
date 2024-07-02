@@ -5,6 +5,7 @@ import com.example.unknowndog.dto.PageRequestDTO;
 import com.example.unknowndog.dto.PageResponseDTO;
 import com.example.unknowndog.dto.ReplyDTO;
 import com.example.unknowndog.service.ReplyService;
+import com.example.unknowndog.service.ReplyServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class ReplyController {
 
   private final ReplyService replyService;
+  private final ReplyServiceImpl replyServiceImpl;
 
   @PostMapping(value = "/new")
   public Map<String, String> sin(@RequestBody ReplyDTO replyDTO , Principal principal) {
@@ -32,7 +34,7 @@ public class ReplyController {
 
     log.info(replyDTO);
 
-    replyDTO.setReplyer(principal.getName());
+    replyDTO.setReplyer(replyServiceImpl.getUserName(replyDTO, principal));  //댓글 작성자명
 
     Long replyId = replyService.register(replyDTO);
 

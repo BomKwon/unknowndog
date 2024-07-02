@@ -39,8 +39,9 @@
                                 <th scope="col" style="width:10%">조회수</th>
                             </tr>
                             </thead>
+                            <tbody>
                             <th:block th:each="notice, status: ${notice.getContent()} ">
-                                <tbody>
+
                                 <tr role="row" class="table-light">
                                     <th scope="row" style="font-size: small">[[${notice.id}]]</th>
                                     <td style="text-align: left;">
@@ -54,31 +55,53 @@
                                     <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
                                     <td>[[${notice.view}]]</td>
                                 </tr>
-                                </tbody>
+
                             </th:block>
+                            <th:block th:each="dto, status: ${pageResponseDTO.dtoList} ">
+                                <tr role="row">
+                                    <th scope="row" style="font-size: small">[[${dto.id}]]</th>
+                                    <td style="text-align: left;">
 
-                            <th:block th:each="board, status: ${boards.getContent()} ">
-                                <tbody>
-                                    <tr role="row">
-                                        <th scope="row" style="font-size: small">[[${board.id}]]</th>
-                                        <td style="text-align: left;">
-                                            <a style="color: black;" th:href="'/board/read/'+ ${board.id}">
-                                                &nbsp;
+                                        <a style="color: black;" th:href="'/board/read/'+ ${dto.id}">
+                                            &nbsp;
 
-                                                [ <span th:if="${board.boardCategory.name() == 'FREE_TALK'}" th:id="${board.boardCategory}" class="mb-1 end">자유</span>
-                                                <span th:if="${board.boardCategory.name() == 'QUESTION'}" th:id="${board.boardCategory}" class="mb-1 end">질문</span>
-                                                <span th:if="${board.boardCategory.name() == 'SHARE'}" th:id="${board.boardCategory}" class="mb-1 end">나눔</span>
-                                                <span th:if="${board.boardCategory.name() == 'REVIEW'}" th:id="${board.boardCategory}" class="mb-1 end">후기</span> ]
+                                            [ <span th:if="${dto.boardCategory.name() == 'FREE_TALK'}" th:id="${dto.boardCategory}" class="mb-1 end">자유</span>
+                                            <span th:if="${dto.boardCategory.name() == 'QUESTION'}" th:id="${dto.boardCategory}" class="mb-1 end">질문</span>
+                                            <span th:if="${dto.boardCategory.name() == 'SHARE'}" th:id="${dto.boardCategory}" class="mb-1 end">나눔</span>
+                                            <span th:if="${dto.boardCategory.name() == 'REVIEW'}" th:id="${dto.boardCategory}" class="mb-1 end">후기</span> ]
 
-                                                [[${board.title}]]
-                                            </a>
-                                        </td>
-                                        <td>[[${board.writer}]]</td>
-                                        <td>[[${#temporals.format(board.regTime, 'yyyy-MM-dd')}]]</td>
-                                        <td>[[${board.view}]]</td>
-                                    </tr>
-                                </tbody>
+                                             [[${dto.title}]]  ([[${dto.replyCount}]])
+
+                                        </a>
+                                    </td>
+                                    <td>[[${dto.writer}]]</td>
+                                    <td>[[${#temporals.format(dto.regTime, 'yyyy-MM-dd')}]]</td>
+                                    <td>[[${dto.view}]]</td>
+                                </tr>
                             </th:block>
+<!--                            <th:block th:each="board, status: ${boards.getContent()} ">-->
+
+<!--                                    <tr role="row">-->
+<!--                                        <th scope="row" style="font-size: small">[[${board.id}]]</th>-->
+<!--                                        <td style="text-align: left;">-->
+<!--                                            <a style="color: black;" th:href="'/board/read/'+ ${board.id}">-->
+<!--                                                &nbsp;-->
+
+<!--                                                [ <span th:if="${board.boardCategory.name() == 'FREE_TALK'}" th:id="${board.boardCategory}" class="mb-1 end">자유</span>-->
+<!--                                                <span th:if="${board.boardCategory.name() == 'QUESTION'}" th:id="${board.boardCategory}" class="mb-1 end">질문</span>-->
+<!--                                                <span th:if="${board.boardCategory.name() == 'SHARE'}" th:id="${board.boardCategory}" class="mb-1 end">나눔</span>-->
+<!--                                                <span th:if="${board.boardCategory.name() == 'REVIEW'}" th:id="${board.boardCategory}" class="mb-1 end">후기</span> ]-->
+
+<!--                                                [[${board.title}]]-->
+<!--                                            </a>-->
+<!--                                        </td>-->
+<!--                                        <td>[[${board.writer}]]</td>-->
+<!--                                        <td>[[${#temporals.format(board.regTime, 'yyyy-MM-dd')}]]</td>-->
+<!--                                        <td>[[${board.view}]]</td>-->
+<!--                                    </tr>-->
+
+<!--                            </th:block>-->
+                            </tbody>
                         </table>
                     </div>
 

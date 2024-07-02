@@ -129,93 +129,64 @@
 
                     </div>
 
+                    <br>
+
+
+                    <h5>&nbsp;&nbsp;댓글</h5>
+
+
                     <hr>
 
 
-<!--                    &lt;!&ndash;댓글&ndash;&gt;-->
-<!--                    <div class="panel panel-default" style="margin-top: 20px;" sec:authorize="isAuthenticated()">-->
-<!--                        <div class="panel-heading">-->
-<!--                            <form class="row g-3" style="margin: auto">-->
+                    <!--댓글-->
+                    <div class="panel panel-default" style="margin-top: 20px;" sec:authorize="isAuthenticated()">
+                        <div class="panel-heading">
+                            <form class="row g-3" style="margin: auto">
 
 <!--                                <div>-->
 <!--                                <input type="text" class="form-control" id="inputReply1" style="display: inline-block; width: 150px; height: 40px; margin: auto">-->
 <!--                                </div>-->
 
-<!--                                <div style="margin-bottom: 20px">-->
-<!--                                    <input  id="exampleFormControlTextarea1" class="form-control" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;-->
-<!--                                    <button type="submit" class="btn btn-light replyRegister" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>-->
-<!--                                </div>-->
+                                <div style="margin-bottom: 20px; text-align: center">
+                                    <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
+                                    <button type="button" class="btn btn-light saveBtn" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
+                                </div>
 
-<!--                            </form>-->
+                            </form>
 
-
-<!--                        </div>-->
-
-<!--                        <br>-->
-<!--                        <br>-->
-
-<!--                        &lt;!&ndash; /.panel-heading &ndash;&gt;-->
-<!--                        <div class="panel-body">-->
-<!--                            <ul class="replylist">-->
-
-
-<!--                                    <div style="text-align: center">-->
-<!--&lt;!&ndash;                                        <div class="header">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <strong class="primary-font">aaaaaa</strong>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <small class="pull-right text-muted">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago&ndash;&gt;-->
-<!--&lt;!&ndash;                                            </small>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            aaaaaa&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </p>&ndash;&gt;-->
-
-<!--                                        <p>작성된 댓글이 없다개 🥵</P>-->
-
-<!--                                    </div>-->
-<!--                                <br>-->
-<!--                                <br>-->
-
-<!--                            </ul>-->
-
-<!--                            <div class="col-sm-6">-->
-<!--                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">-->
-<!--                                    <ul class="pagination">-->
-
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-
-<!--                        </div>-->
-<!--                    </div>-->
-
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <button type="button" class="btn btn-primary replyRegister" data-bs-toggle="modal" data-bs-target="#new-modal">
-                                New Reply
-                            </button>
 
                         </div>
+
+                        <br>
+                        <br>
+
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <ul class="chat replylist">
-                                <li class="clearfix">
+                            <ul class="replylist">
 
-                                    <div class="chat-body clearfix">
-                                        <div class="header">
-                                            <strong class="primary-font">aaaaaa</strong>
-                                            <small class="pull-right text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
-                                            </small>
-                                        </div>
-                                        <p>
-                                            aaaaaa
-                                        </p>
-                                    </div>
-                                </li>
+
+                                <ul class="chat replylist">
+                                  <li class="clearfix">
+
+                                      <div class="chat-body clearfix">
+                                          <div class="header">
+                                              <strong class="primary-font">작성자</strong>
+                                              <small class="pull-right text-muted">
+                                                  <i class="fa fa-clock-o fa-fw"></i> 작성일
+                                              </small>
+                                          </div>
+                                          <p>
+                                              내용
+                                          </p>
+                                      </div>
+                                  </li>
+
+                                        <p>작성된 댓글이 없다개 🥵</p>
+
+                                </ul>
+
+                                <br>
+                                <br>
 
                             </ul>
 
@@ -233,57 +204,14 @@
                     </div>
 
 
-                    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label class="replyText1">내용</label>
-                                    <input class="form-control replyText replyText1">
-
-                                    <label class="replyer1">작성자</label>
-                                    <input class="form-control replyer replyer1">
-
-                                    <label class="regtiem1">등록일자</label>
-                                    <input class="form-control regtiem regtiem1">
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default saveBtn">Save</button>
-                                    <button type="button" class="btn btn-default modBtn">modify</button>
-                                    <button type="button" class="btn btn-default removeBtn">삭제</button>
-                                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>
-
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-
 
                     <script src="/js/reply.js"></script>
-
-
 
 
                 </div>
 
 
-
-
-
-
-
-
             </div>
-
-
-
-
 
 
 
@@ -295,13 +223,9 @@
 
         </div>
     </div>
-</div>
-
-
-
-
-<th:block layout:fragment="script">
     <script th:inline="javascript">
+
+        console.log("읽기진입")
 
         const result = [[${result}]]
 
@@ -313,15 +237,14 @@
 
         ///////////////////////////
 
-        let id = [[${boardDTO.id}]]; //현재 몇 번 글의 댓글인지 알기 위해서
-        console.log(id);
+        let boardId = [[${boardDTO.id}]]; //현재 몇 번 글의 댓글인지 알기 위해서
+        console.log(boardId);
 
 
         let str = ""; //ul 태그 안에 들어갈 html
         let replylist = $(".replylist") //댓글이 달리는 ul태그
         let pagination = $(".pagination") //댓글의 페이징처리 ul태그
         let str2 = ""; //댓글 페이징 처리를 위한 str2
-        let replyRegister = $(".replyRegister"); //댓글 등록 버튼 모달 open
 
         let replyText1 = $(".replyText1"); //label + input
         let replyer1 = $(".replyer1"); //label + input
@@ -331,26 +254,31 @@
         let replyer = $(".replyer"); //작성자 input
         let regtime = $(".regtime"); //input 등록일자
 
-        let modal = $("#new-modal"); //모달전체
         let saveBtn = $(".saveBtn"); // 저장버튼
         let modBtn = $(".modBtn"); //수정버튼
         let removeBtn = $(".removeBtn"); //삭제버튼
 
         let thispage = 1;
 
+        console.log(saveBtn)
 
         //저장버튼 클릭시
-        saveBtn.on("click", function (){
+        saveBtn.on("click", function (e){
+            e.preventDefault()
+
+            alert("ddd")
             console.log(replyText.val())
             console.log(replyer.val())
 
-            let reply = {"id" : id, "replyText" : replyText.val(), "replyer" : replyer.val() }
+
+
+            let reply = {"boardId" : boardId, "replyText" : replyText.val(), "replyer" : replyer.val() }
 
             let url =  "/replies/new"
 
             replyservice.register(reply,url, function (data) {
                 console.log(data)
-                alert(data.rno + "번 댓글이 등록되었습니다.")
+                alert(data.id + "번 댓글이 등록되었습니다.")
                 showList(1);
             })
             modal.modal("hide")
@@ -360,11 +288,11 @@
         //수정버튼 클릭시
         modBtn.on("click", function (){
 
-            let reply = {"rno" : modal.data("rno"), "replyText" : replyText.val()}
+            let reply = {"id" : modal.data("id"), "replyText" : replyText.val()}
 
             let url = "/replies/modify/"
             replyservice.modify(reply, url, function (data) {
-                alert(data.rno)
+                alert(data.id)
                 showList(thispage);
             })
             modal.modal("hide")
@@ -375,81 +303,13 @@
 
             let url = "/replies/remove/"
 
-            replyservice.delete(modal.data("rno"), url,  function (data){
+            replyservice.delete(modal.data("id"), url,  function (data){
 
-                alert(data.rno)
+                alert(data.id)
                 showList(1);
 
             })
             modal.modal("hide")
-
-        })
-
-
-
-
-        //등록
-        replyRegister.on("click", function () {
-            console.log("홍길동")
-            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
-            modal.find("input").hide(); //input 태그 전부 숨긴다.
-            modal.find("label").hide();
-
-            replyText.val("");
-            replyer.val("");
-            regtime.val("");
-
-            replyText1.show()
-
-            $(".btn-close").show()
-
-            saveBtn.show()
-        })
-
-        //댓글 리스트 클릭시 수정 모달창 오픈
-        //수정
-        replylist.on("click", "li", function (e) {
-            modal.modal("show");
-
-            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
-            modal.find("input").hide(); //input 태그 전부 숨긴다.
-            modal.find("label").hide();
-
-            //input 태그 벨류값 전부 "" 빈문자열로 초기화
-            replyText.val("");
-            replyer.val("");
-            regtime.val("");
-
-            //내용, 작성자, 일자
-            replyText1.show()
-            replyer1.show()
-            regtime1.show()
-
-
-
-            replyer.attr("readonly", true)
-            regtime.attr("readonly", true)
-
-            let rno = $(this).data("num");
-
-            let url = "/replies/get/"
-
-            replyservice.read(rno, url, function (data) {
-
-                console.log(data)
-                let email = [[${#authentication.getName()}]]
-
-                if(data.createBy == email){
-                    modBtn.show()
-                    removeBtn.show()
-                }
-
-                replyText.val(data.replyText)
-                replyer.val(data.replyer)
-                regtime.val(data.regTime)
-                modal.data("rno", data.rno);
-                console.log(modal.data("rno"))
-            });
 
         })
 
@@ -461,7 +321,7 @@
 
             let url = "/replies/list/"
 
-            replyservice.list(page, url, id, function (data) {
+            replyservice.list(page, url, boardId, function (data) {
                 console.log(data);
                 console.log(data.start);
                 thispage = data.page
@@ -470,7 +330,7 @@
                 } else {
 
                     for (let i = 0; i < data.dtoList.length; i++) {
-                        str += `<li  data-num="${data.dtoList[i].rno}" class="clearfix"><div class="chat-body clearfix"><div class="header">
+                        str += `<li  data-num="${data.dtoList[i].id}" class="clearfix"><div class="chat-body clearfix"><div class="header">
                     <strong class="primary-font">${data.dtoList[i].replyer}</strong><small class="pull-right text-muted">
                     <i class="fa fa-clock-o fa-fw"></i> 12 mins ago</small>
                     </div><p>${data.dtoList[i].replyText}</p></div></li>`;
@@ -516,7 +376,14 @@
 
 
     </script>
-</th:block>
+</div>
+
+
+
+
+
+
+
 
 
 

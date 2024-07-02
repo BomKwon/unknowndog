@@ -43,7 +43,7 @@ public class BoardDTO {
 
     private User user;
 
-    private BoardCategory boardCategory; // 상품 판매 상태
+    private BoardCategory boardCategory;
 
 
 

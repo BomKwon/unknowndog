@@ -33,6 +33,7 @@ public class Reply extends BaseEntity {
     this.replyText = text;
   }
 
+
   public void Reply(ReplyDTO replyDTO) {
     this.id = replyDTO.getReplyId();
     this.replyText = replyDTO.getReplyText();

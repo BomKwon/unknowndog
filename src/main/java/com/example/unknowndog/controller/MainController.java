@@ -55,9 +55,11 @@ public class MainController {
                        @PathVariable Optional<Integer> page,
                        BoardSearchDTO boardSearchDTO, BoardDTO boardDTO,
                        QuestFormDTO questFormDTO,
-                       NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO) {
+                       NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO,
+                       PageRequestDTO pageRequestDTO) {
 
         if (principal == null){  //비회원도 봐야하니까
+
 
             /*의뢰*/
             Pageable pageable = PageRequest
@@ -78,10 +80,14 @@ public class MainController {
             model.addAttribute("noticeDTO", noticeDTO);
 
             /*자유게시판*/
+
+            PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCountMain(pageRequestDTO);
+
             Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
 
             model.addAttribute("boards", boards);
             model.addAttribute("boardDTO", boardDTO);
+            model.addAttribute("pageResponseDTO", pageResponseDTO);
 
 
             return "main";
@@ -89,6 +95,9 @@ public class MainController {
 
 
         //로그인시
+
+
+        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCountMain(pageRequestDTO);
 
 
         userDTO = UserDTO.of(userService.findByEmail(principal.getName()));
@@ -126,6 +135,7 @@ public class MainController {
 
         model.addAttribute("boards", boards);
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
 
 
         return "main";

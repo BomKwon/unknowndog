@@ -7,7 +7,7 @@ let replyservice = (function () {
         })
   }
 
-  let register = function (reply,url,  callback) {
+  let register = function (reply, url, callback) {
     console.log("진입")
         $.post({
                 url : url,
@@ -22,7 +22,7 @@ let replyservice = (function () {
 
             if(data.status == '401'){
                 alert("로그인 후 이용해주세요");
-                location.href = "/members/login";
+                location.href = "/user/login";
             }else {
                 console.log(result.status + "  " + result.error)
                 alert(result.responseText);
@@ -43,7 +43,7 @@ let replyservice = (function () {
         error : function (result, status, error) {
             if(result.status == '401'){
                 alert("로그인 후 이용해주세요");
-                location.href = "/members/login";
+                location.href = "/user/login";
             }else {
                 console.log(result.status + "  " + result.error)
                 alert(result.responseText);
@@ -73,7 +73,7 @@ let replyservice = (function () {
                 alert(result.status + " " + result.error)
             if(result.status == '401'){
                 alert("로그인 후 이용해주세요");
-                location.href = "/members/login";
+                location.href = "/user/login";
             }else {
                 console.log(result.status + "  " + result.error)
                 alert(result.responseText);

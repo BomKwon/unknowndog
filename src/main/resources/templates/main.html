@@ -37,9 +37,9 @@
         <div class="row row-cols-1  g-4 mb-3">
 
 
-<!--            <div class="col">-->
-<!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
-<!--            </div>-->
+            <div class="col" style="text-align: center">
+                <img src="/img/mainimggg.webp" class="img-fluid" width="450px" alt="메인이미지">
+            </div>
 
             <div class="col">
                 <div class="card border ">
@@ -62,7 +62,7 @@
 
                                 <div class="col">
 
-                                    <div class="card border">
+                                    <div class="card border"  style="height: 375px; margin-bottom: 1px">
 
                                         <div class="card-body">
 
@@ -143,17 +143,19 @@
                 <!--            </div>-->
 
                 <div class="col">
-                    <div class="card border ">
+                    <div class="card border " style="height: 360px">
 
 
 
                         <div class="card-body">
 
-                            <h4>🐶 공지하개 최신글 !</h4>
-
                             <div style="text-align: right">
                                 <a href="/notice/list" style="color: black"> +) 더보기 </a>
                             </div>
+
+                            <h4>🐶 공지하개 최신글 !</h4>
+
+
 
                             <hr>
 
@@ -169,8 +171,9 @@
                                         <th scope="col" style="width:10%">조회수</th>
                                     </tr>
                                     </thead>
+
+                                    <tbody>
                                     <th:block th:each="notice, status: ${notice.getContent()} ">
-                                        <tbody>
                                         <tr role="row">
                                             <th scope="row">[[${notice.id}]]</th>
                                             <td style="text-align: left;">
@@ -180,8 +183,9 @@
                                             <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
                                             <td>[[${notice.view}]]</td>
                                         </tr>
-                                        </tbody>
                                     </th:block>
+                                    </tbody>
+
                                 </table>
                             </div>
 
@@ -201,18 +205,20 @@
                 <!--                <img src="/img/main.png" class="img-fluid" alt="메인이미지">-->
                 <!--            </div>-->
 
-                <div class="col">
-                    <div class="card border ">
+                <div class="col" >
+                    <div class="card border " style="height: 360px">
 
 
 
                         <div class="card-body">
 
-                            <h4>👄 대화하개 최신글 !</h4>
-
                             <div style="text-align: right">
                                 <a href="/board/list" style="color: black"> +) 더보기 </a>
                             </div>
+
+                            <h4>👄 대화하개 최신글 !</h4>
+
+
 
                             <hr>
 
@@ -228,29 +234,27 @@
                                         <th scope="col" style="width:10%">조회수</th>
                                     </tr>
                                     </thead>
-                                    <th:block th:each="board, status: ${boards.getContent()} ">
                                         <tbody>
-                                        <tr role="row">
-                                            <th scope="row">[[${board.id}]]</th>
-                                            <td style="text-align: left;">
-                                                <a style="color: black;" th:href="'/board/read/'+ ${board.id}">
+                                        <th:block th:each="dto, status: ${pageResponseDTO.dtoList} ">
+                                            <tr role="row">
+                                                <th scope="row" style="font-size: small">[[${dto.id}]]</th>
+                                                <td style="text-align: left;">
+                                                    <a style="color: black;" th:href="'/board/read/'+ ${dto.id}">
                                                     &nbsp;
+                                                    [ <span th:if="${dto.boardCategory.name() == 'FREE_TALK'}" th:id="${dto.boardCategory}" class="mb-1 end">자유</span>
+                                                    <span th:if="${dto.boardCategory.name() == 'QUESTION'}" th:id="${dto.boardCategory}" class="mb-1 end">질문</span>
+                                                    <span th:if="${dto.boardCategory.name() == 'SHARE'}" th:id="${dto.boardCategory}" class="mb-1 end">나눔</span>
+                                                    <span th:if="${dto.boardCategory.name() == 'REVIEW'}" th:id="${dto.boardCategory}" class="mb-1 end">후기</span> ]
 
-                                                    [ <span th:if="${board.boardCategory.name() == 'FREE_TALK'}" th:id="${board.boardCategory}" class="mb-1 end">자유</span>
-                                                    <span th:if="${board.boardCategory.name() == 'QUESTION'}" th:id="${board.boardCategory}" class="mb-1 end">질문</span>
-                                                    <span th:if="${board.boardCategory.name() == 'SHARE'}" th:id="${board.boardCategory}" class="mb-1 end">나눔</span>
-                                                    <span th:if="${board.boardCategory.name() == 'REVIEW'}" th:id="${board.boardCategory}" class="mb-1 end">후기</span> ]
-
-                                                    [[${board.title}]]
-
-                                                </a>
-                                            </td>
-                                            <td>[[${board.writer}]]</td>
-                                            <td>[[${#temporals.format(board.regTime, 'yyyy-MM-dd')}]]</td>
-                                            <td>[[${board.view}]]</td>
-                                        </tr>
+                                                    [[${dto.title}]]  ([[${dto.replyCount}]])
+                                                    </a>
+                                                </td>
+                                                <td>[[${dto.writer}]]</td>
+                                                <td>[[${#temporals.format(dto.regTime, 'yyyy-MM-dd')}]]</td>
+                                                <td>[[${dto.view}]]</td>
+                                            </tr>
+                                        </th:block>
                                         </tbody>
-                                    </th:block>
                                 </table>
                             </div>
 

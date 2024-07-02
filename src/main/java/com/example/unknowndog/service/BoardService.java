@@ -8,7 +8,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,10 +81,57 @@ public class BoardService {
     @Transactional
     public int updateViews(Long boardId) { //조회수
 
-        // TODO: 2024-06-24 자기자신이 보면 조회수가 늘어나지 않도록 추후 추가하기- 컨트롤러에서 완
+        // TODO: 2024-06-24 자기자신이 보면 조회수가 늘어나지 않도록 추후 추가하기
 
         return boardRepository.updateViews(boardId);
     }
+
+
+
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+
+        String keyword = pageRequestDTO.getKeyword();
+
+        Pageable pageable = pageRequestDTO.getPageable("id");
+
+        Page<BoardListReplyCountDTO> boardPage = boardRepository.searchWithReplyCount(types, keyword, pageable);
+
+
+//    PageResponseDTO<BoardDTO> aa =
+//            new PageResponseDTO<BoardDTO>(pageRequestDTO, boardDTOList, (int) boardPage.getTotalElements());
+
+//    return aa;
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(boardPage.getContent())
+                .total((int) boardPage.getTotalElements())
+                .build();
+
+    }
+
+
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCountMain(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+
+        String keyword = pageRequestDTO.getKeyword();
+
+        // 페이지 번호와 페이지 크기 설정
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<BoardListReplyCountDTO> boardPage = boardRepository.searchWithReplyCount(types, keyword, pageable);
+
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(boardPage.getContent())
+                .total((int) boardPage.getTotalElements())
+                .build();
+
+    }
+
+
 
     @Transactional(readOnly = true)
     public BoardDTO getboardDetail(Long boardId){  //읽기

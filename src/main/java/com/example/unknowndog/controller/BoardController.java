@@ -39,24 +39,30 @@ public class BoardController {
     @GetMapping("/list")
     public String boardAll(BoardSearchDTO boardSearchDTO, BoardDTO boardDTO,
                            @PathVariable("page") Optional<Integer> page, Model model,
-                           NoticeSearchDTO noticeSearchDTO,
+                           NoticeSearchDTO noticeSearchDTO, PageRequestDTO pageRequestDTO,
                            Principal principal){
+
 
         if (principal == null) {
 
             Pageable pageable = PageRequest
                     .of(page.isPresent() ? page.get() : 0 , 10);
 
+
+            PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
+
             Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
 
             model.addAttribute("boards", boards);
             model.addAttribute("boardDTO", boardDTO);
             model.addAttribute("maxPage", 10);
+            model.addAttribute("pageResponseDTO", pageResponseDTO);  /*여기에 모든게 담겨서 이제 다른건 필요없음요*/
 
 
             //공지
             Pageable pageable1 = PageRequest
                     .of(page.isPresent() ? page.get() : 0 , 10);
+
 
             Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
 
@@ -68,6 +74,10 @@ public class BoardController {
 
         }
 
+
+        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
+
+
         Pageable pageable = PageRequest
                 .of(page.isPresent() ? page.get() : 0 , 10);
 
@@ -75,6 +85,7 @@ public class BoardController {
 
         model.addAttribute("boards", boards);
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
         model.addAttribute("maxPage", 10);
 
         //공지

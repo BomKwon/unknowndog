@@ -1,5 +1,6 @@
 package com.example.unknowndog.dto;
 
+import com.example.unknowndog.constant.BoardCategory;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,10 @@ public class BoardListReplyCountDTO {
 
   private String title;
   private String writer;
+
+  private int view;
+
+  private BoardCategory boardCategory;
 
   private LocalDateTime regTime;
 

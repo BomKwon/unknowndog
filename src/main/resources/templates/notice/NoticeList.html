@@ -40,8 +40,8 @@
                                 <th scope="col" style="width:10%">조회수</th>
                             </tr>
                             </thead>
+                            <tbody>
                             <th:block th:each="notice, status: ${notice.getContent()} ">
-                                <tbody>
                                 <tr role="row">
                                     <th scope="row">[[${notice.id}]]</th>
                                     <td style="text-align: left;">
@@ -53,8 +53,8 @@
                                     <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
                                     <td>[[${notice.view}]]</td>
                                 </tr>
-                                </tbody>
                             </th:block>
+                            </tbody>
                         </table>
                     </div>
 

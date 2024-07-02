@@ -1,8 +1,11 @@
 package com.example.unknowndog.repository;
 
+import com.example.unknowndog.dto.BoardListReplyCountDTO;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.repository.search.BoardRepositoryCustorm;
 import com.example.unknowndog.repository.search.BoardSearch;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
