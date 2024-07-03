@@ -28,48 +28,56 @@
                     alert(errorMessage);
                 }
                 bindDomEvent();
+
+
+                $(".hidden").hide()
+
+
+                // 사진파일 검사
+                function bindDomEvent() {
+                    $(".form-control-file").on("click", function () {
+                        console.log($(this).val())
+                        if($(this).val() == "" &&  $(this).siblings(".form-control-label").val()  == "이미지"){
+                            $(this).siblings(".form-control-label").html("이미지");
+                        }
+                    })
+
+                    $(".form-control-file").on("change", function () {
+                        //파일을 검사할꺼예요
+                        //파일명
+
+
+                        var fileName = $(this).val().split("\\").pop();
+                        //확장자
+
+                        console.log(fileName)
+
+                        var fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
+
+                        fileExt = fileExt.toLowerCase();//소문자
+
+                        if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                            if(fileExt ==null || fileExt ==""){
+                                $(this).siblings(".form-control-label").html("이미지가 비어있다개");
+                                return;
+                            }
+                            alert("이미지 파일만 등록이 가능하다개");
+                            return;
+                        }
+
+                        $(this).siblings(".form-control-label").html(fileName);
+
+
+                    })
+
+                }
+
             })
 
 
-            // 사진파일 검사
-
-            function bindDomEvent() {
-                $(".form-control-file").on("click", function () {
-                    console.log($(this).val())
-                    if($(this).val() == "" &&  $(this).siblings(".form-control-label").val()  == "이미지"){
-                        $(this).siblings(".form-control-label").html("이미지");
-                    }
-                })
-
-                $(".form-control-file").on("change", function () {
-                    //파일을 검사할꺼예요
-                    //파일명
 
 
-                    var fileName = $(this).val().split("\\").pop();
-                    //확장자
 
-                    console.log(fileName)
-
-                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
-
-                    fileExt = fileExt.toLowerCase();//소문자
-
-                    if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
-                        if(fileExt ==null || fileExt ==""){
-                            $(this).siblings(".form-control-label").html("이미지가 비어있다개");
-                            return;
-                        }
-                        alert("이미지 파일만 등록이 가능하다개");
-                        return;
-                    }
-
-                    $(this).siblings(".form-control-label").html(fileName);
-
-
-                })
-
-            }
 
 
         </script>
@@ -113,7 +121,7 @@
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="title">제목</span>
-                                    <input type="text"  th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">
+                                    <input type="text"  th:field="*{title}" class="form-control" placeholder="제목을 입력해주시개" aria-label="Username" aria-describedby="basic-addon1">
                                     <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">
 
                                     </p>
@@ -124,7 +132,7 @@
                                     <span class="input-group-text">급여</span>
                                     <select class="form-select mb-1" th:field="*{salaryOption}" aria-label="Default select example">
                                         <option value="" selected>옵션을 선택해주시개</option>
-                                        <option value="시급">시급</option>
+                                        <option value="시급" >시급</option>
                                         <option value="일급">일급</option>
                                         <option value="월급">월급</option>
                                         <option value="연봉">연봉</option>
@@ -136,9 +144,16 @@
                                     </p>
                                 </div>
 
+                                <div class="input-group mb-3 hidden">
+                                    <span class="input-group-text" id="stockNumber">필요한 인원</span>
+                                    <select class="form-select mb-1" th:field="*{stockNumber}" aria-label="Default select example">
+                                        <option value="1" selected>1</option>
+                                    </select>
+                                </div>
+
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="area">지역</span>
-                                    <input type="text"  th:field="*{area}" class="form-control" placeholder="지역을 입력해주세요" aria-label="Username" aria-describedby="basic-addon1">
+                                    <input type="text"  th:field="*{area}" class="form-control" placeholder="지역을 입력해주시개" aria-label="Username" aria-describedby="basic-addon1">
                                     <p th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="fieldError">
 
                                     </p>
@@ -150,7 +165,7 @@
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">글 상세 내용</span>
-                                    <textarea class="form-control" th:field="*{questDetail}" aria-label="상세 내용을 입력해주세요"></textarea>
+                                    <textarea class="form-control" th:field="*{questDetail}" aria-label="상세 내용을 입력해주시개"></textarea>
                                     <p th:if="${#fields.hasErrors('questDetail')}" th:errors="*{questDetail}" class="fieldError">
 
                                     </p>

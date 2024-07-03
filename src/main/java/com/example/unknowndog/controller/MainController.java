@@ -5,10 +5,7 @@ import com.example.unknowndog.dto.*;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.Quest;
-import com.example.unknowndog.service.BoardService;
-import com.example.unknowndog.service.NoticeService;
-import com.example.unknowndog.service.QuestService;
-import com.example.unknowndog.service.UserService;
+import com.example.unknowndog.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -34,6 +31,7 @@ public class MainController {
     private final QuestService questService;
     private final NoticeService noticeService;
     private final BoardService boardService;
+    private final MainService mainService;
 
 
 //    @GetMapping("/admin")
@@ -104,7 +102,10 @@ public class MainController {
 
         log.info(userDTO.getId());
 
-        model.addAttribute("un", principal.getName());
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+
         model.addAttribute("userDTO", userDTO);
 
 

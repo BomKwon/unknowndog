@@ -5,6 +5,7 @@ import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
 import com.example.unknowndog.service.BoardService;
+import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.NoticeService;
 import com.example.unknowndog.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +36,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final NoticeService noticeService;
+    private final MainService mainService;
 
     @GetMapping("/list")
     public String boardAll(BoardSearchDTO boardSearchDTO, BoardDTO boardDTO,
@@ -74,6 +76,11 @@ public class BoardController {
 
         }
 
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
+
 
         PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
 
@@ -108,6 +115,9 @@ public class BoardController {
     @GetMapping("/new")
     public String boardForm(Principal principal, Model model) {
 
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
         model.addAttribute("boardDTO", new BoardDTO());
 
         return "/board/boardForm";
@@ -118,6 +128,8 @@ public class BoardController {
                             Principal principal, Model model
             , @RequestParam("boardImgFile") List<MultipartFile> boardImgFileList) throws IOException {
 
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
 
         if (bindingResult.hasErrors()) {
@@ -160,6 +172,11 @@ public class BoardController {
     @GetMapping("/read/{boardId}")        //   /board/3  3번이미지 보여줘
     public String questDtl(@PathVariable("boardId") Long boardId
             , Model model, Principal principal, BoardDTO boardDTO) {
+
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
 
         try {

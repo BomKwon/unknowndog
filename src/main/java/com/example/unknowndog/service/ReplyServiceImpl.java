@@ -34,14 +34,14 @@ public class ReplyServiceImpl implements ReplyService {
 
 
   //글을 쓰려는 회원의 닉네임을 가져오는것인데..
-  public String getUserName(ReplyDTO replyDTO, Principal principal){
+  public void getUserName(ReplyDTO replyDTO, Principal principal){
 
     String email = principal.getName();
     User user = userService.findByEmail(email);
 
     String userName = user.getNickname();
 
-    return userName;
+    replyDTO.setReplyer(userName);
 
   }
 
@@ -67,7 +67,7 @@ public class ReplyServiceImpl implements ReplyService {
     Pageable pageable = PageRequest
             .of(pageRequestDTO.getPage() <= 0 ? 0: pageRequestDTO.getPage()-1,
                     pageRequestDTO.getSize(),
-                    Sort.by("replayId" +
+                    Sort.by("id" +
                             "").descending());
 
     Page<Reply> result = replyRepository.listOfBoard(boardId, pageable);
@@ -99,7 +99,7 @@ public class ReplyServiceImpl implements ReplyService {
   @Transactional
   public void modify(ReplyDTO replyDTO) {
 
-    Reply reply = replyRepository.findById(replyDTO.getReplyId()).get();
+    Reply reply = replyRepository.findById(replyDTO.getId()).get();
     log.info(reply);
     reply.changeText(replyDTO.getReplyText()); //댓글 수정
 
@@ -112,8 +112,7 @@ public class ReplyServiceImpl implements ReplyService {
   public void remove(Long replayId
   ) {
 
-    replyRepository.deleteById(replayId
-    );
+    replyRepository.deleteById(replayId);
 
   }
 

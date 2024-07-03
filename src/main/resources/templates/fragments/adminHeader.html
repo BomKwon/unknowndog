@@ -37,7 +37,7 @@
                     <div class="font-size small" sec:authorize="isAuthenticated()" >
 
                         <span  ></span>
-                        관리자 <a th:href="'/user/read/' +${#authentication.name}" sec:authentication property="principal" var="principal" th:text="${#authentication.name}"></a>님 어서오시개🐶
+                        관리자 <a th:href="'/user/read/' +${#authentication.name}" sec:authentication property="principal" var="principal" th:text="${nickname}"></a>님 어서오시개🐶
 
                     </div>
 

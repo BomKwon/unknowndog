@@ -5,6 +5,7 @@ import com.example.unknowndog.dto.NoticeDTO;
 import com.example.unknowndog.dto.UserDTO;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
+import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.NoticeService;
 import com.example.unknowndog.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,9 +35,13 @@ public class AdminController {
 
     private final NoticeService noticeService;
     private final UserService userService;
+    private final MainService mainService;
 
     @GetMapping("/")
     public String adminMain(Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         if(!principal.getName().equals("00bom00@naver.com")) {
             model.addAttribute("adminErr", "접속 권한이 없다개 메인화면으로 돌아간다개");
@@ -54,6 +59,9 @@ public class AdminController {
 
         // TODO: 2024-06-21 알려주신 대로 했지만내가 멍청해서 적용을 못하기에 추후에 다시 보도록(작성자=닉네임 연결부분) 완
 
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
         model.addAttribute("noticeDTO", new NoticeDTO());
 
         return "/admin/noticeForm";
@@ -64,7 +72,12 @@ public class AdminController {
                             BindingResult bindingResult,
                             Model model, Principal principal) {
 
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+
         Notice notice = noticeDTO.newNotice();
+
 
         if (bindingResult.hasErrors()) {
             log.info("에러발생했개! "+ noticeDTO);
@@ -97,7 +110,10 @@ public class AdminController {
     //회원리스트
     @GetMapping("/user/list")
     public String userList(UserSearchDTO userSearchDTO, UserDTO userDTO,
-                           @PathVariable("page") Optional<Integer> page, Model model){
+                           @PathVariable("page") Optional<Integer> page, Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         Pageable pageable = PageRequest
                 .of(page.isPresent() ? page.get() : 0 , 10);
@@ -113,7 +129,11 @@ public class AdminController {
 
 
     @GetMapping("/notice/{noticeId}")
-    public String noticeMo(@PathVariable Long noticeId, Model model) {
+    public String noticeMo(@PathVariable Long noticeId, Model model, Principal principal) {
+
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
 
         noticeService.updateViews(noticeId);
@@ -139,7 +159,11 @@ public class AdminController {
     @PostMapping("/notice/{noticeId}")
     public String itemUpdate(@Valid NoticeDTO noticeDTO,
                              BindingResult bindingResult,
-                             Model model) {
+                             Model model, Principal principal) {
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
 
         if (bindingResult.hasErrors()) {
             return "/notice/noticeForm";

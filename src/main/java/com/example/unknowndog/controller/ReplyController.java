@@ -34,7 +34,7 @@ public class ReplyController {
 
     log.info(replyDTO);
 
-    replyDTO.setReplyer(replyServiceImpl.getUserName(replyDTO, principal));  //댓글 작성자명
+    replyServiceImpl.getUserName(replyDTO, principal);  //댓글 작성자명
 
     Long replyId = replyService.register(replyDTO);
 
@@ -57,6 +57,8 @@ public class ReplyController {
    PageResponseDTO<ReplyDTO> pageResponseDTO =
            replyService.getListOfBoard(boardId, pageRequestDTO);
 
+
+
    return pageResponseDTO;
 
   }
@@ -73,7 +75,7 @@ public class ReplyController {
   public Map<String, Long> modify(@PathVariable("replyId") Long replyId,
                                   @RequestBody ReplyDTO replyDTO){
 
-    replyDTO.setReplyId(replyId);
+    replyDTO.setId(replyId);
 
     replyService.modify(replyDTO);
 

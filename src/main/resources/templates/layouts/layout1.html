@@ -12,13 +12,18 @@
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">
+        /*마우스 우클릭 방지*/
+        document.oncontextmenu = function () {return false}
+    </script>
+
     <link href="/css/main.css"  rel="stylesheet">
 
     <link th:href="@{/css/layout1.css}" rel="stylesheet">
     <!-- jquery-->
 
 </head>
-<body>
+<body oncontextmenu="return false"> <!--마우스 우클릭 방지-->
 
     <!-- th:block  레이아웃 템플릿에서 프래그먼트를 정의하는 테그-->
     <!-- th:replace 다른 템플릿 파일의 특정 요소를 현재 위치에 삽입하는 태그-->

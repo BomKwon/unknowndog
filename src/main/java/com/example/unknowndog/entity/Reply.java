@@ -35,7 +35,7 @@ public class Reply extends BaseEntity {
 
 
   public void Reply(ReplyDTO replyDTO) {
-    this.id = replyDTO.getReplyId();
+    this.id = replyDTO.getId();
     this.replyText = replyDTO.getReplyText();
     this.replyer = replyDTO.getReplyer();
   }

@@ -4,6 +4,7 @@ import com.example.unknowndog.dto.MainQuestDTO;
 import com.example.unknowndog.dto.QuestFormDTO;
 import com.example.unknowndog.dto.QuestSearchDTO;
 import com.example.unknowndog.entity.Quest;
+import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.QuestService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -33,9 +34,16 @@ public class QuestController {
 
     private final QuestService questService;
 
+    private final MainService mainService;
+
 
     @GetMapping("/new")
     public String questForm(Principal principal, Model model) {
+
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         model.addAttribute("questFormDTO", new QuestFormDTO());
 
@@ -47,7 +55,10 @@ public class QuestController {
                             Principal principal, Model model
             , @RequestParam("questImgFile") List<MultipartFile> questImgFileList) throws IOException {
 
-
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         if (bindingResult.hasErrors()) {
 
@@ -88,8 +99,12 @@ public class QuestController {
 
     @GetMapping("/read/{questId}")        //   /quest/3  3번이미지 보여줘
     public String questDtl(@PathVariable("questId") Long questId
-            , Model model) {
+            , Model model, Principal principal) {
 
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         try {
 
@@ -113,8 +128,11 @@ public class QuestController {
 
     @GetMapping("/modify/{questId}")        //   /quest/3  3번이미지 보여줘
     public String questModifyGet(@PathVariable("questId") Long questId
-            , Model model) {
+            , Model model, Principal principal) {
 
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         try {
 
@@ -136,9 +154,13 @@ public class QuestController {
 
     @PostMapping("/modify/{questId}")
     public String questUpdate(@Valid QuestFormDTO questFormDTO,
-                             BindingResult bindingResult,
+                             BindingResult bindingResult, Principal principal,
                              @RequestParam("questImgFile") List<MultipartFile> multipartFiles,
                              Model model) {
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
 
         if (bindingResult.hasErrors()) {
             return "/quest/questForm";
@@ -150,6 +172,7 @@ public class QuestController {
         }
 
         try {
+            questService.getUserName(questFormDTO, principal);
             questService.updateQuest(questFormDTO, multipartFiles);
         }catch (Exception e){
             model.addAttribute("errorMessage", "수정 중에 문제가 발생했다개");
@@ -164,7 +187,11 @@ public class QuestController {
 
 
     @DeleteMapping("/remove/{questId}")
-    public String questRemove(Long questId, RedirectAttributes redirectAttributes){
+    public String questRemove(Long questId, RedirectAttributes redirectAttributes,
+                              Principal principal, Model model){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         String quest = questService.remove(questId);
         redirectAttributes.addFlashAttribute("result", questId + "번 글이 삭제됐다개");
@@ -180,7 +207,7 @@ public class QuestController {
 
     @GetMapping({"/list","/list/{page}"})
     public String questList(QuestSearchDTO questSearchDTO,
-                            @PathVariable("page") Optional<Integer> page, Model model) {
+                            @PathVariable("page") Optional<Integer> page, Model model, Principal principal) {
 
         // TODO: 2024-06-21 밑에 코드로 안돼서 급한대로 메인은 되니까 붙여놓음
 
@@ -194,6 +221,11 @@ public class QuestController {
 //
 //        model.addAttribute("quests", quests);
 //        model.addAttribute("questSearchDTO", questSearchDTO);
+
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         Pageable pageable = PageRequest
                 .of(page.isPresent() ? page.get() : 0 , 10);

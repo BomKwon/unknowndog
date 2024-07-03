@@ -3,6 +3,7 @@ package com.example.unknowndog.controller;
 
 import com.example.unknowndog.dto.UserDTO;
 import com.example.unknowndog.entity.User;
+import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -14,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @Log4j2
 @RequiredArgsConstructor
@@ -24,12 +27,14 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final MainService mainService;
 
 
 
 
     @GetMapping("/register")
     public String userForm(Model model){      //object로 보내서 form에서 사용하려고
+
 
         model.addAttribute("userFormDTO", new UserDTO());
 
@@ -114,8 +119,24 @@ public class UserController {
     }
 
 
-    @GetMapping("/view")  //간단정보 회원끼리 누구나
-    public String walkview(){
+    @GetMapping("/view/{email}")  //간단정보 회원끼리 누구나
+    public String walkview(@PathVariable("email") String email, Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+        try {
+            UserDTO userDTO = UserDTO.of(userService.findByEmail(email));
+            model.addAttribute("userDTO" , userDTO);
+
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage",
+                    "존재하지 않는 회원이개");
+            model.addAttribute("userDTO", new UserDTO());
+
+            return "redirect:/";
+
+        }
 
         return "/user/userView";
     }
@@ -127,7 +148,10 @@ public class UserController {
     //그리고 오류 터져서 회원번호(id)가 아닌 일단 이메일로 바꿔둠 추후 로그인한 이메일을 통해 회원번호와 별명을 가져올것
     @GetMapping("/read/{email}")  //자기만 볼수있는 세세한 정보
     public String userDtl(@PathVariable("email") String email
-            , Model model){
+            , Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         try {
             UserDTO userDTO = UserDTO.of(userService.findByEmail(email));
@@ -150,7 +174,10 @@ public class UserController {
 
     @GetMapping("/modify/{email}")  //자기만 볼수있는 세세한 정보
     public String userModifyGet(@PathVariable("email") String email
-            , Model model){
+            , Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         try {
             UserDTO userDTO = UserDTO.of(userService.findByEmail(email));
@@ -171,7 +198,10 @@ public class UserController {
     @PostMapping("/modify/{email}")
     public String modify(@Valid UserDTO userDTO,
                          BindingResult bindingResult,
-                         Model model){
+                         Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
         if (bindingResult.hasErrors()) {
             return "/user/userForm";
@@ -192,7 +222,11 @@ public class UserController {
 
     @GetMapping("/read")        //   /user/3  3번이미지 보여줘
     public String userInfo(@PathVariable("email") String email, Long userId
-            , Model model) {
+            , Model model, Principal principal) {
+
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
 
 
 //        try {

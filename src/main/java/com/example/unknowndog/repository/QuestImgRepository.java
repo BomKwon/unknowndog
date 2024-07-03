@@ -1,6 +1,5 @@
 package com.example.unknowndog.repository;
 
-import com.example.unknowndog.entity.Quest;
 import com.example.unknowndog.entity.QuestImg;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +12,7 @@ public interface QuestImgRepository extends JpaRepository<QuestImg, Long> {
     List<QuestImg> findByQuestIdOrderByIdAsc(Long questId);
 
     //상품의 대표이미지를 찾는 쿼리 메소드
-    Quest findByQuestIdAndRepimgYn (Long questId, String repimgYn);
+    QuestImg findByQuestIdAndRepimgYn (Long questId, String repimgYn);
 
 
 }

@@ -28,7 +28,16 @@
                             alert(errorMessage);
                         }
 
-                    })
+                        $(".okBtn").on("click" , function (e) {
+                            e.preventDefault()
+                            alert("신청 완료 되었다개👌")
+                        })
+
+                        $(".likeBtn").on("click" , function (e) {
+                            e.preventDefault()
+                            alert("찜 완료 되었다개💖")
+                        })
+
 
                         var salary = $(".salary").val()
 
@@ -36,32 +45,35 @@
                             salary.hide()
                         }
 
-
                         var regTime = $(".regTime").val()
 
-                    function timeForToday(regTime) {
-                        const today = new Date();
-                        const timeValue = new Date(regTime);
+                        function timeForToday(regTime) {
+                            const today = new Date();
+                            const timeValue = new Date(regTime);
 
 
-                        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-                        if (betweenTime < 1) return '방금전';
-                        if (betweenTime < 60) {
-                            return `${betweenTime}분전`;
+                            const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+                            if (betweenTime < 1) return '방금전';
+                            if (betweenTime < 60) {
+                                return `${betweenTime}분전`;
+                            }
+
+                            const betweenTimeHour = Math.floor(betweenTime / 60);
+                            if (betweenTimeHour < 24) {
+                                return `${betweenTimeHour}시간전`;
+                            }
+
+                            const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+                            if (betweenTimeDay < 365) {
+                                return `${betweenTimeDay}일전`;
+                            }
+
+                            return timeValue;
                         }
 
-                        const betweenTimeHour = Math.floor(betweenTime / 60);
-                        if (betweenTimeHour < 24) {
-                            return `${betweenTimeHour}시간전`;
-                        }
+                    })
 
-                        const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
-                        if (betweenTimeDay < 365) {
-                            return `${betweenTimeDay}일전`;
-                        }
 
-                        return timeValue;
-                    }
 
 
 
@@ -138,7 +150,7 @@
                                 </div>
 
 
-                                <a href="/user/read/">
+                                <a th:href="'/user/view/' + ${questFormDTO.createBy}">
                                     <div class="mb-3" style="color: black">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
@@ -167,8 +179,8 @@
 
                                     <div th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}">
                                         <div th:if="${questFormDTO.stockNumber > 0}" class="">
-                                            <button type="button" class="btn btn-light btn-lg" onclick="addCart()">❤ 찜</button>
-                                            <button type="button" class="btn btn-light btn-lg" onclick="order()">✔ 수락하기</button>
+                                            <button type="button" class="btn btn-light btn-lg likeBtn" >❤ 찜</button> <!--onclick="addCart()"-->
+                                            <button type="button" class="btn btn-light btn-lg okBtn" >✔ 신청하기</button>  <!--onclick="order()"-->
                                         </div>
 
                                                                                 <!--1 onclick를 이용해서 함수만든후에 실행-->

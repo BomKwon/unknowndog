@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.w3.org/1999/xhtml"
+        prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"
       layout:decorate="~{layouts/layout1}">
 <head>
     <link rel="stylesheet" href="/css/layout1.css" />
@@ -139,18 +140,22 @@
 
 
                     <!--댓글-->
-                    <div class="panel panel-default" style="margin-top: 20px;" sec:authorize="isAuthenticated()">
+                    <div class="panel panel-default" style="margin-top: 20px;" >
                         <div class="panel-heading">
-                            <form class="row g-3" style="margin: auto">
+                            <form class="row g-3 reply" style="margin: auto">
 
 <!--                                <div>-->
 <!--                                <input type="text" class="form-control" id="inputReply1" style="display: inline-block; width: 150px; height: 40px; margin: auto">-->
 <!--                                </div>-->
 
-                                <div style="margin-bottom: 20px; text-align: center">
+                                <div style="margin-bottom: 20px; text-align: center" sec:authorize="isAuthenticated()">
                                     <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
                                     <button type="button" class="btn btn-light saveBtn" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
                                 </div>
+
+<!--                                <div style="margin-bottom: 20px; text-align: center" sec:authorize="isAnonymous()">-->
+<!--                                    로그인 후에 댓글 작성이 가능하개🐶-->
+<!--                                </div>-->
 
                             </form>
 
@@ -166,22 +171,26 @@
 
 
                                 <ul class="chat replylist">
-                                  <li class="clearfix">
+                                  <div class="clearfix">
 
                                       <div class="chat-body clearfix">
-                                          <div class="header">
-                                              <strong class="primary-font">작성자</strong>
-                                              <small class="pull-right text-muted">
-                                                  <i class="fa fa-clock-o fa-fw"></i> 작성일
-                                              </small>
-                                          </div>
-                                          <p>
-                                              내용
-                                          </p>
-                                      </div>
-                                  </li>
+<!--                                          <div class="header">-->
+<!--                                              <strong class="primary-font">작성자</strong>-->
+<!--                                              <small class="pull-right text-muted">-->
+<!--                                                  <i class="fa fa-clock-o fa-fw"></i> 작성일-->
+<!--                                              </small>-->
+<!--                                          </div>-->
+<!--                                          <p>-->
+<!--                                              내용-->
+<!--                                          </p>-->
 
-                                        <p>작성된 댓글이 없다개 🥵</p>
+                                          <div style="text-align: center">
+                                              <p>작성된 댓글이 없다개 🥵</p>
+                                          </div>
+                                      </div>
+                                  </div>
+
+
 
                                 </ul>
 
@@ -247,16 +256,13 @@
         let str2 = ""; //댓글 페이징 처리를 위한 str2
 
         let replyText1 = $(".replyText1"); //label + input
-        let replyer1 = $(".replyer1"); //label + input
-        let regtime1 = $(".regtime1"); //label + input
-
         let replyText = $(".replyText"); //작성내용 input
-        let replyer = $(".replyer"); //작성자 input
-        let regtime = $(".regtime"); //input 등록일자
 
         let saveBtn = $(".saveBtn"); // 저장버튼
         let modBtn = $(".modBtn"); //수정버튼
         let removeBtn = $(".removeBtn"); //삭제버튼
+
+        let reply = $(".reply"); //모달전체
 
         let thispage = 1;
 
@@ -268,34 +274,38 @@
 
             alert("ddd")
             console.log(replyText.val())
-            console.log(replyer.val())
 
 
 
-            let reply = {"boardId" : boardId, "replyText" : replyText.val(), "replyer" : replyer.val() }
+            let reply = {"boardId" : boardId, "replyText" : replyText.val() }
 
             let url =  "/replies/new"
 
-            replyservice.register(reply,url, function (data) {
+            replyservice.register(reply, url, function (data) {
                 console.log(data)
-                alert(data.id + "번 댓글이 등록되었습니다.")
+                // alert(data.id + "번 댓글이 등록되었습니다.")
                 showList(1);
+
+                console.log(data)
+
+
             })
-            modal.modal("hide")
+            reply.reply("hide")
+
 
         })
 
         //수정버튼 클릭시
         modBtn.on("click", function (){
 
-            let reply = {"id" : modal.data("id"), "replyText" : replyText.val()}
+            let reply = {"id" : reply.data("id"), "replyText" : replyText.val()}
 
             let url = "/replies/modify/"
             replyservice.modify(reply, url, function (data) {
                 alert(data.id)
                 showList(thispage);
             })
-            modal.modal("hide")
+            reply.reply("hide")
         })
 
         //삭제버튼 클릭시
@@ -303,13 +313,13 @@
 
             let url = "/replies/remove/"
 
-            replyservice.delete(modal.data("id"), url,  function (data){
+            replyservice.delete(reply.data("id"), url,  function (data){
 
                 alert(data.id)
                 showList(1);
 
             })
-            modal.modal("hide")
+            reply.reply("hide")
 
         })
 
@@ -325,16 +335,28 @@
                 console.log(data);
                 console.log(data.start);
                 thispage = data.page
+
+
                 if ( data== null || data.dtoList == null || data.dtoList.length == null  ) {
                     return null;
-                } else {
+                } else if (data != null && data.dtoList != null && data.dtoList.length >= 0){
+
 
                     for (let i = 0; i < data.dtoList.length; i++) {
-                        str += `<li  data-num="${data.dtoList[i].id}" class="clearfix"><div class="chat-body clearfix"><div class="header">
-                    <strong class="primary-font">${data.dtoList[i].replyer}</strong><small class="pull-right text-muted">
-                    <i class="fa fa-clock-o fa-fw"></i> 12 mins ago</small>
-                    </div><p>${data.dtoList[i].replyText}</p></div></li>`;
+
+
+                        str += `<div  data-num="${data.dtoList[i].id}" class="clearfix">
+                                    <div class="chat-body clearfix"><div class="header">
+                                        <strong class="primary-font">${data.dtoList[i].replyer}</strong>
+                                        <small class="pull-right text-muted">
+                                            <i class="fa fa-clock-o fa-fw"></i>${data.dtoList[i].regTime} <span > <a href="" class="modBtn">[수정</a>/<a href="" class="removeBtn">삭제]</a> </span></small>
+                                        </div>
+                                        <p>${data.dtoList[i].replyText}</p>
+                                    </div>
+                                </div>`;
                     }
+
+
                     if (data.prev) {
                         str2 += `<li class="page-item previous " aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous">
                 <a class="page-link" data-num="${data.start - 1}">이전</a>

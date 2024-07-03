@@ -36,7 +36,6 @@ public class UserService implements UserDetailsService {
        return userRepository.findByEmail(email);
     }
 
-
     // 회원가입
     public User saveUser(User user) {
         log.info("사용자가 있는지 확인하기 전");
@@ -49,6 +48,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
 
     }
+
 
     public User validateDuplicateEmailonly(String email) {
         log.info("이미 가입된 회원인지 확인");

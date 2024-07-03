@@ -2,6 +2,7 @@ package com.example.unknowndog.controller;
 
 import com.example.unknowndog.dto.*;
 import com.example.unknowndog.entity.Notice;
+import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.NoticeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -28,11 +29,17 @@ import java.util.Optional;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final MainService mainService;
 
     @GetMapping({"/list", "/list/{page}"})
     public String noticeList(NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO,
                              @PathVariable("page") Optional<Integer> page, Model model,
                              Principal principal) {
+
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         if (principal == null) {
 
@@ -62,8 +69,12 @@ public class NoticeController {
     }
 
     @GetMapping("/read/{noticeId}")
-    public String noticeRead(@PathVariable Long noticeId, Model model) {
+    public String noticeRead(@PathVariable Long noticeId, Model model, Principal principal) {
 
+        if (principal != null) {
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+        }
 
         noticeService.updateViews(noticeId);
 
