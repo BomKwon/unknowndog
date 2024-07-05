@@ -3,82 +3,149 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout1}">
-        <head>
-        <link rel="stylesheet" href="/css/layout1.css" />
-        <meta charset="UTF-8">
-        <title>모르는 개 산책 :: 의뢰 정보</title>
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 의뢰 정보</title>
 
-            <th:block layout:fragment="css">
-                <!--css-->
-                <style>
-                    .fieldError {
-                        color: red;
+    <th:block layout:fragment="css">
+        <!--css-->
+        <style>
+            .fieldError {
+                color: red;
+            }
+        </style>
+    </th:block>
+
+    <!-- 사용자 스크립트 추가-->
+
+    <script th:inline="javascript">
+
+        $(document).ready(function errMsg() {
+
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+
+            $("#counts").hide()
+
+
+
+            //신청하기 버튼을 클릭했을 때 실행할 함수
+            $(".okBtn").on("click" , function (e) {
+                e.preventDefault()
+                alert("신청 완료 되었다개👌 (아직 준비중 추후 업데이트 예정)")
+            })
+
+            // $(".likeBtn").on("click" , function (e) {
+            //     e.preventDefault()
+            //
+            // })
+
+
+
+
+            $(".delBtn").on("click" , function (e) {
+                e.preventDefault()
+
+                if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
+
+                    document.removefrm.submit();
+                    alert("삭제 완료 되었다개😥 (아직 준비중 추후 업데이트 예정)")
+
+                } else {
+
+                    alert("오류인가? (아직 준비중 추후 업데이트 예정)")
+
+                }
+
+                var salary = $(".salary").val()
+
+                if (salary == 0) {
+                    salary.hide()
+                }
+
+
+            })
+
+
+            var regTime = $(".regTime").val()
+
+            function timeForToday(regTime) {
+                const today = new Date();
+                const timeValue = new Date(regTime);
+
+
+                const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+                if (betweenTime < 1) return '방금전';
+                if (betweenTime < 60) {
+                    return `${betweenTime}분전`;
+                }
+
+                const betweenTimeHour = Math.floor(betweenTime / 60);
+                if (betweenTimeHour < 24) {
+                    return `${betweenTimeHour}시간전`;
+                }
+
+                const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+                if (betweenTimeDay < 365) {
+                    return `${betweenTimeDay}일전`;
+                }
+
+                return timeValue;
+            }
+
+
+
+        })
+
+
+        //찜 버튼을 클릭했을 때 실행 할 함수
+        function addLike() {
+            console.log("홍길동")
+
+            var questId = [[${questId}]]
+            var count = $("#count").val();
+            var param = {
+                questId : questId,
+                count : count
+            }
+            $.ajax({
+                url : "/likes",
+                type : "post",
+                contentType : "application/json; charset=utf-8",
+                data : JSON.stringify(param),
+                dataType : "json",
+                success : function (result,status) {
+
+                    //나중에 모달창으로 꾸미자
+                    //혹은 html페이지에 표시도 가능
+                    alert("찜 완료 되었다개💖 (아직 준비중 추후 업데이트 예정)")
+
+
+                } ,
+                error : function (result, status, error) {
+
+                    if(result.status == '401'){
+                        // alert(result.responseText+'로그인 후 이용해주세요');
+                        alert('로그인 후 이용해주개');
+                        location.href = '/user/login';
+                    }else {
+                        alert("확인요망 : " + result.responseText)
                     }
-                </style>
-            </th:block>
 
-            <!-- 사용자 스크립트 추가-->
-            <th:block layout:fragment="script">
-                <script th:inline="javascript">
+                    //에러출력, favicon
 
-                    $(document).ready(function errMsg() {
+                    //실패 메시지 bindingResult.hasErrors() 의 메소드 이건 DTO message
+                }
+            })
 
-                        var errorMessage = [[${errorMessage}]];
-                        if (errorMessage != null) {
-                            alert(errorMessage);
-                        }
-
-                        $(".okBtn").on("click" , function (e) {
-                            e.preventDefault()
-                            alert("신청 완료 되었다개👌")
-                        })
-
-                        $(".likeBtn").on("click" , function (e) {
-                            e.preventDefault()
-                            alert("찜 완료 되었다개💖")
-                        })
-
-
-                        var salary = $(".salary").val()
-
-                        if (salary == 0) {
-                            salary.hide()
-                        }
-
-                        var regTime = $(".regTime").val()
-
-                        function timeForToday(regTime) {
-                            const today = new Date();
-                            const timeValue = new Date(regTime);
-
-
-                            const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-                            if (betweenTime < 1) return '방금전';
-                            if (betweenTime < 60) {
-                                return `${betweenTime}분전`;
-                            }
-
-                            const betweenTimeHour = Math.floor(betweenTime / 60);
-                            if (betweenTimeHour < 24) {
-                                return `${betweenTimeHour}시간전`;
-                            }
-
-                            const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
-                            if (betweenTimeDay < 365) {
-                                return `${betweenTimeDay}일전`;
-                            }
-
-                            return timeValue;
-                        }
-
-                    })
+        }
 
 
 
-
-
-                </script>
-            </th:block>
+    </script>
 
 </head>
 <body>
@@ -97,8 +164,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card-body">
-<!--                                <span th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-3 ">도와주개</span>-->
-<!--                                <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료</span>-->
+                                <!--                                <span th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}" class="badge text-bg-success  mb-3 ">도와주개</span>-->
+                                <!--                                <span th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}" class="badge text-bg-danger mb-3">완료</span>-->
                                 <br>
 
 
@@ -153,11 +220,11 @@
                                 <a th:href="'/user/view/' + ${questFormDTO.createBy}">
                                     <div class="mb-3" style="color: black">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
-                                        <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4m13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"></path>
-                                    </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
+                                            <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4m13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"></path>
+                                        </svg>
 
-                                    <span  th:text="${questFormDTO.writer}"></span>
+                                        <span  th:text="${questFormDTO.writer}"></span>
 
                                     </div>
                                 </a>
@@ -165,25 +232,38 @@
 
                                 <br>
 
-                                <div class="h4 mb-3">
-                                    <span class="badge rounded-pill text-bg-light" style="background-color: honeydew" th:text="${questFormDTO.salaryOption}">Light</span>
-                                    <span class="salary" th:text="${questFormDTO.salary}"></span> 원
+
+                                <div class="input-group mb-3 count" id="counts">
+                                    <span class="input-group-text">수량</span>
+                                    <select class="form-select mb-1" id="count" name="count" aria-label="Default select example">
+                                        <option value="1" selected>1</option>
+                                    </select>
                                 </div>
 
-
+                                <br>
                                 <br>
 
 
+                                <div class="h3 mb-3">
+                                    <span class="badge rounded-pill text-bg-light" style="background-color: honeydew" th:text="${questFormDTO.salaryOption}">Light</span>
+                                    <span class="salary" th:if="${questFormDTO.salary} != 0" >[[${questFormDTO.salary}]] 원</span>
+                                </div>
+
+
                                 <hr>
+
+
                                 <div class="text-end mt-3 mb-3 me-3" >
 
                                     <div th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}">
-                                        <div th:if="${questFormDTO.stockNumber > 0}" class="">
-                                            <button type="button" class="btn btn-light btn-lg likeBtn" >❤ 찜</button> <!--onclick="addCart()"-->
-                                            <button type="button" class="btn btn-light btn-lg okBtn" >✔ 신청하기</button>  <!--onclick="order()"-->
+                                        <div th:if="${questFormDTO.stockNumber > 0}" >
+                                            <div th:if="${questFormDTO.createBy} != ${#authentication.principal.username}">
+                                                <button type="button" class="btn btn-light btn-lg likeBtn" onclick="addLike()">❤ 찜</button> <!--onclick="addCart()"-->
+                                                <button type="button" class="btn btn-light btn-lg okBtn" >✔ 신청하기</button>  <!--onclick="order()"-->
+                                            </div>
                                         </div>
 
-                                                                                <!--1 onclick를 이용해서 함수만든후에 실행-->
+                                        <!--1 onclick를 이용해서 함수만든후에 실행-->
                                         <!--2 add이벤트리스너를 이용해서 버튼을 클릭했을때 작동하는 함수만들기 -->
 
 
@@ -199,41 +279,43 @@
                                         <h1>완료했다개</h1>
                                     </div>
 
-<!--                                    <div th:unless="${questFormDTO.questStatus.name() == 'SUCCESS'}">-->
-<!--                                        &lt;!&ndash;변경 예정 안팔고 있으니까 품절 표시??&ndash;&gt;-->
-<!--                                        <h1>완료</h1>-->
-<!--                                    </div>-->
+                                    <!--                                    <div th:unless="${questFormDTO.questStatus.name() == 'SUCCESS'}">-->
+                                    <!--                                        &lt;!&ndash;변경 예정 안팔고 있으니까 품절 표시??&ndash;&gt;-->
+                                    <!--                                        <h1>완료</h1>-->
+                                    <!--                                    </div>-->
 
                                     <br>
                                     <br>
 
                                     <!--삭제 수정버튼 만들깅 기존-->
-<!--                                    <div th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">-->
+                                    <!--                                    <div th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">-->
 
-<!--                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">-->
-<!--                                            삭제-->
-<!--                                        </a>-->
+                                    <!--                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">-->
+                                    <!--                                            삭제-->
+                                    <!--                                        </a>-->
 
-<!--                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">-->
-<!--                                            수정-->
-<!--                                        </a>-->
+                                    <!--                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">-->
+                                    <!--                                            수정-->
+                                    <!--                                        </a>-->
 
-<!--                                    </div>-->
+                                    <!--                                    </div>-->
 
                                     <!-- 삭제 수정버튼 만들깅 관리자용-->
                                     <div sec:authorize="hasRole('ADMIN')">
 
-                                        <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
-                                            삭제
-                                        </a>
+                                        <form  name="removefrm">
+                                            <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
+                                                삭제
+                                            </a>
 
-                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
-                                            수정
-                                        </a>
+                                            <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
+                                                수정
+                                            </a>
+                                        </form>
 
                                     </div>
 
-<!--                                   삭제 수정버튼 만들깅 일반-->
+                                    <!--                                   삭제 수정버튼 만들깅 일반-->
                                     <div sec:authorize="hasRole('USER')" th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">
 
                                         <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
@@ -255,68 +337,6 @@
         </div>
     </div>
 
-
-
-<!--    <div class="row mb-3">-->
-<!--        <div class="col ">-->
-
-<!--            <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">-->
-<!--                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">상세정보</button>-->
-<!--                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" tabindex="-1">상품평</button>-->
-<!--            </div>-->
-
-<!--            <div class="tab-content" id="nav-tabContent">-->
-<!--                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">-->
-<!--                    <p th:text="${item.itemDetail}">홍길동</p>-->
-<!--                </div>-->
-<!--                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">-->
-<!--                    &lt;!&ndash;댓글&ndash;&gt;-->
-<!--                    <div class="panel panel-default">-->
-<!--                        <div class="panel-heading">-->
-<!--                            &lt;!&ndash;로그인시 리뷰 등록버튼 보이도록 아니면 안보이게&ndash;&gt;-->
-
-<!--                            <button type="button" class="btn btn-primary reviewRegister" data-bs-toggle="modal" data-bs-target="#new-modal">-->
-<!--                                New Reply-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; /.panel-heading &ndash;&gt;-->
-<!--                        <div class="panel-body">-->
-<!--                            <ul class="chat reviewlist">-->
-<!--                                <li class="clearfix">-->
-
-<!--                                    <div class="chat-body clearfix">-->
-<!--                                        <div class="header">-->
-<!--                                            <strong class="primary-font">aaaaaa</strong>-->
-<!--                                            <small class="pull-right text-muted">-->
-<!--                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago-->
-<!--                                            </small>-->
-<!--                                        </div>-->
-<!--                                        <p>-->
-<!--                                            aaaaaa-->
-<!--                                        </p>-->
-<!--                                    </div>-->
-<!--                                </li>-->
-
-<!--                            </ul>-->
-
-<!--                            <div class="col-sm-6">-->
-<!--                                <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">-->
-<!--                                    <ul class="pagination">-->
-
-<!--                                    </ul>-->
-
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--        </div>-->
-<!--    </div>-->
 
 
     <div class="row">
@@ -344,36 +364,36 @@
     </div>
 
 
-<!--    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>-->
-<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <label class="reviewText1">내용</label>-->
-<!--                    <input class="form-control reviewText reviewText1">-->
+    <!--    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+    <!--        <div class="modal-dialog">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-header">-->
+    <!--                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>-->
+    <!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+    <!--                </div>-->
+    <!--                <div class="modal-body">-->
+    <!--                    <label class="reviewText1">내용</label>-->
+    <!--                    <input class="form-control reviewText reviewText1">-->
 
-<!--                    <label class="writer1">작성자</label>-->
-<!--                    <input class="form-control writer writer1">-->
+    <!--                    <label class="writer1">작성자</label>-->
+    <!--                    <input class="form-control writer writer1">-->
 
-<!--                    <label class="regtiem1">등록일자</label>-->
-<!--                    <input class="form-control regtiem regtiem1">-->
+    <!--                    <label class="regtiem1">등록일자</label>-->
+    <!--                    <input class="form-control regtiem regtiem1">-->
 
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <button type="button" class="btn btn-default saveBtn">Save</button>-->
-<!--                    <button type="button" class="btn btn-default modBtn">modify</button>-->
-<!--                    <button type="button" class="btn btn-default removeBtn">삭제</button>-->
-<!--                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>-->
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                    <button type="button" class="btn btn-default saveBtn">Save</button>-->
+    <!--                    <button type="button" class="btn btn-default modBtn">modify</button>-->
+    <!--                    <button type="button" class="btn btn-default removeBtn">삭제</button>-->
+    <!--                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>-->
 
-<!--                </div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; /.modal-content &ndash;&gt;-->
-<!--        </div>-->
-<!--        &lt;!&ndash; /.modal-dialog &ndash;&gt;-->
-<!--    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            &lt;!&ndash; /.modal-content &ndash;&gt;-->
+    <!--        </div>-->
+    <!--        &lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+    <!--    </div>-->
 
     <div style="text-align: right; margin-top: 30px; margin-left: 10px">
         <a href="/notice/list" class="btn btn-danger">목록</a>

@@ -97,6 +97,7 @@ public class BoardService {
 
         Page<BoardListReplyCountDTO> boardPage = boardRepository.searchWithReplyCount(types, keyword, pageable);
 
+        boardPage.getContent().forEach(boardListReplyCountDTO -> log.info(boardListReplyCountDTO));
 
 //    PageResponseDTO<BoardDTO> aa =
 //            new PageResponseDTO<BoardDTO>(pageRequestDTO, boardDTOList, (int) boardPage.getTotalElements());

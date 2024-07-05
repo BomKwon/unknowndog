@@ -19,7 +19,7 @@
 
 
 
-                <div class="card-body">
+                <div class="card-body" style="height: 500px;">
 
                     <h4>👄 대화하개</h4>
 
@@ -29,7 +29,9 @@
                     <hr>
 
                     <div style="margin-left: 10px; margin-bottom: 15px; margin-right: 10px; margin-top: 15px">
-                        <table class="table" style="width:100%; text-align: center">
+                        <table class="table" style="width:100%;  text-align: center">
+
+
                             <thead>
                             <tr class="table-danger">
                                 <th scope="col" style="width:10%">글번호</th>
@@ -39,15 +41,19 @@
                                 <th scope="col" style="width:10%">조회수</th>
                             </tr>
                             </thead>
+
+
+
                             <tbody>
+
                             <th:block th:each="notice, status: ${notice.getContent()} ">
 
                                 <tr role="row" class="table-light">
-                                    <th scope="row" style="font-size: small">[[${notice.id}]]</th>
+                                    <th scope="row" style="font-size: small">[ 공지 ]</th>
                                     <td style="text-align: left;">
                                         <a style="color: black;" th:href="'/notice/read/'+ ${notice.id}">
                                             &nbsp;
-                                            [ 공지 ] [[${notice.title}]]
+                                             [[${notice.title}]]
 
                                         </a>
                                     </td>
@@ -57,7 +63,10 @@
                                 </tr>
 
                             </th:block>
-                            <th:block th:each="dto, status: ${pageResponseDTO.dtoList} ">
+
+
+                            <th:block th:each="dto: ${pageResponseDTO.dtoList}">
+
                                 <tr role="row">
                                     <th scope="row" style="font-size: small">[[${dto.id}]]</th>
                                     <td style="text-align: left;">
@@ -79,55 +88,56 @@
                                     <td>[[${dto.view}]]</td>
                                 </tr>
                             </th:block>
-<!--                            <th:block th:each="board, status: ${boards.getContent()} ">-->
 
-<!--                                    <tr role="row">-->
-<!--                                        <th scope="row" style="font-size: small">[[${board.id}]]</th>-->
-<!--                                        <td style="text-align: left;">-->
-<!--                                            <a style="color: black;" th:href="'/board/read/'+ ${board.id}">-->
-<!--                                                &nbsp;-->
 
-<!--                                                [ <span th:if="${board.boardCategory.name() == 'FREE_TALK'}" th:id="${board.boardCategory}" class="mb-1 end">자유</span>-->
-<!--                                                <span th:if="${board.boardCategory.name() == 'QUESTION'}" th:id="${board.boardCategory}" class="mb-1 end">질문</span>-->
-<!--                                                <span th:if="${board.boardCategory.name() == 'SHARE'}" th:id="${board.boardCategory}" class="mb-1 end">나눔</span>-->
-<!--                                                <span th:if="${board.boardCategory.name() == 'REVIEW'}" th:id="${board.boardCategory}" class="mb-1 end">후기</span> ]-->
 
-<!--                                                [[${board.title}]]-->
-<!--                                            </a>-->
-<!--                                        </td>-->
-<!--                                        <td>[[${board.writer}]]</td>-->
-<!--                                        <td>[[${#temporals.format(board.regTime, 'yyyy-MM-dd')}]]</td>-->
-<!--                                        <td>[[${board.view}]]</td>-->
-<!--                                    </tr>-->
-
-<!--                            </th:block>-->
                             </tbody>
+
+
                         </table>
+
+
+                        <div th:if="${#lists.isEmpty(pageResponseDTO.dtoList)}" >
+
+                            <br>
+                            <br>
+                            <br>
+
+                            <h3 style="text-align: center"> 아직 작성된 글이 없다개 👻 </h3>
+
+                        </div>
+
+
                     </div>
+
+
+
+
 
                 </div>
 
-                <div class="pagination justify-content-center en mb-0"  th:with="start=${(boards.number/maxPage) * maxPage + 1 } , end=${(boards.totalPages==0 ) ? 1 :  (start + (maxPage -1) < boards.totalPages ? start + (maxPage - 1): boards.totalPages) }">
-                    <div class="col-2">
+                <div>
+
+                    <th:block th:if="${pageResponseDTO.total > 10}">
                         <ul class="pagination">
 
                             <!--맨앞-->
-                            <li class="page-item" th:classappend="${boards.first} ? 'disabled' : ''">
-                                <a class="page-link"   th:onclick="'javascript:page(' + ${boards.first} + ')'  "> << </a>
+                            <li class="page-item" >
+                                <a class="page-link"   onclick="'javascript:page(1)'"> << </a>
                             </li>
 
                             <!--이전-->
-                            <li class="page-item" th:classappend="${boards.first} ? 'disabled' : ''">
+                            <li class="page-item" th:classappend="${pageResponseDTO.prev} ? 'disabled' : ''">
                                 <a class="page-link"   th:onclick="'javascript:page(' + ${boards.number - 1} + ')'  "> < </a>
                             </li>
 
                             <!--반복-->
-                            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${boards.number eq page -1 } ? 'active' : ''">
-                                <a class="page-link"  th:onclick="'javascript:page(' + ${page - 1} + ')'  ">[[${page}]]</a>
+                            <li class="page-item" th:each="page1: ${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}"  th:classappend="${pageResponseDTO.page eq page1 -1 } ? 'active' : ''">
+                                <a class="page-link"  th:onclick="'javascript:page(' + ${page1 - 1} + ')'  ">[[${page1}]]</a>
                             </li>
 
                             <!--다음-->
-                            <li class="page-item" th:classappend="${boards.last} ? 'disabled' : ''">
+                            <li class="page-item" th:classappend="${pageResponseDTO.next} ? 'disabled' : ''">
                                 <a class="page-link" th:onclick="'javascript:page(' + ${boards.number + 1} + ')'  "> > </a>
                             </li>
 
@@ -136,7 +146,8 @@
                                 <a class="page-link" th:onclick="'javascript:page(' + ${boards.last} + ')'  "> >> </a>
                             </li>
                         </ul>
-                    </div>
+                    </th:block>
+
                 </div>
 
             </div>

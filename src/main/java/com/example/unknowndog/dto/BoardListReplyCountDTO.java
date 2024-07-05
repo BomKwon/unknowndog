@@ -1,11 +1,16 @@
 package com.example.unknowndog.dto;
 
 import com.example.unknowndog.constant.BoardCategory;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardListReplyCountDTO {
 
   private Long id;

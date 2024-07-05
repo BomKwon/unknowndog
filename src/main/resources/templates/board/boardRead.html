@@ -143,20 +143,10 @@
                     <div class="panel panel-default" style="margin-top: 20px;" >
                         <div class="panel-heading">
                             <form class="row g-3 reply" style="margin: auto">
-
-<!--                                <div>-->
-<!--                                <input type="text" class="form-control" id="inputReply1" style="display: inline-block; width: 150px; height: 40px; margin: auto">-->
-<!--                                </div>-->
-
                                 <div style="margin-bottom: 20px; text-align: center" sec:authorize="isAuthenticated()">
                                     <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
                                     <button type="button" class="btn btn-light saveBtn" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
                                 </div>
-
-<!--                                <div style="margin-bottom: 20px; text-align: center" sec:authorize="isAnonymous()">-->
-<!--                                    로그인 후에 댓글 작성이 가능하개🐶-->
-<!--                                </div>-->
-
                             </form>
 
 
@@ -189,6 +179,31 @@
                                           </div>
                                       </div>
                                   </div>
+
+
+                                    <div class="modal fade" id="new-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label class="replyText1">내용</label>
+                                                    <input class="form-control replyText replyText1">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default saveBtn">Save</button>
+                                                    <button type="button" class="btn btn-default modBtn">modify</button>
+                                                    <button type="button" class="btn btn-default removeBtn">삭제</button>
+                                                    <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>
+
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
 
 
 
@@ -236,8 +251,14 @@
 
         console.log("읽기진입")
 
+        let email = [[${#authentication.principal.username}]]
+
         const result = [[${result}]]
 
+        let replyInput = $(".replyInput");
+
+
+        replyInput.hide()
 
 
         if (result){
@@ -262,7 +283,8 @@
         let modBtn = $(".modBtn"); //수정버튼
         let removeBtn = $(".removeBtn"); //삭제버튼
 
-        let reply = $(".reply"); //모달전체
+        let reply = $(".reply"); //댓글전체
+        let modal = $("#new-modal"); //모달전체
 
         let thispage = 1;
 
@@ -295,18 +317,62 @@
 
         })
 
-        //수정버튼 클릭시
-        modBtn.on("click", function (){
 
-            let reply = {"id" : reply.data("id"), "replyText" : replyText.val()}
+
+
+        //수정버튼 클릭시
+        modBtn.on("click", function (e){
+
+            let reply = {"rno" : modal.data("rno"), "replyText" : replyText.val()}
 
             let url = "/replies/modify/"
             replyservice.modify(reply, url, function (data) {
-                alert(data.id)
+                alert(data.rno)
                 showList(thispage);
             })
-            reply.reply("hide")
+            modal.modal("hide")
         })
+
+
+        //댓글 리스트 클릭시 수정 모달창 오픈
+        //수정
+        replylist.on("click", "li", function (e) {
+            modal.modal("show");
+
+            modal.find("button[id != closeBtn]").hide() //버튼중에 아이디를 찾는다. id가 closeBtn이 아닌 거
+            modal.find("input").hide(); //input 태그 전부 숨긴다.
+            modal.find("label").hide();
+
+            //input 태그 벨류값 전부 "" 빈문자열로 초기화
+            replyText.val("");
+
+            //내용, 작성자, 일자
+            replyText1.show()
+
+            let rno = $(this).data("num");
+
+            let url = "/replies/get/"
+
+            replyservice.read(rno, url, function (data) {
+
+                console.log(data)
+
+                if(data.createBy == email){
+                    modBtn.show()
+                    removeBtn.show()
+                }
+
+                replyText.val(data.replyText)
+                modal.data("rno", data.rno);
+                console.log(modal.data("rno"))
+            });
+
+        })
+
+
+
+
+
 
         //삭제버튼 클릭시
         removeBtn.on("click", function (){
@@ -337,20 +403,31 @@
                 thispage = data.page
 
 
-                if ( data== null || data.dtoList == null || data.dtoList.length == null  ) {
+                if ( data== null || data.dtoList == null || data.dtoList.length == 0  ) {
+
+                    pagination.html(str2);
+                    replylist.html(str);
+
                     return null;
+
                 } else if (data != null && data.dtoList != null && data.dtoList.length >= 0){
 
 
                     for (let i = 0; i < data.dtoList.length; i++) {
 
 
-                        str += `<div  data-num="${data.dtoList[i].id}" class="clearfix">
-                                    <div class="chat-body clearfix"><div class="header">
+                        str += `<div  data-num="${data.dtoList[i].id}" class="clearfix ">
+
+                                    <div class="chat-body clearfix"><div class="header replyList">
                                         <strong class="primary-font">${data.dtoList[i].replyer}</strong>
                                         <small class="pull-right text-muted">
-                                            <i class="fa fa-clock-o fa-fw"></i>${data.dtoList[i].regTime} <span > <a href="" class="modBtn">[수정</a>/<a href="" class="removeBtn">삭제]</a> </span></small>
-                                        </div>
+                                            <i class="fa fa-clock-o fa-fw"></i>${data.dtoList[i].regTime} `
+                         if(email == data.dtoList[i].createBy) {
+                             str += `   <span > [<a href="" class="modBtn" style="color: darkgray">수정</a>/<a href="" style="color: darkgray" class="removeBtn">삭제</a>] </span></small>`
+                         }
+
+
+                        str +=           ` </div>
                                         <p>${data.dtoList[i].replyText}</p>
                                     </div>
                                 </div>`;

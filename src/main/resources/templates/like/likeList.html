@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>산책 정보</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+
+        <div class="row row-cols-1  g-4">
+            <div class="col">
+                <div class="card border-light shadow" style="height: 180%">
+
+                    <div class="card-body">
+                        <div style="margin-top: 10px">
+                            <h4>🐶 찜한 산책</h4>
+
+
+                        </div>
+
+
+                        <hr>
+
+                        <div th:if="${#lists.isEmpty(likeDetailDTOList)}">
+
+                            <!--목록이 비어있다면-->
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                            <div style="text-align: center">
+                                목록이 비어있다개🙀
+                            </div>
+                        </div>
+
+
+
+                        <div class="row row-cols-2  row-cols-md-5">
+
+                            <th:block th:each="likeDetailDTOList:${likeDetailDTOList}" th:if="${likeDetailDTOList != null}">
+                                <div class="col mb-2">
+
+
+                                    <div class="card border" style="height: 375px; margin-bottom: 1px">
+
+
+
+                                        <div class="card-body">
+
+
+                                            <div class="row row-cols-1  g-4 ">
+
+                                                <a class="card-link " th:href="'/quest/read/' + ${likeDetailDTOList.id}" style="color: black">
+
+                                                    <div class="card-photo mb-2 ratio ratio-1x1">
+                                                        <img alt="" th:href="'/quest/read/' + ${likeDetailDTOList.id}" width="100%" class="card-img-top ratio ratio-1x1">
+                                                    </div>
+
+                                                    <div class="mb-1">
+                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'UNSUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-success  mb-1 end">도와주개</span>
+                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'SUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-danger mb-1 end">완료다개</span>
+                                                    </div>
+
+                                                    <div class="font-size small mb-1">
+                                                        [[${likeDetailDTOList.area}]]
+                                                    </div>
+                                                    <div class="card-desc mb-1">
+                                                        <h2 class="card-title"></h2>
+                                                        [[${likeDetailDTOList.title}]]
+                                                        <div class="card-price" text-align="right">
+                                                            [[${likeDetailDTOList.salaryOption}]] <span th:if="${likeDetailDTOList.salary} != 0">[[${likeDetailDTOList.salary}]] 원</span>
+                                                        </div>
+                                                        <div class="card-counts">
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+                            </th:block>
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

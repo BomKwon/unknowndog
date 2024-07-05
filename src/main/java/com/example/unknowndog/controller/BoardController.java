@@ -44,37 +44,14 @@ public class BoardController {
                            NoticeSearchDTO noticeSearchDTO, PageRequestDTO pageRequestDTO,
                            Principal principal){
 
+        log.info(pageRequestDTO);
+        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
 
-        if (principal == null) {
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
 
-            Pageable pageable = PageRequest
-                    .of(page.isPresent() ? page.get() : 0 , 10);
-
-
-            PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
-
-            Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
-
-            model.addAttribute("boards", boards);
-            model.addAttribute("boardDTO", boardDTO);
-            model.addAttribute("maxPage", 10);
-            model.addAttribute("pageResponseDTO", pageResponseDTO);  /*여기에 모든게 담겨서 이제 다른건 필요없음요*/
+        log.info(pageResponseDTO);
 
 
-            //공지
-            Pageable pageable1 = PageRequest
-                    .of(page.isPresent() ? page.get() : 0 , 10);
-
-
-            Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable1);
-
-            model.addAttribute("notice", notice);
-            model.addAttribute("maxPage", 10);
-
-
-            return "/board/boardList";
-
-        }
 
         if (principal != null) {
             String nickname = mainService.getUserName(principal);
@@ -82,7 +59,7 @@ public class BoardController {
         }
 
 
-        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCount(pageRequestDTO);
+        log.info(pageResponseDTO);
 
 
         Pageable pageable = PageRequest
@@ -92,7 +69,7 @@ public class BoardController {
 
         model.addAttribute("boards", boards);
         model.addAttribute("boardDTO", boardDTO);
-        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
         model.addAttribute("maxPage", 10);
 
         //공지
@@ -113,12 +90,12 @@ public class BoardController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/new")
-    public String boardForm(Principal principal, Model model) {
+    public String boardForm(Principal principal, Model model, BoardDTO boardDTO) {
 
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
 
-        model.addAttribute("boardDTO", new BoardDTO());
+        model.addAttribute("boardDTO", boardDTO);
 
         return "/board/boardForm";
     }

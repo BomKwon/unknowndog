@@ -2,14 +2,14 @@ package com.example.unknowndog.dto;
 
 import com.example.unknowndog.entity.BoardImg;
 import com.example.unknowndog.entity.QuestImg;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.modelmapper.ModelMapper;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardImgDTO {
 
     private int id;

@@ -8,6 +8,7 @@ import com.example.unknowndog.entity.QReply;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import org.codehaus.groovy.transform.SourceURIASTTransformation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -141,11 +142,15 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         //페이징
         this.getQuerydsl().applyPagination(pageable, dtoQuery);
+        System.out.println("페이지어블" + pageable);
 
         List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch(); //실행
+        dtoList.forEach(boardListReplyCountDTO -> System.out.println(boardListReplyCountDTO));
 //    boardList.forEach(board1 -> log.info(board1));
         long count = dtoQuery.fetchCount(); //row 수
-//    System.out.println(count);
+
+
+    System.out.println(count);
 
 
         return new PageImpl<>(dtoList, pageable, count);
