@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <link rel="stylesheet" href="/css/layout1.css" />
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: 나의 신청 목록</title>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+
+
+            $(".cancelOrder").on("click", function (e) {
+
+                let orderId = $(this).val();
+                let url = "/order/" + orderId + "/cancel";
+                let paramData = {
+                    orderId : orderId
+                }
+
+                if (confirm("신청을 정말 취소할거개? 😥") == true) {    //확인
+
+                    let a = $(this).find('span:eq(0)')  //jquery
+
+                    console.log(a)
+
+                    $.ajax({
+                        url : url,
+                        // data : JSON.stringify(paramData),
+                        // contentType : "application/json; charset=utf-8",
+                        type : "post",
+                        dataType : "json",
+                        success : function (result) {
+                            alert(result + "번 신청이 취소 되었다개. 😥");
+                            location.href = "/orders/" + [[${page}]]
+                        },
+                        error : function (jqXHR, status, error) {
+                            if(jqXHR.status == '401'){
+                                alert("로그인 후 이용해주개");
+                                location.href = "members/login";
+                            }else {
+                                alert(jqXHR.responseText);
+                            }
+                        }
+                    })
+
+                } else {
+
+
+                }
+
+                // console.log($(this).val())
+                // console.log(e.target.value)
+
+
+            })
+
+
+        });
+
+
+
+    </script>
+
+</head>
+<body>
+
+    <div layout:fragment="content">
+
+        <div class="row row-cols-1  g-4">
+            <div class="col">
+                <div class="card border">
+
+                    <div class="card-body">
+                        <div style="margin-top: 10px">
+                            <h4>🐶 신청한 산책</h4>
+
+                            <span style="text-align: right">
+                        </span>
+
+                        </div>
+
+
+                        <hr>
+
+                        <div th:if="${orderHistDTOPage.isEmpty}">
+
+                            <!--목록이 비어있다면-->
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                            <div style="text-align: center">
+                                <img src="/img/공사중.png" width="300">
+
+                                <br>
+                                <br>
+
+                                목록이 비어있다개🙀
+                            </div>
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col">
+
+                                    <div class="card-body">
+                                        <div class="col" th:each="order: ${orderHistDTOPage.getContent()}">
+                                            <span class="h4" th:text="${order.orderDate} + ' 신청'"></span>
+
+                                            <th:block th:if="${order.orderStatus.name() == 'ORDER'}">
+                                                <button class="btn btn-danger cancelOrder" th:value="${order.orderId}">
+                                                    취소
+                                                </button>
+                                            </th:block>
+
+                                            <th:block th:unless="${order.orderStatus.name() == 'ORDER'}">
+                                                <button class="btn btn-secondary " th:value="${order.orderId}">
+                                                    (취소완료)
+                                                </button>
+                                            </th:block>
+
+                                            <div class="card mb-3" th:each="orderQuest: ${order.orderQuestDTOList}">
+                                                <div class="row g-0">
+                                                    <div class="col-md-2">
+                                                        <img th:src="${orderQuest.imgUrl}" class="img-fluid rounded-start" th:alt="${orderQuest.title}">
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="card-body">
+                                                            <h5 class="ceard-titl" th:text="${orderQuest.title}"></h5>
+                                                            [[${orderQuest.area}]]
+                                                            <br>
+                                                            [[${orderQuest.salaryOption}]] <span class="card-text" th:if="${orderQuest.orderPrice} != 0" th:text="${orderQuest.orderPrice}+ '원'"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+                            </div>
+
+
+                            <div th:if="${!orderHistDTOPage.isEmpty}">
+                                <div class="row justify-content-center" th:with="start=${(orderHistDTOPage.number/maxPage) * maxPage + 1 } , end=${(orderHistDTOPage.totalPages==0 ) ? 1 :  (start + (maxPage -1) < orderHistDTOPage.totalPages ? start + (maxPage - 1): orderHistDTOPage.totalPages) }">
+                                    <div class="col-4">
+                                        <ul class="pagination">
+                                            <!--이전-->
+                                            <li class="page-item" th:classappend="${orderHistDTOPage.first} ? 'disabled' : ''">
+                                                <a class="page-link"   th:href="@{'/orders/' + ${orderHistDTOPage.number - 1}}">Previous</a>
+                                            </li>
+
+                                            <!--반복-->
+                                            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${orderHistDTOPage.number eq page - 1} ? 'active' : ''">
+                                                <a  th:href="@{'/orders/' + ${page -1}}" class="page-link" >[[${page}]]</a>
+                                            </li>
+
+                                            <!--다음-->
+                                            <li class="page-item" th:classappend="${orderHistDTOPage.last} ? 'disabled' : ''">
+                                                <a class="page-link" th:href="@{'/orders/' + ${orderHistDTOPage.number + 1}}">Next</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

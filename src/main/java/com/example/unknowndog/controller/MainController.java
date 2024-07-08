@@ -4,7 +4,6 @@ package com.example.unknowndog.controller;
 import com.example.unknowndog.dto.*;
 import com.example.unknowndog.entity.Board;
 import com.example.unknowndog.entity.Notice;
-import com.example.unknowndog.entity.Quest;
 import com.example.unknowndog.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -56,58 +53,14 @@ public class MainController {
                        NoticeSearchDTO noticeSearchDTO, NoticeDTO noticeDTO,
                        PageRequestDTO pageRequestDTO) {
 
-        if (principal == null){  //비회원도 봐야하니까
 
+        if (principal != null) {
 
-            /*의뢰*/
-            Pageable pageable = PageRequest
-                    .of(page.isPresent() ? page.get() : 0 , 5);
+            String nickname = mainService.getUserName(principal);
+            model.addAttribute("nickname", nickname);
+            model.addAttribute("userDTO", userDTO);
 
-            Page<MainQuestDTO> quests = questService
-                    .getMainQuestPage(questSearchDTO, pageable);
-
-            quests.forEach(quest -> log.info(quest));
-
-            model.addAttribute("quests", quests);
-            model.addAttribute("questSearchDTO", questSearchDTO);
-
-            /*공지*/
-            Page<Notice> notice = noticeService.getNoticePage(noticeSearchDTO, pageable);
-
-            model.addAttribute("notice", notice);
-            model.addAttribute("noticeDTO", noticeDTO);
-
-            /*자유게시판*/
-
-            PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCountMain(pageRequestDTO);
-
-            Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
-
-            model.addAttribute("boards", boards);
-            model.addAttribute("boardDTO", boardDTO);
-            model.addAttribute("pageResponseDTO", pageResponseDTO);
-
-
-            return "main";
         }
-
-
-        //로그인시
-
-
-        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCountMain(pageRequestDTO);
-
-
-        userDTO = UserDTO.of(userService.findByEmail(principal.getName()));
-
-        log.info(userDTO.getId());
-
-        String nickname = mainService.getUserName(principal);
-        model.addAttribute("nickname", nickname);
-
-
-        model.addAttribute("userDTO", userDTO);
-
 
         //산책하개 최신 5글만 보이게 하는
 
@@ -118,9 +71,10 @@ public class MainController {
         Page<MainQuestDTO> quests = questService
                 .getMainQuestPage(questSearchDTO, pageable);
 
-        quests.forEach(quest -> log.info(quest));
+//        quests.forEach(quest -> log.info(quest));
 
         model.addAttribute("quests", quests);
+        model.addAttribute("questFormDTO", questFormDTO);
         model.addAttribute("questSearchDTO", questSearchDTO);
 
 
@@ -132,11 +86,14 @@ public class MainController {
 
 
         /*자유게시판*/
+        PageResponseDTO<BoardListReplyCountDTO> pageResponseDTO = boardService.listWithReplyCountMain(pageRequestDTO);
+
         Page<Board> boards = boardService.getboardPage(boardSearchDTO, pageable);
 
         model.addAttribute("boards", boards);
         model.addAttribute("boardDTO", boardDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+
 
 
         return "main";
@@ -164,6 +121,11 @@ public class MainController {
 //        return "main";
 //    }
 
+
+    @GetMapping("/404_NotFound")
+    public String notFound(){
+        return "/404NotFound";
+    }
 
 
 }

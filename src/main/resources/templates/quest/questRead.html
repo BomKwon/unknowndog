@@ -32,16 +32,16 @@
 
 
 
-            //신청하기 버튼을 클릭했을 때 실행할 함수
-            $(".okBtn").on("click" , function (e) {
-                e.preventDefault()
-                alert("신청 완료 되었다개👌 (아직 준비중 추후 업데이트 예정)")
-            })
-
-            // $(".likeBtn").on("click" , function (e) {
+            // //신청하기 버튼을 클릭했을 때 실행할 함수
+            // $(".okBtn").on("click" , function (e) {
             //     e.preventDefault()
-            //
+            //     alert("신청 완료 되었다개👌 (아직 준비중 추후 업데이트 예정)")
             // })
+            //
+            // // $(".likeBtn").on("click" , function (e) {
+            // //     e.preventDefault()
+            // //
+            // // })
 
 
 
@@ -121,7 +121,7 @@
 
                     //나중에 모달창으로 꾸미자
                     //혹은 html페이지에 표시도 가능
-                    alert("찜 완료 되었다개💖 (아직 준비중 추후 업데이트 예정)")
+                    alert("찜 완료 되었다개💖")
 
 
                 } ,
@@ -142,6 +142,77 @@
             })
 
         }
+
+
+
+
+
+        //주문하기를 클릭했을때 실행하는 함수
+        function order() {
+            //아이템 아이디
+            var questId = [[${questId}]]
+            var count = $("#count").val();
+            console.log(questId);
+            console.log(count);
+            //수량
+
+            //보낸다. url /order,
+            //       method post
+            //ajax 사용 rest방식 //restController로 받던가
+            //requestbody로 받건가 post로 보내야한다고 한다
+            // 키, 벨류로 이루어진 json형식으로 변환
+            //  json형식 { "키" : "벨류"  , "키2" : "벨류2"}
+            var param = { questId : questId,
+                count : count  }
+
+            // $.ajax({
+            //     url : 보낼주소  "/order",
+            //     type : "post", "get", "put", "delete",
+            //     contentType : "application/json; charset=utf-8" 보내는 타입,
+            //      plain text 의 경우는 utf-8 생략
+            //     data : 보낼 데이터,
+            //     dataType : 받는 타입 "json" "text",
+            //     success :  성공했을때 실행내용 보통
+            //              function(리턴값){실행문; 콜백함수를 하기도},
+            //     error : 실패했을때 실행 내용
+            //              function(리턴값){실행문; 콜백함수를 하기도}
+            //      마지막에는 꼭 , 쓰지 않는다.
+            // })
+
+            $.ajax({
+                url : "/order",
+                type : "post",
+                contentType : "application/json; charset=utf-8",
+                data : JSON.stringify(param),
+                dataType : "json",
+                success : function (result,status) {
+
+                    //나중에 모달창으로 꾸미자
+                    //혹은 html페이지에 표시도 가능
+                    alert("신청 완료 되었다개👌 (아직 준비중 추후 업데이트 예정)")
+                    alert("신청 내역 페이지로 이동한다개. 아직은 안감")
+
+
+                } ,
+                error : function (result, status, error) {
+
+                    if(result.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/user/login';
+                    }else {
+                        alert("스테이터스 : " + result.responseText)
+                    }
+
+
+                    //에러출력, favicon
+
+                    //실패 메시지 bindingResult.hasErrors() 의 메소드 이건 DTO message
+                }
+            })
+
+        }
+
+
 
 
 
@@ -259,7 +330,7 @@
                                         <div th:if="${questFormDTO.stockNumber > 0}" >
                                             <div th:if="${questFormDTO.createBy} != ${#authentication.principal.username}">
                                                 <button type="button" class="btn btn-light btn-lg likeBtn" onclick="addLike()">❤ 찜</button> <!--onclick="addCart()"-->
-                                                <button type="button" class="btn btn-light btn-lg okBtn" >✔ 신청하기</button>  <!--onclick="order()"-->
+                                                <button type="button" class="btn btn-light btn-lg okBtn" onclick="order()">✔ 신청하기</button>  <!--onclick="order()"-->
                                             </div>
                                         </div>
 
@@ -308,7 +379,7 @@
                                                 삭제
                                             </a>
 
-                                            <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
+                                            <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm modBtn">
                                                 수정
                                             </a>
                                         </form>
@@ -322,7 +393,7 @@
                                             삭제
                                         </a>
 
-                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm delBtn">
+                                        <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm modBtn">
                                             수정
                                         </a>
 

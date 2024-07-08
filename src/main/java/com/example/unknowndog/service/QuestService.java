@@ -169,7 +169,23 @@ public class QuestService {
     public Page<MainQuestDTO> getMainQuestPage(QuestSearchDTO questSearchDTO, Pageable pageable){
 
         return questRepository.getMainQuestPage(questSearchDTO, pageable);
+
     }
+
+
+
+
+    @Transactional(readOnly = true)
+    public Page<MainQuestDTO> getUserQuestPage(QuestSearchDTO questSearchDTO, Pageable pageable, Principal principal){
+
+        questRepository.findQuestByCreateBy(principal.getName(), pageable);
+
+        return questRepository.getUserQuestPage(questSearchDTO, pageable);
+    }
+
+
+
+
 
 
     // TODO: 2024-06-21 이게 문제인지..

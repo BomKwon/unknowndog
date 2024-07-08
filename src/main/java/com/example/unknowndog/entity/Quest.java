@@ -82,18 +82,23 @@ public class Quest extends BaseEntity {
         //이미 이 entity는 select를 통해서 값을 가져와서
         //entitymanager가 데이터를 가지고 있다.
         //그래서 수정이 가능하다
+
         int restStock = this.stockNumber - stockNumber;
+
         if(restStock < 0) {
             throw new OutOfStockException("상품의 재고가 부족합니다. " +
                     "(현재 재고수량 : " + this.stockNumber + ")");
         }
+
         this.stockNumber = restStock;
+        this.questStatus = QuestStatus.valueOf("SUCCESS");
 
     }
 
     //취소를 눌렀을때
     public void stockUpdate(int stockNumber){  //의뢰 취소할때
 
+        this.questStatus = QuestStatus.valueOf("UNSUCCESS");
         this.stockNumber += stockNumber;
     }
 

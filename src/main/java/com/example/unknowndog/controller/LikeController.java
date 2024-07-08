@@ -2,11 +2,16 @@ package com.example.unknowndog.controller;
 
 import com.example.unknowndog.dto.LikeDetailDTO;
 import com.example.unknowndog.dto.LikeQuestDTO;
+import com.example.unknowndog.dto.MainQuestDTO;
+import com.example.unknowndog.dto.QuestSearchDTO;
 import com.example.unknowndog.service.LikeService;
 import com.example.unknowndog.service.MainService;
+import com.example.unknowndog.service.QuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -101,6 +106,8 @@ public class LikeController {
 
         model.addAttribute("likeDetailDTOList", likeDetailDTOList);
 
+
+
         return "/like/likeList";
     }
 
@@ -110,6 +117,8 @@ public class LikeController {
     public @ResponseBody ResponseEntity deleteLikeQuest(
             @PathVariable("likeQuestId") Long likeQuestId,
             Principal principal){
+
+        log.info("들어온 아이디: "+ likeQuestId);
 
 //        System.out.println("넘어온 likeQuestId : " + likeQuestId);
         //넘어온값이 확인되면 저 값을 이용해서

@@ -5,7 +5,160 @@
 <head>
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
-    <title>산책 정보</title>
+    <title>모르는 개 산책 :: 찜한 산책 정보</title>
+
+
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            $(".search").on("click", function (e) {
+                e.preventDefault();
+                page(0)
+            })
+
+            $(".unlike").hide()
+
+            /*x버튼을 눌렀을때 장바구니 아이템 삭제*/
+
+            $(".like").on("click", function () {
+
+
+                if (confirm("찜 목록에서 정말 삭제할거개? 😥") == true) {    //확인
+
+                    let a = $(this).find('span:eq(0)')  //jquery
+
+                    console.log(a)
+
+                    deleteLikeQuest(a)
+
+                } else {
+
+
+                }
+
+            })
+
+            $(".unlike").on("click", function () {
+
+                let a = $(this).find('span:eq(0)')  //jquery
+
+                addLikeQuest(a)
+
+            })
+
+            const adminErr = [[${adminErr}]]
+            if (adminErr) {
+                alert(adminErr)
+            }
+
+            function page(page) {
+                location.href = "/" + page;
+            }
+
+
+
+            function deleteLikeQuest(obj){
+
+
+
+                let likeQuestId = obj.data("id");    //아이템의 아이디를 가져온다.
+                let url = "/likeQuest/" + likeQuestId;
+
+                console.log(likeQuestId)
+
+                // alert(url);
+
+                $.ajax({
+                    url :url,
+                    type : "delete" ,
+                    dataType : "json",
+                    success : function (result) {
+
+                        $(".like").hide()
+                        $(".unlike").show()
+
+                        location.href='/likes';
+                    },
+                    error : function (result, status, error) {
+
+                        if(result.status == '401'){
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/user/login';
+                        }else if(result.status == '200') {
+                            alert(result.responseText + "를 찜 목록에서 삭제 완료 했다개😥")
+                            location.href='/likes';
+                        }else {
+                            alert("확인요망 : " + result.responseText )
+                            alert("확인요망 : " + result.status )
+
+                        }
+                    }
+                });
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+
+            }
+
+
+
+
+            function addLikeQuest(){
+
+                var questId = [[${questId}]]
+                var count = $("#count").val();
+                var param = {
+                    questId: questId,
+                    count: count
+                }
+                $.ajax({
+                    url: "/likes",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(param),
+                    dataType: "json",
+                    success: function (result, status) {
+
+                        //나중에 모달창으로 꾸미자
+                        //혹은 html페이지에 표시도 가능
+                        alert("찜 완료 되었다개💖 (아직 준비중 추후 업데이트 예정)")
+
+                        $(".unlike").hide()
+
+                        $(".like").show()
+
+
+                    },
+                    error: function (result, status, error) {
+
+                        if (result.status == '401') {
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('로그인 후 이용해주개');
+                            location.href = '/user/login';
+                        } else {
+                            alert("확인요망 : " + result.responseText)
+                        }
+
+                        //에러출력, favicon
+
+                        //실패 메시지 bindingResult.hasErrors() 의 메소드 이건 DTO message
+                    }
+
+
+                })
+
+            }
+
+
+        })
+
+
+    </script>
+
+
+
+
+
+
 </head>
 <body>
 
@@ -13,7 +166,7 @@
 
         <div class="row row-cols-1  g-4">
             <div class="col">
-                <div class="card border-light shadow" style="height: 180%">
+                <div class="card border">
 
                     <div class="card-body">
                         <div style="margin-top: 10px">
@@ -38,8 +191,22 @@
                             <br>
 
                             <div style="text-align: center">
+
+                                <img src="/img/공사중.png" width="300">
+
+                                <br>
+                                <br>
+
                                 목록이 비어있다개🙀
                             </div>
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
                         </div>
 
 
@@ -57,34 +224,50 @@
                                         <div class="card-body">
 
 
-                                            <div class="row row-cols-1  g-4 ">
+                                            <div class="row row-cols-1  g-4">
 
-                                                <a class="card-link " th:href="'/quest/read/' + ${likeDetailDTOList.id}" style="color: black">
+
+                                                <a class="card-link " th:href="'/quest/read/' + ${likeDetailDTOList.questId}" style="color: black; margin-bottom: 1px">
 
                                                     <div class="card-photo mb-2 ratio ratio-1x1">
-                                                        <img alt="" th:href="'/quest/read/' + ${likeDetailDTOList.id}" width="100%" class="card-img-top ratio ratio-1x1">
-                                                    </div>
-
-                                                    <div class="mb-1">
-                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'UNSUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-success  mb-1 end">도와주개</span>
-                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'SUCCESS'}" th:id="${quest.questStatus}" class="badge text-bg-danger mb-1 end">완료다개</span>
+                                                        <img alt="" th:src="${likeDetailDTOList.imgUrl}" width="100%" class="card-img-top ratio ratio-1x1">
                                                     </div>
 
                                                     <div class="font-size small mb-1">
                                                         [[${likeDetailDTOList.area}]]
                                                     </div>
-                                                    <div class="card-desc mb-1">
-                                                        <h2 class="card-title"></h2>
-                                                        [[${likeDetailDTOList.title}]]
-                                                        <div class="card-price" text-align="right">
-                                                            [[${likeDetailDTOList.salaryOption}]] <span th:if="${likeDetailDTOList.salary} != 0">[[${likeDetailDTOList.salary}]] 원</span>
-                                                        </div>
-                                                        <div class="card-counts">
-                                                        </div>
+
+                                                    <div class="mb-1">
+                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'UNSUCCESS'}" th:id="${likeDetailDTOList.questStatus}" class="badge text-bg-success  mb-1 end">도와주개</span>
+                                                        <span th:if="${likeDetailDTOList.questStatus.name() == 'SUCCESS'}" th:id="${likeDetailDTOList.questStatus}" class="badge text-bg-danger mb-1 end">완료다개</span>
                                                     </div>
+
+                                                    <h6 class="card-title">[[${likeDetailDTOList.title}]]</h6>
                                                 </a>
 
+                                                    <div class="card-desc mb-1">
 
+                                                        <div class="card-price" text-align="right">
+                                                            [[${likeDetailDTOList.salaryOption}]] <span th:if="${likeDetailDTOList.salary} != 0">[[${likeDetailDTOList.salary}]] 원</span>
+
+                                                            <button style="margin-bottom: 2px; margin-right: 2px" type="button" class="btn btn-outline-danger like" aria-hidden="true"  >
+                                                                <!--찜 일때-->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"></path>
+                                                                </svg>
+                                                                <span class="visually-hidden" th:data-id="${likeDetailDTOList.likeQuestId}">Button</span>
+                                                            </button>
+
+                                                            <button style="margin-bottom: 2px; margin-right: 2px" type="button" class="btn btn-outline-secondary unlike" aria-hidden="true"  th:data-id="${likeDetailDTOList.likeQuestId}">
+                                                                <!--찜 아닐때-->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"></path>
+                                                                </svg>
+                                                                <span class="visually-hidden">Button</span>
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
 
 
                                             </div>
@@ -94,28 +277,27 @@
                                     </div>
 
 
-
-
-
                                 </div>
 
 
                             </th:block>
 
 
-
                         </div>
 
 
-
-
                     </div>
+
+
 
                 </div>
             </div>
         </div>
 
     </div>
+
+
+
 
 </body>
 </html>

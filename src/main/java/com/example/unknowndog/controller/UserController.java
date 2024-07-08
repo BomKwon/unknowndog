@@ -1,14 +1,20 @@
 package com.example.unknowndog.controller;
 
 
+import com.example.unknowndog.dto.MainQuestDTO;
+import com.example.unknowndog.dto.QuestSearchDTO;
 import com.example.unknowndog.dto.UserDTO;
 import com.example.unknowndog.entity.User;
 import com.example.unknowndog.service.MainService;
+import com.example.unknowndog.service.QuestService;
 import com.example.unknowndog.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +33,7 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final QuestService questService;
     private final MainService mainService;
 
 
@@ -120,7 +127,8 @@ public class UserController {
 
 
     @GetMapping("/view/{email}")  //간단정보 회원끼리 누구나
-    public String walkview(@PathVariable("email") String email, Model model, Principal principal){
+    public String walkview(@PathVariable("email") String email, Model model, Principal principal,
+                           QuestSearchDTO questSearchDTO, Pageable pageable){
 
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
@@ -128,6 +136,7 @@ public class UserController {
         try {
             UserDTO userDTO = UserDTO.of(userService.findByEmail(email));
             model.addAttribute("userDTO" , userDTO);
+
 
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage",

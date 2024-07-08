@@ -116,9 +116,10 @@
 
                 </div>
 
-                <div>
+                <div class="pagination justify-content-center en mb-0" th:with="start=${(boards.number/maxPage) * maxPage + 1 } , end=${(boards.totalPages==0 ) ? 1 :  (start + (maxPage -1) < boards.totalPages ? start + (maxPage - 1): boards.totalPages) }">
 
-                    <th:block th:if="${pageResponseDTO.total > 10}">
+                    <div class="col-2">
+
                         <ul class="pagination">
 
                             <!--맨앞-->
@@ -127,17 +128,17 @@
                             </li>
 
                             <!--이전-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.prev} ? 'disabled' : ''">
+                            <li class="page-item" th:classappend="${boards.prev} ? 'disabled' : ''">
                                 <a class="page-link"   th:onclick="'javascript:page(' + ${boards.number - 1} + ')'  "> < </a>
                             </li>
 
                             <!--반복-->
-                            <li class="page-item" th:each="page1: ${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}"  th:classappend="${pageResponseDTO.page eq page1 -1 } ? 'active' : ''">
+                            <li class="page-item" th:each="page1: ${#numbers.sequence(boards.start,boards.end)}"  th:classappend="${boards.page eq page1 -1 } ? 'active' : ''">
                                 <a class="page-link"  th:onclick="'javascript:page(' + ${page1 - 1} + ')'  ">[[${page1}]]</a>
                             </li>
 
                             <!--다음-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.next} ? 'disabled' : ''">
+                            <li class="page-item" th:classappend="${boards.next} ? 'disabled' : ''">
                                 <a class="page-link" th:onclick="'javascript:page(' + ${boards.number + 1} + ')'  "> > </a>
                             </li>
 
@@ -146,12 +147,50 @@
                                 <a class="page-link" th:onclick="'javascript:page(' + ${boards.last} + ')'  "> >> </a>
                             </li>
                         </ul>
-                    </th:block>
+                    </div>
 
                 </div>
 
+
             </div>
         </div>
+
+
+        <div class="col-sm-6">
+
+            <div id="dataTables-example_filter" class="dataTables_filter" style="text-align: center">
+                <form action="/board/list" method="get">
+                    <div class="input-group">
+
+                        <select class="form-select" name="type" id="inputGroupSelect04" aria-label="Example select with button addon">
+                            <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                            <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                            <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+                            <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목 + 내용</option>
+                            <option value="tw" th:selected="${pageRequestDTO.type == 'tw'}">제목 + 작성자</option>
+                            <option value="twc" th:selected="${pageRequestDTO.type == 'twc'}">제목 + 내용 + 작성자</option>
+                        </select>
+
+                        <input type="search" name="keyword" th:value="${pageRequestDTO.keyword}" class="form-control input-sm" placeholder="" aria-controls="dataTables-example">
+                        <button class="input-group-text searchBtn" type="submit">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                            </svg>
+
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+
+
+
+
     </div>
 
 </div>

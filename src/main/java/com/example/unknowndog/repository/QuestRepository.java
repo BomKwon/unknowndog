@@ -1,8 +1,10 @@
 package com.example.unknowndog.repository;
 
+import com.example.unknowndog.entity.Order;
 import com.example.unknowndog.entity.Quest;
 import com.example.unknowndog.repository.search.QuestRepositoryCustorm;
 import com.example.unknowndog.repository.search.QuestSearch;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +24,10 @@ public interface QuestRepository extends JpaRepository<Quest, Long> , QuerydslPr
     @Query("update Quest q set q.view = q.view + 1 where q.id = :id")
     int updateViews(@Param("id") Long id);
 
+    @Query("select q from Quest q " +
+            "where q.createBy = : email" +
+            "order order by q.regTime desc")
+    List<Order> findQuestByCreateBy (@Param("email") String email, Pageable pageable);
 
     List<Quest> findByTitleOrQuestDetail(String title, String questDetail);
 

@@ -118,6 +118,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
                         break;
 
 
+
                 } //swich
 
             }//for

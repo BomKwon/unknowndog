@@ -14,7 +14,7 @@
     <div class="row row-cols-1  g-4">
 
         <div class="col">
-            <div class="card border">
+            <div class="card border mb-3">
 
 
 
@@ -72,40 +72,44 @@
                 </div>
 
 
-                <div class="pagination justify-content-center en mb-0" th:with="start=${(notice.number/maxPage) * maxPage + 1 } , end=${(notice.totalPages==0 ) ? 1 :  (start + (maxPage -1) < notice.totalPages ? start + (maxPage - 1): notice.totalPages) }">
-                    <div class="col-2">
-                        <ul class="pagination">
 
-                            <!--맨앞-->
-                            <li class="page-item" th:classappend="${notice.first} ? 'disabled' : ''">
-                                <a class="page-link"   th:onclick="'javascript:page(' + ${notice.first} + ')'  "> << </a>
-                            </li>
-
-                            <!--이전-->
-                            <li class="page-item" th:classappend="${notice.first} ? 'disabled' : ''">
-                                <a class="page-link"   th:onclick="'javascript:page(' + ${notice.number - 1} + ')'  "> < </a>
-                            </li>
-
-                            <!--반복-->
-                            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${notice.number eq page -1 } ? 'active' : ''">
-                                <a class="page-link"  th:onclick="'javascript:page(' + ${page - 1} + ')'  ">[[${page}]]</a>
-                            </li>
-
-                            <!--다음-->
-                            <li class="page-item" th:classappend="${notice.last} ? 'disabled' : ''">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${notice.number + 1} + ')'  "> > </a>
-                            </li>
-
-                            <!--맨마지막-->
-                            <li class="page-item" th:classappend="${notice.last} ? 'disabled' : ''">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${notice.last} + ')'  "> >> </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
 
 
             </div>
+
+
+            <div class="pagination justify-content-center en mb-0" th:with="start=${(notice.number/maxPage) * maxPage + 1 } , end=${(notice.totalPages==0 ) ? 1 :  (start + (maxPage -1) < notice.totalPages ? start + (maxPage - 1): notice.totalPages) }">
+                <div class="col-2">
+                    <ul class="pagination">
+
+                        <!--맨앞-->
+                        <li class="page-item" th:classappend="${notice.first} ? 'disabled' : ''">
+                            <a class="page-link"   th:onclick="'javascript:page(' + ${notice.first} + ')'  "> << </a>
+                        </li>
+
+                        <!--이전-->
+                        <li class="page-item" th:classappend="${notice.first} ? 'disabled' : ''">
+                            <a class="page-link"   th:onclick="'javascript:page(' + ${notice.number - 1} + ')'  "> < </a>
+                        </li>
+
+                        <!--반복-->
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"  th:classappend="${notice.number eq page -1 } ? 'active' : ''">
+                            <a class="page-link"  th:onclick="'javascript:page(' + ${page - 1} + ')'  ">[[${page}]]</a>
+                        </li>
+
+                        <!--다음-->
+                        <li class="page-item" th:classappend="${notice.last} ? 'disabled' : ''">
+                            <a class="page-link" th:onclick="'javascript:page(' + ${notice.number + 1} + ')'  "> > </a>
+                        </li>
+
+                        <!--맨마지막-->
+                        <li class="page-item" th:classappend="${notice.last} ? 'disabled' : ''">
+                            <a class="page-link" th:onclick="'javascript:page(' + ${notice.last} + ')'  "> >> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
 

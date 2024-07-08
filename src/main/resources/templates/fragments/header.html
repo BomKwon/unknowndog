@@ -26,7 +26,7 @@
                         <li><a href="/notice/list" class="nav-link px-2 link-secondary"> 공지하개</a></li>
                         <li><a href="/quest/list" class="nav-link px-2 link-body-emphasis"> 산책하개</a></li>
                         <li><a href="/board/list" class="nav-link px-2 link-body-emphasis"> 대화하개</a></li>
-                        <li><a href="#" class="nav-link px-2 link-body-emphasis"> 알려줄개</a></li>
+                        <li><a href="/404_NotFound" class="nav-link px-2 link-body-emphasis"> 알려줄개</a></li>
                     </ul>
 
 <!--                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">-->
@@ -56,14 +56,14 @@
 
 
                     <a href="/likes" sec:authorize="isAuthenticated()">
-                        <img src="/img/heart.gif" width="30" height="30" alt="" class="rounded-circle">
-<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">-->
-<!--                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>-->
-<!--                            <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>-->
-<!--                        </svg>-->
+                        <img src="/img/d.png" width="40" height="40" alt="likes">
                     </a>
 
-                    &ensp;
+
+                    <a href="/orders" sec:authorize="isAuthenticated()">
+                        <img src="/img/walking.png" width="38" height="38" alt="orders">
+                    </a>
+
 
 
                     <div class="dropdown text-end me-3">
@@ -77,6 +77,7 @@
 
                         <ul class="dropdown-menu text-small">
                             <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="'/user/view/' +${#authentication.name}">내 산책 정보</a></li>
+                            <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/orders">신청 내역</a></li>
                             <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="'/user/read/' +${#authentication.name}">마이페이지</a></li>
                             <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/admin/" sec:authorize="hasRole('ADMIN')">관리자페이지</a></li>
                             <li sec:authorize="isAnonymous()">

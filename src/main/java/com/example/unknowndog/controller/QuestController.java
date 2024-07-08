@@ -1,9 +1,11 @@
 package com.example.unknowndog.controller;
 
+import com.example.unknowndog.dto.LikeDetailDTO;
 import com.example.unknowndog.dto.MainQuestDTO;
 import com.example.unknowndog.dto.QuestFormDTO;
 import com.example.unknowndog.dto.QuestSearchDTO;
 import com.example.unknowndog.entity.Quest;
+import com.example.unknowndog.service.LikeService;
 import com.example.unknowndog.service.MainService;
 import com.example.unknowndog.service.QuestService;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +37,8 @@ public class QuestController {
     private final QuestService questService;
 
     private final MainService mainService;
+
+    private final LikeService likeService;
 
 
     @GetMapping("/new")
@@ -225,6 +229,14 @@ public class QuestController {
         if (principal != null) {
             String nickname = mainService.getUserName(principal);
             model.addAttribute("nickname", nickname);
+
+            List<LikeDetailDTO> likeDetailDTOList
+                    = likeService.getLikeList(principal.getName());
+            // email을 파라미터로 넘긴다.
+
+            log.info(likeDetailDTOList);
+
+            model.addAttribute("likeDetailDTOList", likeDetailDTOList);
         }
 
         Pageable pageable = PageRequest
@@ -233,13 +245,12 @@ public class QuestController {
         Page<MainQuestDTO> quests = questService
                 .getMainQuestPage(questSearchDTO, pageable);
 
-        quests.forEach(quest -> log.info(quest));
+//        quests.forEach(quest -> log.info(quest));
 
         model.addAttribute("quests", quests);
         model.addAttribute("questSearchDTO", questSearchDTO);
 
         model.addAttribute("maxPage", 10);
-
 
 
         return "/quest/questList";

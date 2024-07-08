@@ -12,4 +12,6 @@ public interface QuestRepositoryCustorm {
 
     Page<MainQuestDTO> getMainQuestPage(QuestSearchDTO questSearchDTO, Pageable pageable);
 
+    Page<MainQuestDTO> getUserQuestPage(QuestSearchDTO questSearchDTO, Pageable pageable);
+
 }
