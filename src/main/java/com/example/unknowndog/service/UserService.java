@@ -153,17 +153,31 @@ public class UserService implements UserDetailsService {
         //정보가져오기 이멜로
         User user = userRepository.findById(userDTO.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        //상품정보 업데이트  repository.save(item) 이것 수정이다 >
-        // 영속성 상태일때는 변경감지를 이용 update > 트랜잭션이 종료될때
+
         user.updateUser(userDTO);
 
         return user.getId();
+    }
+
+    public String remove(Long userId) {
+
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+        String nickname = user.getNickname();
+        userRepository.deleteById(userId);
+
+        return nickname;
+
     }
 
 
     public Page<User> getUserList(UserSearchDTO userSearchDTO, Pageable pageable) {
         return userRepository.getUserPage(userSearchDTO, pageable);
     }
+
+
+
 
 
 

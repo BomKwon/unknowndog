@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>모르는 개 산책 :: ID/PW 찾기</title>
+
+
+    <script th:inline="javascript">
+
+        $(document).ready(function errMsg() {
+
+            var errorMessage = [[${errorMessage}]]
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+
+
+            var IdForm = $("#findId")
+            var PwForm = $("#findPw")
+
+            IdForm.hide()
+            PwForm.hide()
+
+            $(".findIdR").focusout("check", function () {
+                $(".find").hide()
+                PwForm.hide()
+
+                IdForm.show()
+
+            })
+
+            $(".findPwR").focusout("check", function () {
+                $(".find").hide()
+                IdForm.hide()
+
+                PwForm.show()
+
+            })
+
+            $("input[name='find']").change(function(){
+                // 휴대폰 결제 선택 시.
+                if($("input[name='payment']:checked").val() == '휴대폰결제'){
+                    $('#selectPay_card').hide();
+                    $('#selectPay_noBank').hide();
+                    $('#selectPay_phone').show();
+                }
+                // 무통장입금 결제 선택 시.
+                else if($("input[name='payment']:checked").val() == '무통장입금'){
+                    $('#selectPay_card').hide();
+                    $('#selectPay_phone').hide();
+                    $('#selectPay_noBank').show();
+                }
+                // 신용카드 결제 선택 시.
+                else if($("input[name='payment']:checked").val() == '신용카드'){
+                    $('#selectPay_phone').hide();
+                    $('#selectPay_noBank').hide();
+                    $('#selectPay_card').show();
+                }
+            });
+            출처: https://oneriverjj.tistory.com/13 [Rivertron:티스토리]
+
+
+        })
+
+
+
+
+
+    </script>
+
+
+        </head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row row-cols-1  g-4">
+        <div class="col">
+            <div class="card border">
+
+                <div class="card-body">
+
+
+
+                    <div class="find">
+                        <div style="margin-top: 10px">
+                            <h4>🐶 ID / PW 찾기</h4>
+
+                            <span style="text-align: right">
+                        </span>
+
+                        </div>
+
+
+                        <hr>
+
+                        <div>
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                            <div style="text-align: center">
+
+                                <span>
+                                    <input class="form-check-input findIdR" type="radio" name="find" id="findIdR">
+                                    <label class="form-check-label" for="findIdR">
+                                        ID 찾기
+                                    </label>
+                                </span>
+
+
+                                &nbsp;&nbsp;&nbsp;
+
+
+                                <span>
+                                    <input class="form-check-input findPwR" type="radio" name="find" id="findPwR">
+                                    <label class="form-check-label" for="findPwR">
+                                        PW 찾기
+                                    </label>
+                                </span>
+
+                            </div>
+
+
+                            <br>
+
+
+
+                            <div id="findId">
+
+                                <form action="/user/findUser" method="post" >
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="name" class="form-label">이  름</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" id="name" class="form-control" > <!--placeholder="이름을 입력하라개"-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                        <span id="nameHelpInline" class="form-text">
+                                            <p>가입 할 때 입력한 이름을 입력해주시개 🐶</p>
+                                        </span>
+                                        </div>
+
+                                        <button class="findIdBtn">찾기</button>
+
+                                    </div>
+                                </form>
+
+
+                                <div>
+                                    회원님의 가입하신 이메일은 [이메일] 입니다.
+                                </div>
+
+                                <div>
+                                    <button class="btn btn-danger closeBtn">닫기</button>
+                                </div>
+
+                            </div>
+
+
+
+                            <div id="findPw">
+
+                                <form action="/user/findUser" method="post" >
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="email" class="form-label">이메일</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" id="email" class="form-control" > <!--placeholder="이름을 입력하라개"-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                        <span id="emailHelpInline" class="form-text">
+                                            <p>가입 할 때 입력한 이메일을 입력해주시개 🐶</p>
+                                        </span>
+                                        </div>
+
+                                        <button class="findPwBtn">찾기</button>
+
+                                    </div>
+                                </form>
+
+
+                                <div>
+                                    재설정할 비밀번호를 입력해주세요.
+                                </div>
+
+                                <form>
+                                    <div class="row g-5 align-items-center">
+                                        <div class="col-auto">
+                                            <label for="password" class="form-label">비밀번호</label>
+                                            <label for="password2" class="form-label">비밀번호 확인</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <input type="text" id="password" class="form-control" > <!--placeholder="이름을 입력하라개"-->
+                                            <input type="text" id="password2" class="form-control" > <!--placeholder="이름을 입력하라개"-->
+                                        </div>
+
+                                        <div class="col-auto">
+                                        <span id="passwordHelpInline" class="form-text">
+                                            <p>새로 쓸 비밀번호를 입력해주개</p>
+                                        </span>
+                                        </div>
+
+                                        <div>
+                                            <button class="modBtn">재설정하기</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                            <div style="text-align: center">
+                                <a href="/user/login" class="btn btn-light loginBtn">로그인✨</a>
+                            </div>
+                            <br>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

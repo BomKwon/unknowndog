@@ -4,6 +4,8 @@ import com.example.unknowndog.dto.ReplyDTO;
 import com.example.unknowndog.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Entity
@@ -23,6 +25,7 @@ public class Reply extends BaseEntity {
 
   @JoinColumn(name = "board_id")
   @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Board board; //참조대상
 
   private String replyText; // 내용

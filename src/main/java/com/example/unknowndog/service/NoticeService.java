@@ -3,10 +3,7 @@ package com.example.unknowndog.service;
 import com.example.unknowndog.dto.NoticeDTO;
 import com.example.unknowndog.dto.NoticeSearchDTO;
 import com.example.unknowndog.dto.QuestFormDTO;
-import com.example.unknowndog.entity.Notice;
-import com.example.unknowndog.entity.Quest;
-import com.example.unknowndog.entity.QuestImg;
-import com.example.unknowndog.entity.User;
+import com.example.unknowndog.entity.*;
 import com.example.unknowndog.repository.NoticeRepository;
 import com.example.unknowndog.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -96,6 +93,20 @@ public class NoticeService {
         return notice.getId();
     }
 
+
+
+
+    public String remove(Long noticeId) {
+
+        Notice notice = noticeRepository
+                .findById(noticeId)
+                .orElseThrow(EntityNotFoundException::new);
+        String title = notice.getTitle();
+        noticeRepository.deleteById(noticeId);
+
+        return title;
+
+    }
 
 
 

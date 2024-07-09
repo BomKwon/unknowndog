@@ -72,6 +72,10 @@
                                     </p>
                                 </div>
 
+
+
+                                <!-- if 만약에 넘어오는 이미지 파일이 없다면-->
+
                                 <div th:if =  "${#lists.isEmpty(boardDTO.boardImgDTOList)}">
                                     <div class="input-group mb-3" th:each="num: ${#numbers.sequence(1,5)}">
                                         <input type="file" class="form-control cutom-file-input" name="boardImgFile">
@@ -99,12 +103,10 @@
 
                                 </div>
 
-                                <!--                                <div th:unless="${#strings.isEmpty(boardDTO.id)}">-->
-                                <!--                                    <button th:formaction="@{'/board/modify/' + ${boardDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>-->
-                                <!--                                    <a th:href="@{'/board/remove/' + ${boardDTO.id} }" class="btn btn-danger btn-sm delBtn">-->
-                                <!--                                        삭제-->
-                                <!--                                    </a>-->
-                                <!--                                </div>-->
+
+                                <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
+                                    수정
+                                </button>
 
 
                             </form>

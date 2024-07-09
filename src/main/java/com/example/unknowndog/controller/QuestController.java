@@ -15,6 +15,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -156,6 +158,7 @@ public class QuestController {
 
     }
 
+    // TODO: 2024-07-09 수정필요함 사진인식안됨
     @PostMapping("/modify/{questId}")
     public String questUpdate(@Valid QuestFormDTO questFormDTO,
                              BindingResult bindingResult, Principal principal,
@@ -187,12 +190,12 @@ public class QuestController {
     }
 
 
-    // TODO: 2024-06-21 글 삭제 작동 안되니까 수정하셈 케스케이트 사용해라
+    // TODO: 2024-06-21 글 삭제 작동 안되니까 수정하셈 케스케이트 사용해라 0709 완
+    @GetMapping("/remove/{questId}")
+    public @ResponseBody ResponseEntity questRemove(@PathVariable("questId") Long questId, RedirectAttributes redirectAttributes,
+                                                    Principal principal, Model model){
 
-
-    @DeleteMapping("/remove/{questId}")
-    public String questRemove(Long questId, RedirectAttributes redirectAttributes,
-                              Principal principal, Model model){
+        log.info("들어온 아이디 : " + questId);
 
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
@@ -200,7 +203,7 @@ public class QuestController {
         String quest = questService.remove(questId);
         redirectAttributes.addFlashAttribute("result", questId + "번 글이 삭제됐다개");
 
-        return "redirect:/quest/List";
+        return new ResponseEntity<String>(quest, HttpStatus.OK);
 
     }
 
@@ -213,18 +216,6 @@ public class QuestController {
     public String questList(QuestSearchDTO questSearchDTO,
                             @PathVariable("page") Optional<Integer> page, Model model, Principal principal) {
 
-        // TODO: 2024-06-21 밑에 코드로 안돼서 급한대로 메인은 되니까 붙여놓음
-
-//        Pageable pageable = PageRequest
-//                .of(page.isPresent() ? page.get() : 0 , 5);
-//
-//        Page<Quest> quests = questService
-//                .getQuestPage(questSearchDTO, pageable);
-//
-//        quests.forEach(quest -> log.info(quest));
-//
-//        model.addAttribute("quests", quests);
-//        model.addAttribute("questSearchDTO", questSearchDTO);
 
         if (principal != null) {
             String nickname = mainService.getUserName(principal);

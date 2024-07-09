@@ -13,15 +13,81 @@
 
         <script th:inline="javascript">
             $(document).ready(function () {
+
                 var errorMessage = [[${errorMessage}]];
 
                 if (errorMessage != null) {
                     //모달로 띄우면 좀더 아름답지 않을까?
                     alert(errorMessage);
                 }
-                bindDomEvent();
+
+
+                $(".delBtn").on("click" , function (e) {
+                    e.preventDefault()
+
+                    if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
+
+                        let a = $(this).find('span:eq(0)')  //jquery
+
+                        console.log(a)
+
+                        deleteBoard(a)
+
+                    } else {
+
+
+
+                    }
+
+                })
+
 
             })
+
+
+            // 삭제버튼을 눌렀을때 실행하는
+            function deleteBoard(obj){
+
+
+
+                var boardId = [[${boardId}]];    //아이템의 아이디를 가져온다.
+                let url = "/board/remove/" + boardId;
+
+                let errurl = "/board/read/" + boardId;
+
+                console.log("보드아이디"+boardId)
+
+                // alert(url);
+
+                $.ajax({
+                    url :url,
+                    type : "get" ,
+                    dataType : "json",
+                    success : function (result) {
+
+                        location.href='/board/list';
+                    },
+                    error : function (result, status, error) {
+
+                        if(result.status == '401'){
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/user/login';
+                        }else if(result.status == '200') {
+                            alert(result.responseText + " 글을 삭제 완료 했다개😥")
+                            location.href='/board/list';
+                        }else {
+                            /*여긴 또 잘 지워짐 ㅇㅅㅇ*/
+                            // alert("글을 삭제 완료 했다개😥")
+                            alert("확인요망 : " + result.responseText )
+                            alert("확인요망 : " + result.status )
+                            location.href=errurl;
+                        }
+                    }
+                });
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+
+            }
 
 
         </script>
@@ -111,7 +177,7 @@
                             삭제
                         </a>
 
-                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm delBtn">
+                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
                             수정
                         </a>
 
@@ -124,7 +190,7 @@
                             삭제
                         </a>
 
-                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm delBtn">
+                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
                             수정
                         </a>
 
@@ -418,7 +484,7 @@
 
                         str += `<div  data-num="${data.dtoList[i].id}" class="clearfix ">
 
-                                    <div class="chat-body clearfix"><div class="header replyList">
+                                    <div class="clearfix"><div class="header replyList">
                                         <strong class="primary-font">${data.dtoList[i].replyer}</strong>
                                         <small class="pull-right text-muted">
                                             <i class="fa fa-clock-o fa-fw"></i>${data.dtoList[i].regTime} `

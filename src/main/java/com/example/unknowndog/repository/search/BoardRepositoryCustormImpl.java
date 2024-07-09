@@ -1,5 +1,7 @@
 package com.example.unknowndog.repository.search;
 
+import com.example.unknowndog.constant.BoardCategory;
+import com.example.unknowndog.constant.QuestStatus;
 import com.example.unknowndog.dto.BoardSearchDTO;
 import com.example.unknowndog.dto.MainBoardDTO;
 import com.example.unknowndog.dto.QMainBoardDTO;
@@ -46,6 +48,12 @@ public class BoardRepositoryCustormImpl implements BoardRepositoryCustorm{
 
     }
 
+    private BooleanExpression searchBoardCategory(BoardCategory boardCategory){
+
+        // 입력값이 없으면 null 있으면 select * from item  where itemSellStatus = :itemSellStatus
+        return boardCategory == null ? null : QBoard.board.boardCategory.eq(boardCategory);
+    }
+
 
     private BooleanExpression searchByLike(String searchBy, String searchQuery){
         // 제목 , 제목+내용 , 제목 + 내용 + 작성자   랑 검색어
@@ -70,8 +78,10 @@ public class BoardRepositoryCustormImpl implements BoardRepositoryCustorm{
 
     @Override
     public Page<Board> getBoardPage(BoardSearchDTO boardSearchDTO, Pageable pageable) {
+
         QueryResults<Board> result =  jpaQueryFactory.selectFrom(QBoard.board)
                 .where( regDtsAfter(boardSearchDTO.getSearchDateType()),
+                        searchBoardCategory(boardSearchDTO.getBoardCategory()),
                         searchByLike( boardSearchDTO.getSearchBy(), boardSearchDTO.getSearchQuery() )
                 )
                 .orderBy(QBoard.board.id.desc() )

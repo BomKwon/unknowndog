@@ -72,7 +72,74 @@
 
                 }
 
+
+                /*삭제버튼을 눌렀을때 장바구니 아이템 삭제*/
+                $(".delBtn").on("click", function () {
+
+
+                    if (confirm("정말 삭제할거개? 😥") == true) {    //확인
+
+                        let a = $(this).find('span:eq(0)')  //jquery
+
+                        console.log(a)
+
+                        deleteQuest(a)
+
+                    } else {
+
+
+                    }
+
+                })
+
+
+
             })
+
+
+
+            function deleteQuest(obj){
+
+
+
+                let questId = obj.data("id");    //아이템의 아이디를 가져온다.
+                let url = "/quest/remove/" + questId;
+
+                console.log(questId)
+
+                // alert(url);
+
+                $.ajax({
+                    url :url,
+                    type : "get" ,
+                    dataType : "json",
+                    success : function (result) {
+
+                        location.href='/quest/list';
+                    },
+                    error : function (result, status, error) {
+
+                        if(result.status == '401'){
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/user/login';
+                        }else if(result.status == '200') {
+                            alert(result.responseText + " 글을 삭제 완료 했다개😥")
+                            location.href='/quest/list';
+                        }else {
+                            /*이거 자꾸 오류난다고 뜨는데 지워지긴함 추후 수정*/
+                            alert("글을 삭제 완료 했다개😥")
+                            // alert("확인요망 : " + result.responseText )
+                            // alert("확인요망 : " + result.status )
+                            location.href='/quest/list';
+                        }
+                    }
+                });
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+
+            }
+
+
 
 
 

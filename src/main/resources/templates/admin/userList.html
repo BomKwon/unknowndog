@@ -17,31 +17,69 @@
                     alert(errorMessage);
                 }
 
+                /*삭제버튼을 눌렀을때 장바구니 아이템 삭제*/
                 $(".delBtn").on("click", function () {
 
-                    alert("추후 업데이트 예정입니다 ~.~")
+
+                    if (confirm("해당 회원을 정말 탈퇴하시겠습니까? 😥") == true) {    //확인
+
+                        let a = $(this).find('span:eq(0)')  //jquery
+
+                        console.log(a)
+
+                        deleteUser(a)
+
+                    } else {
 
 
-                    $.ajax({
-                        url: '/admin/user/',
-                        data: param,
-                        type: 'POST',
-                        dataType: 'text',
-                        success: function (result) {
-                            console.log(result)
-                            $("#label1").css("color", "lightblue").text(result);
-                            alert("회원이 강퇴되었습니다.")
-                        },
-                        error : function (error) {
-                            alert("회원 강퇴 중 에러 발생! " + error)
+                    }
+
+
+
+                })
+
+            })
+
+
+            function deleteUser(obj) {
+
+                var userId = prompt("탈퇴 시킬 회원의 번호를 다시 한번 확인 해주세요.")
+                let url = "/admin/user/remove/" + userId;
+
+                let url1 = "/admin/user/list"
+
+                console.log(userId)
+
+                // alert(url);
+
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    success: function (result) {
+
+                        location.href = '/admin/user/list';
+                    },
+                    error: function (result, status, error) {
+
+                        if (result.status == '401') {
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('권한이 없다개');
+                            location.href = '/user/login';
+                        } else if (result.status == '200') {
+                            alert(result.responseText + " 회원을 탈퇴 완료 했습니다")
+                            location.href = '/admin/user/list';
+                        } else {
+                            // alert("글을 삭제 완료 했습니다😥")
+                            alert("확인요망 : " + result.responseText)
+                            alert("확인요망 : " + result.status)
+                            location.href = "/admin/user/list";
                         }
-                    })//End Ajax
+                    }
+                })
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+            }
 
-                })//End delBtn function
-
-
-
-            })//end fuction
 
         </script>
 
@@ -92,7 +130,7 @@
                                     <td>[[${#temporals.format(user.birth, 'yyyy-MM-dd')}]]</td>
                                     <td>[[${#temporals.format(user.regTime, 'yyyy-MM-dd')}]]</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger delBtn"
+                                        <button th:href="@{'/admin/user/remove/' + ${user.id} }" type="button" class="btn btn-danger delBtn"
                                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                         탈퇴 </button>
                                     </td>

@@ -17,10 +17,67 @@
                     //모달로 띄우면 좀더 아름답지 않을까?
                     alert(errorMessage);
                 }
-                bindDomEvent();
+                /*삭제버튼을 눌렀을때 장바구니 아이템 삭제*/
+                $(".delBtn").on("click", function () {
+
+
+                    if (confirm("정말 탈퇴하시겠습니까? 😥") == true) {    //확인
+
+                        let a = $(this).find('span:eq(0)')  //jquery
+
+                        console.log(a)
+
+                        deleteUser(a)
+
+                    } else {
+
+
+                    }
+
+
+
+                })
 
             })
 
+
+            function deleteUser(obj) {
+
+                var userId = [[${userDTO.id}]];
+                let url = "/user/remove/" + userId;
+
+                let url1 = "/user/modify" + userId;
+
+                console.log(userId)
+
+                // alert(url);
+
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    success: function (result) {
+
+                        location.href = '/';
+                    },
+                    error: function (result, status, error) {
+
+                        if (result.status == '401') {
+                            alert(result.responseText+'로그인 후 이용해주세요');
+                            location.href = '/user/login';
+                        } else if (result.status == '200') {
+                            alert(result.responseText + "님 탈퇴 완료했다개 안녕히 가시개😥")
+                            location.href = '/user/logout';
+                        } else {
+                            // alert("글을 삭제 완료 했습니다😥")
+                            alert("확인요망 : " + result.responseText)
+                            alert("확인요망 : " + result.status)
+                            location.href = url1;
+                        }
+                    }
+                })
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+            }
 
         </script>
 
@@ -177,11 +234,11 @@
                             <!--                                    삭제 수정버튼 만들깅-->
                             <div style="margin: 0 auto; text-align: right">
 
-                                <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-light regiBtn">
+                                <a th:formaction="@{'/user/modify/' + ${id} }" class="btn btn-light regiBtn">
                                     수정
                                 </a>
 
-                                <a th:href="@{'/user/modify/' + ${userDTO.email} }" class="btn btn-danger">
+                                <a th:href="@{'/user/remove/' + ${id} }" class="btn btn-danger delBtn">
                                     탈퇴
                                 </a>
 

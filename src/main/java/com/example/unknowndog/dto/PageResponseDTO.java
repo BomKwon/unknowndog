@@ -14,6 +14,7 @@ public class PageResponseDTO<E> {
   private int page;
   private int size;
   private int total;  //게시물 총수, 검색시 총수량이 변경됨
+  private int totalPage;
 
   //시작 페이지번호
   private int start;
@@ -31,7 +32,7 @@ public class PageResponseDTO<E> {
                             //다른곳에서도 사용이 가능함
 
   @Builder(builderMethodName = "withAll")
-  public  PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> dtoList, int total){
+  public  PageResponseDTO(PageRequestDTO pageRequestDTO, List<E> dtoList, int total, int totalPage){
 
     if(total <= 0){
       return;
@@ -39,6 +40,8 @@ public class PageResponseDTO<E> {
 
     this.page = pageRequestDTO.getPage();
     this.size = pageRequestDTO.getSize();
+
+    this.totalPage = totalPage;
 
     this.total = total;
     this.dtoList = dtoList;

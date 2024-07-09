@@ -108,6 +108,7 @@ public class BoardService {
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(boardPage.getContent())
                 .total((int) boardPage.getTotalElements())
+                .totalPage((int) boardPage.getTotalPages())
                 .build();
 
     }
@@ -162,6 +163,46 @@ public class BoardService {
 
         return boardDTO;
     }
+
+
+
+    //상품정보 업데이트
+    public Long updateBoard (BoardDTO boardDTO,
+                             List<MultipartFile> multipartFiles) throws Exception {
+
+        Board board = boardRepository.findById(boardDTO.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        //상품정보 업데이트  repository.save(item) 이것 수정이다 >
+        // 영속성 상태일때는 변경감지를 이용 update > 트랜잭션이 종료될때
+        board.updateBoard(boardDTO);
+
+        List<Long> boardImgIds = boardDTO.getBoardImgIds();
+
+
+        //이미지 등록
+        for (int i = 0; i < multipartFiles.size(); i++) {
+
+            boardImgService
+                    .updateBoardImg(boardImgIds.get(i),multipartFiles.get(i) );
+
+        }
+        return board.getId();
+    }
+
+
+    public String remove(Long boardId) {
+
+
+        Board board = boardRepository
+                .findById(boardId)
+                .orElseThrow(EntityNotFoundException::new);
+        String title = board.getTitle();
+        boardRepository.deleteById(boardId);
+
+        return title;
+
+    }
+
 
 
 

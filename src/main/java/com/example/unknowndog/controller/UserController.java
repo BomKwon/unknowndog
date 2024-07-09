@@ -15,11 +15,14 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -266,8 +269,33 @@ public class UserController {
 
 
     //// TODO: 2024-06-21 탈퇴 만드셈
+    @GetMapping("/remove/{userId}")
+    public @ResponseBody ResponseEntity userRemove(@PathVariable("userId") Long userId, RedirectAttributes redirectAttributes,
+                                                   Principal principal, Model model){
+
+        log.info("들어온 아이디 : " + userId);
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+        String user = userService.remove(userId);
+        redirectAttributes.addFlashAttribute("result", userId + "번 회원이 탈퇴했습니다.");
+
+        return new ResponseEntity<String>(user, HttpStatus.OK);
+
+    }
 
 
+
+
+    //아이디 비번 찾기
+    @GetMapping("/findUser")
+    public /*@ResponseBody ResponseEntity */ String findUser(/*@PathVariable("email") */String emaill) {
+
+
+        return "/user/findUser";
+
+    }
 
 
 

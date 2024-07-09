@@ -2,10 +2,15 @@ package com.example.unknowndog.entity;
 
 import com.example.unknowndog.constant.BoardCategory;
 import com.example.unknowndog.constant.QuestStatus;
+import com.example.unknowndog.dto.BoardDTO;
 import com.example.unknowndog.dto.NoticeDTO;
+import com.example.unknowndog.dto.QuestFormDTO;
 import com.example.unknowndog.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "board")
@@ -40,8 +45,17 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardCategory boardCategory; // 상품 판매 상태
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardImg> boardImgList = new ArrayList<>();
 
-    public Board(Long id, String title, String content, String writer, int view, User user, BoardCategory boardCategory) {
+
+    public void updateBoard(BoardDTO boardDTO) {
+        this.title = boardDTO.getTitle();
+        this.content = boardDTO.getContent();
+        this.boardCategory = boardDTO.getBoardCategory();
+    }
+
+    public Board(Long id, String title, String content, String writer, int view, User user, BoardCategory boardCategory, List<BoardImg> boardImgList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -49,5 +63,7 @@ public class Board extends BaseEntity {
         this.view = view;
         this.user = user;
         this.boardCategory = boardCategory;
+        this.boardImgList = boardImgList;
     }
+
 }

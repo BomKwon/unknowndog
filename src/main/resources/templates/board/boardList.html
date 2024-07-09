@@ -6,6 +6,42 @@
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
     <title>모르는 개 산책 :: 대화하개</title>
+
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+            $(document).ready(function () {
+                $(".search").on("click", function (e) {
+                    e.preventDefault();
+                    page(0)
+                })
+
+            })
+
+            function page(page) {
+
+                var searchDateType  = $("#searchDateType").val()
+
+                var questStatus = $("#questStatus").val()
+
+                var  area = $("#area").val()
+
+                var  searchBy = $("#searchBy").val()
+
+                var searchQuery = $("#floatingInput").val()
+
+                location.href= "/quest/list/" + page +
+                    "?searchDateType=" + searchDateType +
+                    "&questStatus=" + questStatus +
+                    "&area=" + area +
+                    "&searchBy=" + searchBy +
+                    "&searchQuery=" + searchQueryfunction
+
+            }
+
+        </script>
+    </th:block>
+
 </head>
 <body>
 
@@ -123,28 +159,27 @@
                         <ul class="pagination">
 
                             <!--맨앞-->
-                            <li class="page-item" >
-                                <a class="page-link"   onclick="'javascript:page(1)'"> << </a>
+                            <li class="page-item" th:classappend="${pageResponseDTO.start} ? 'disabled' : ''">
+                                <a class="page-link"  onclick="'javascript:page(1)'"> << </a>
                             </li>
 
                             <!--이전-->
-                            <li class="page-item" th:classappend="${boards.prev} ? 'disabled' : ''">
-                                <a class="page-link"   th:onclick="'javascript:page(' + ${boards.number - 1} + ')'  "> < </a>
+                            <li class="page-item" th:classappend="${pageResponseDTO.prev} ? '' : 'disabled'">
+                                <a class="page-link"   th:onclick="'javascript:page(' + ${pageResponseDTO.start - 1} + ')'  "> < </a>
                             </li>
 
                             <!--반복-->
-                            <li class="page-item" th:each="page1: ${#numbers.sequence(boards.start,boards.end)}"  th:classappend="${boards.page eq page1 -1 } ? 'active' : ''">
+                            <li class="page-item" th:each="page1: ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"  th:classappend="${pageResponseDTO.page eq page1 -1 } ? '' : 'active'">
                                 <a class="page-link"  th:onclick="'javascript:page(' + ${page1 - 1} + ')'  ">[[${page1}]]</a>
                             </li>
 
                             <!--다음-->
-                            <li class="page-item" th:classappend="${boards.next} ? 'disabled' : ''">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${boards.number + 1} + ')'  "> > </a>
-                            </li>
+                            <li class="page-item" th:classappend="${pageResponseDTO.next} ? '' : 'disabled'">
+                                <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.end + 1} + ')'  "> > </a>
 
                             <!--맨마지막-->
-                            <li class="page-item" th:classappend="${boards.last} ? 'disabled' : ''">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${boards.last} + ')'  "> >> </a>
+                            <li class="page-item" th:classappend="${pageResponseDTO.end < pageResponseDTO.totalPage} ? '' : 'disabled'">
+                                <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.totalPage} + ')'  "> >> </a>
                             </li>
                         </ul>
                     </div>

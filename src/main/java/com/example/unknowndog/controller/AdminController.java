@@ -15,13 +15,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -107,28 +107,7 @@ public class AdminController {
     }
 
 
-    //회원리스트
-    @GetMapping("/user/list")
-    public String userList(UserSearchDTO userSearchDTO, UserDTO userDTO,
-                           @PathVariable("page") Optional<Integer> page, Model model, Principal principal){
-
-        String nickname = mainService.getUserName(principal);
-        model.addAttribute("nickname", nickname);
-
-        Pageable pageable = PageRequest
-                .of(page.isPresent() ? page.get() : 0 , 10);
-
-        Page<User> users = userService.getUserList(userSearchDTO, pageable);
-
-        model.addAttribute("users", users);
-        model.addAttribute("userDTO", userDTO);
-        model.addAttribute("maxPage", 10);
-
-        return "/admin/userList";
-    }
-
-
-    @GetMapping("/notice/{noticeId}")
+    @GetMapping("/notice/modify/{noticeId}")
     public String noticeMo(@PathVariable Long noticeId, Model model, Principal principal) {
 
 
@@ -151,13 +130,13 @@ public class AdminController {
 
         }
 
-        return "/notice/noticeForm";
+        return "/admin/noticeForm";
     }
 
 
 
-    @PostMapping("/notice/{noticeId}")
-    public String itemUpdate(@Valid NoticeDTO noticeDTO,
+    @PostMapping("/notice/modify/{noticeId}")
+    public String noticeUpdate(@Valid NoticeDTO noticeDTO,
                              BindingResult bindingResult,
                              Model model, Principal principal) {
 
@@ -166,19 +145,74 @@ public class AdminController {
 
 
         if (bindingResult.hasErrors()) {
-            return "/notice/noticeForm";
+            return "/admin/noticeForm";
         }
 
         try {
             noticeService.updateNotice(noticeDTO);
         }catch (Exception e){
             model.addAttribute("errorMessage", "공지 수정 중 에러가 발생하였다개");
-            return "/notice/noticeForm";
+            return "/admin/noticeForm";
         }
 
         model.addAttribute("result", "공지 수정이 완료되었다개");
 
         return "redirect:/notice/read/{noticeId}";
+
+    }
+
+
+    @GetMapping("/notice/remove/{noticeId}")
+    public @ResponseBody ResponseEntity noticeRemove(@PathVariable("noticeId") Long noticeId, RedirectAttributes redirectAttributes,
+                                                    Principal principal, Model model){
+
+        log.info("들어온 아이디 : " + noticeId);
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+        String notice = noticeService.remove(noticeId);
+        redirectAttributes.addFlashAttribute("result", noticeId + "번 글이 삭제됐다개");
+
+        return new ResponseEntity<String>(notice, HttpStatus.OK);
+
+    }
+
+
+
+    //회원리스트
+    @GetMapping("/user/list")
+    public String userList(UserSearchDTO userSearchDTO, UserDTO userDTO,
+                           @PathVariable("page") Optional<Integer> page, Model model, Principal principal){
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+        Pageable pageable = PageRequest
+                .of(page.isPresent() ? page.get() : 0 , 10);
+
+        Page<User> users = userService.getUserList(userSearchDTO, pageable);
+
+        model.addAttribute("users", users);
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("maxPage", 10);
+
+        return "/admin/userList";
+    }
+
+    @GetMapping("/user/remove/{userId}")
+    public @ResponseBody ResponseEntity userRemove(@PathVariable("userId") Long userId, RedirectAttributes redirectAttributes,
+                                                     Principal principal, Model model){
+
+        log.info("들어온 아이디 : " + userId);
+
+        String nickname = mainService.getUserName(principal);
+        model.addAttribute("nickname", nickname);
+
+        String user = userService.remove(userId);
+        redirectAttributes.addFlashAttribute("result", userId + "번 회원이 탈퇴되었습니다.");
+
+        return new ResponseEntity<String>(user, HttpStatus.OK);
 
     }
 

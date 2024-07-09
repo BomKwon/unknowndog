@@ -17,28 +17,14 @@
                         page(0)
                     })
 
-                    function page(page) {
-
-                        var searchDateType  = $("#searchDateType").val()
-
-                        var questStatus = $("#questStatus").val()
-
-                        var  area = $("#area").val()
-
-                        var  searchBy = $("#searchBy").val()
-
-                        var searchQuery = $("#floatingInput").val()
-
-                        location.href= "/quest/list/" + page +
-                            "?searchDateType=" + searchDateType +
-                            "&questStatus=" + questStatus +
-                            "&area=" + area +
-                            "&searchBy=" + searchBy +
-                            "&searchQuery=" + searchQuery
-
-                    }
 
                 })
+
+
+                function page(page) {
+
+                    location.href= "/quest/list/" + page
+                }
 
 
                 $(".pagination").on("active", function () {

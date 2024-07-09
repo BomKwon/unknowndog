@@ -16,7 +16,68 @@
                 if (errorMessage != null) {
                     alert(errorMessage);
                 }
+
+                /*삭제버튼을 눌렀을때 장바구니 아이템 삭제*/
+                $(".delBtn").on("click", function () {
+
+
+                    if (confirm("정말 삭제하시겠습니까? 😥") == true) {    //확인
+
+                        let a = $(this).find('span:eq(0)')  //jquery
+
+                        console.log(a)
+
+                        deleteNotice(a)
+
+                    } else {
+
+
+                    }
+
+                })
+
             })
+
+
+            function deleteNotice(obj){
+
+                let noticeId = obj.data("id");    //아이템의 아이디를 가져온다.
+                let url = "/admin/notice/remove/" + noticeId;
+
+                let url1 = "/notice/read/" + noticeId;
+
+                console.log(noticeId)
+
+                // alert(url);
+
+                $.ajax({
+                    url :url,
+                    type : "get" ,
+                    dataType : "json",
+                    success : function (result) {
+
+                        location.href='/notice/list';
+                    },
+                    error : function (result, status, error) {
+
+                        if(result.status == '401'){
+                            // alert(result.responseText+'로그인 후 이용해주세요');
+                            alert('권한이 없다개');
+                            location.href = '/user/login';
+                        }else if(result.status == '200') {
+                            alert(result.responseText + " 글을 삭제 완료 했습니다😥")
+                            location.href='/notice/list';
+                        }else {
+                            // alert("글을 삭제 완료 했습니다😥")
+                            alert("확인요망 : " + result.responseText )
+                            alert("확인요망 : " + result.status )
+                            location.href=url1;
+                        }
+                    }
+                });
+                //삭제버튼은 버튼자체의 태그를 갖는다.
+
+            }
 
         </script>
     </th:block>
@@ -72,6 +133,15 @@
                                     <button th:formaction="@{/admin/notice/new}" type="submit" class="btn btn-success">작성완료</button>
 
                                 </div>
+
+
+                                <div th:unless="${#strings.isEmpty(noticeDTO.id)}" style="text-align: right">
+                                    <button th:formaction="@{'/admin/notice/modify/' + ${noticeDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>
+                                    <a th:href="@{'/admin/notice/remove/' + ${noticeDTO.id} }" class="btn btn-danger btn-sm delBtn">
+                                        삭제
+                                    </a>
+                                </div>
+
 
 <!--                                <div th:unless="${#strings.isEmpty(noticeDTO.id)}">-->
 <!--                                    <button th:formaction="@{'/notice/admin/modify/' + ${noticeDTO.id}  }" type="submit" class="btn btn-light btn-sm modBtn">수정</button>-->

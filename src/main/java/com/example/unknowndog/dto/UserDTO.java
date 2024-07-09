@@ -39,7 +39,7 @@ public class UserDTO {
     private String password2;
 
     @NotEmpty(message = "별명은 필수 입력 값이개")
-    @Length(min = 2, max = 10, message = "별명은 2자 이상, 10자 이하로 입력해주세요.")
+    @Length(min = 2, max = 4, message = "별명은 2자 이상, 4자 이하로 입력해주세요.")
     private String nickname;    //별명
 
     

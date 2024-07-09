@@ -51,12 +51,13 @@
 
                 if (confirm("정말 삭제하시겠습니까??") == true) {    //확인
 
-                    document.removefrm.submit();
-                    alert("삭제 완료 되었다개😥 (아직 준비중 추후 업데이트 예정)")
+                    let a = $(this).find('span:eq(0)')  //jquery
+
+                    console.log(a)
+
+                    deleteQuest(a)
 
                 } else {
-
-                    alert("오류인가? (아직 준비중 추후 업데이트 예정)")
 
                 }
 
@@ -189,8 +190,10 @@
 
                     //나중에 모달창으로 꾸미자
                     //혹은 html페이지에 표시도 가능
-                    alert("신청 완료 되었다개👌 (아직 준비중 추후 업데이트 예정)")
-                    alert("신청 내역 페이지로 이동한다개. 아직은 안감")
+                    alert("신청 완료 되었다개👌")
+                    alert("신청 내역 페이지로 이동한다개🐶")
+
+                    location.href = '/orders'
 
 
                 } ,
@@ -209,6 +212,49 @@
                     //실패 메시지 bindingResult.hasErrors() 의 메소드 이건 DTO message
                 }
             })
+
+        }
+
+
+        // 삭제버튼을 눌렀을때 진행하는
+        function deleteQuest(obj){
+
+
+
+            var questId = [[${questId}]];    //아이템의 아이디를 가져온다.
+            let url = "/quest/remove/" + questId;
+
+            console.log(questId)
+
+            // alert(url);
+
+            $.ajax({
+                url :url,
+                type : "get" ,
+                dataType : "json",
+                success : function (result) {
+
+                    location.href='/quest/list';
+                },
+                error : function (result, status, error) {
+
+                    if(result.status == '401'){
+                        // alert(result.responseText+'로그인 후 이용해주세요');
+                        alert('로그인 후 이용해주세요');
+                        location.href = '/user/login';
+                    }else if(result.status == '200') {
+                        alert(result.responseText + " 글을 삭제 완료 했다개😥")
+                        location.href='/quest/list';
+                    }else {
+                        /*여긴 또 잘 지워짐 ㅇㅅㅇ*/
+                        // alert("글을 삭제 완료 했다개😥")
+                        alert("확인요망 : " + result.responseText )
+                        alert("확인요망 : " + result.status )
+                        location.href='/quest/list';
+                    }
+                }
+            });
+            //삭제버튼은 버튼자체의 태그를 갖는다.
 
         }
 
@@ -374,7 +420,6 @@
                                     <!-- 삭제 수정버튼 만들깅 관리자용-->
                                     <div sec:authorize="hasRole('ADMIN')">
 
-                                        <form  name="removefrm">
                                             <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
                                                 삭제
                                             </a>
@@ -382,7 +427,6 @@
                                             <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm modBtn">
                                                 수정
                                             </a>
-                                        </form>
 
                                     </div>
 

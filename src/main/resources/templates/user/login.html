@@ -16,7 +16,28 @@
                 color: #A7D2FFFF;
             }
         </style>
+
     </th:block>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function errMsg() {
+
+
+
+
+
+
+        })
+
+        function openPopup(){
+            var url = "/user/findUser";
+            var name = "모르는 개 산책 :: ID/PW 찾기";
+            var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
+        }
+
+    </script>
 </head>
 <body>
 
@@ -54,7 +75,7 @@
 
         <font size="2px" color="#d3d3d3"> 아이디나 비밀번호를 잊으셨다면? </font> &ensp;
 
-        <a href="#"><font size="2.5px" color="#add8e6">ID / PW 찾기</font></a> &ensp;
+        <a href="/user/findUser"><font size="2.5px" color="#add8e6">ID / PW 찾기</font></a> &ensp;
 
 <!--        <font size="3px" color="#add8e6"> | </font> &ensp;-->
 

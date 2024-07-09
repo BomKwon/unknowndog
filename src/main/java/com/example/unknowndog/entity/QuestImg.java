@@ -31,6 +31,7 @@ public class QuestImg extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quest_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Quest quest;
 
 

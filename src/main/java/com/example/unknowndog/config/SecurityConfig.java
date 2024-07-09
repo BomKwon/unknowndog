@@ -35,6 +35,13 @@ public class SecurityConfig {
 //                                .requestMatchers("/replies/new/**").authenticated()
 
                                 .requestMatchers("/user/view/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
+                                //산책정보페이지는 로그인을 해야 볼수 있음
+
+                                .requestMatchers("/likes/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
+                                .requestMatchers("/like/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
+                                .requestMatchers("/orders/**").authenticated()      //산책정보페이지는 로그인을 해야 볼수 있음
+                                .requestMatchers("/order/**").authenticated()
+
 //                                .requestMatchers("/templates/cart/**").authenticated()
 //                                .requestMatchers("/order/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음
 //                                .requestMatchers("/orders/**").authenticated()      //주문페이지는 로그인을 해야 볼수 있음

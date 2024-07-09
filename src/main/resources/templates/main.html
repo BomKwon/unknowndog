@@ -24,7 +24,6 @@
             function page(page) {
                 location.href= "/" + page;
             }
-
         })
 
     </script>
@@ -179,7 +178,7 @@
                                             <td style="text-align: left;">
                                                 <a  style="color: black" th:href="'/notice/read/'+ ${notice.id}">[[${notice.title}]]</a>
                                             </td>
-                                            <td>[[${notice.writer}]]</td>
+                                            <td class="writer">[[${notice.writer}]]</td>
                                             <td>[[${#temporals.format(notice.regTime, 'yyyy-MM-dd')}]]</td>
                                             <td>[[${notice.view}]]</td>
                                         </tr>
