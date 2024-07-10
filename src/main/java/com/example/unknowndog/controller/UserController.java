@@ -293,7 +293,7 @@ public class UserController {
     public /*@ResponseBody ResponseEntity */ String findUser(/*@PathVariable("email") */String emaill) {
 
 
-        return "/user/findUser";
+        return "/404NotFound";
 
     }
 

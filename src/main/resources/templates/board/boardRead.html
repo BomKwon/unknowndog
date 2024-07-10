@@ -100,6 +100,13 @@
 
 <div layout:fragment="content">
 
+    <div style="text-align: right; margin-top: 30px; margin-right: 10px">
+        <a href="/board/list" class="btn btn-light">목록</a>
+        <a href="/" class="btn btn-light">메인</a>
+    </div>
+
+    <br>
+
     <div class="row row-cols-1  g-4">
         <div class="col">
             <div class="card border-light shadow">
@@ -177,14 +184,14 @@
                             삭제
                         </a>
 
-                        <a th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
+                        <a th:unless="${boardDTO.createBy} != ${#authentication.principal.username}" th:href="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
                             수정
                         </a>
 
                     </div>
 
                     <!--                                   삭제 수정버튼 만들깅 일반-->
-                    <div sec:authorize="hasRole('USER')" th:if="${boardDTO.createBy} == ${#authentication.principal.username}" style="text-align: right">
+                    <div sec:authorize="hasRole('USER')" th:unless="${boardDTO.createBy} != ${#authentication.principal.username}" style="text-align: right">
 
                         <a th:href="@{'/board/remove/' + ${boardId} }" class="btn btn-danger btn-sm delBtn">
                             삭제
@@ -207,9 +214,9 @@
 
                     <!--댓글-->
                     <div class="panel panel-default" style="margin-top: 20px;" >
-                        <div class="panel-heading">
+                        <div class="panel-heading" sec:authorize="isAuthenticated()">
                             <form class="row g-3 reply" style="margin: auto">
-                                <div style="margin-bottom: 20px; text-align: center" sec:authorize="isAuthenticated()">
+                                <div style="margin-bottom: 20px; text-align: center">
                                     <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
                                     <button type="button" class="btn btn-light saveBtn" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
                                 </div>
@@ -241,7 +248,13 @@
 <!--                                          </p>-->
 
                                           <div style="text-align: center">
-                                              <p>작성된 댓글이 없다개 🥵</p>
+                                              <p>아직 작성된 댓글이 없다개 🥵</p>
+                                              <div sec:authorize="isAuthenticated()" style="text-align: center">
+                                                  <p>가장 먼저 댓글을 달아보시개🐶</p>
+                                              </div>
+                                              <div sec:authorize="isAnonymous()" style="text-align: center">
+                                                  <p>로그인해서 가장 먼저 댓글을 달아보시개🐶</p>
+                                              </div>
                                           </div>
                                       </div>
                                   </div>
@@ -260,8 +273,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default saveBtn">Save</button>
-                                                    <button type="button" class="btn btn-default modBtn">modify</button>
-                                                    <button type="button" class="btn btn-default removeBtn">삭제</button>
+                                                    <button type="button" class="btn btn-default modBtnR">modify</button>
+                                                    <button type="button" class="btn btn-default removeBtnR">삭제</button>
                                                     <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>
 
                                                 </div>
@@ -317,8 +330,6 @@
 
         console.log("읽기진입")
 
-        let email = [[${#authentication.principal.username}]]
-
         const result = [[${result}]]
 
         let replyInput = $(".replyInput");
@@ -346,8 +357,8 @@
         let replyText = $(".replyText"); //작성내용 input
 
         let saveBtn = $(".saveBtn"); // 저장버튼
-        let modBtn = $(".modBtn"); //수정버튼
-        let removeBtn = $(".removeBtn"); //삭제버튼
+        let modBtnR = $(".modBtnR"); //수정버튼
+        let removeBtnR = $(".removeBtnR"); //삭제버튼
 
         let reply = $(".reply"); //댓글전체
         let modal = $("#new-modal"); //모달전체
@@ -387,7 +398,7 @@
 
 
         //수정버튼 클릭시
-        modBtn.on("click", function (e){
+        modBtnR.on("click", function (e){
 
             let reply = {"rno" : modal.data("rno"), "replyText" : replyText.val()}
 
@@ -423,11 +434,6 @@
 
                 console.log(data)
 
-                if(data.createBy == email){
-                    modBtn.show()
-                    removeBtn.show()
-                }
-
                 replyText.val(data.replyText)
                 modal.data("rno", data.rno);
                 console.log(modal.data("rno"))
@@ -441,7 +447,7 @@
 
 
         //삭제버튼 클릭시
-        removeBtn.on("click", function (){
+        removeBtnR.on("click", function (){
 
             let url = "/replies/remove/"
 
@@ -489,7 +495,7 @@
                                         <small class="pull-right text-muted">
                                             <i class="fa fa-clock-o fa-fw"></i>${data.dtoList[i].regTime} `
                          if(email == data.dtoList[i].createBy) {
-                             str += `   <span > [<a href="" class="modBtn" style="color: darkgray">수정</a>/<a href="" style="color: darkgray" class="removeBtn">삭제</a>] </span></small>`
+                             str += `   <span > [<a href="" class="modBtnR" style="color: darkgray">수정</a>/<a href="" style="color: darkgray" class="removeBtnR">삭제</a>] </span></small>`
                          }
 
 

@@ -1,12 +1,10 @@
 package com.example.unknowndog.controller;
 
-import com.example.unknowndog.dto.LikeDetailDTO;
-import com.example.unknowndog.dto.MainQuestDTO;
-import com.example.unknowndog.dto.QuestFormDTO;
-import com.example.unknowndog.dto.QuestSearchDTO;
+import com.example.unknowndog.dto.*;
 import com.example.unknowndog.entity.Quest;
 import com.example.unknowndog.service.LikeService;
 import com.example.unknowndog.service.MainService;
+import com.example.unknowndog.service.OrderService;
 import com.example.unknowndog.service.QuestService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -41,6 +39,8 @@ public class QuestController {
     private final MainService mainService;
 
     private final LikeService likeService;
+
+    private final OrderService orderService;
 
 
     @GetMapping("/new")
@@ -213,7 +213,7 @@ public class QuestController {
 
 
     @GetMapping({"/list","/list/{page}"})
-    public String questList(QuestSearchDTO questSearchDTO,
+    public String questList(QuestSearchDTO questSearchDTO, PageRequestDTO pageRequestDTO,
                             @PathVariable("page") Optional<Integer> page, Model model, Principal principal) {
 
 
@@ -239,8 +239,6 @@ public class QuestController {
 //        quests.forEach(quest -> log.info(quest));
 
         model.addAttribute("quests", quests);
-        model.addAttribute("questSearchDTO", questSearchDTO);
-
         model.addAttribute("maxPage", 10);
 
 

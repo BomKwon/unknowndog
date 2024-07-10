@@ -55,7 +55,7 @@
 
 
 
-                <div class="card-body" style="height: 500px;">
+                <div class="card-body">
 
                     <h4>👄 대화하개</h4>
 
@@ -152,44 +152,46 @@
 
                 </div>
 
-                <div class="pagination justify-content-center en mb-0" th:with="start=${(boards.number/maxPage) * maxPage + 1 } , end=${(boards.totalPages==0 ) ? 1 :  (start + (maxPage -1) < boards.totalPages ? start + (maxPage - 1): boards.totalPages) }">
 
-                    <div class="col-2">
-
-                        <ul class="pagination">
-
-                            <!--맨앞-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.start} ? 'disabled' : ''">
-                                <a class="page-link"  onclick="'javascript:page(1)'"> << </a>
-                            </li>
-
-                            <!--이전-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.prev} ? '' : 'disabled'">
-                                <a class="page-link"   th:onclick="'javascript:page(' + ${pageResponseDTO.start - 1} + ')'  "> < </a>
-                            </li>
-
-                            <!--반복-->
-                            <li class="page-item" th:each="page1: ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"  th:classappend="${pageResponseDTO.page eq page1 -1 } ? '' : 'active'">
-                                <a class="page-link"  th:onclick="'javascript:page(' + ${page1 - 1} + ')'  ">[[${page1}]]</a>
-                            </li>
-
-                            <!--다음-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.next} ? '' : 'disabled'">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.end + 1} + ')'  "> > </a>
-
-                            <!--맨마지막-->
-                            <li class="page-item" th:classappend="${pageResponseDTO.end < pageResponseDTO.totalPage} ? '' : 'disabled'">
-                                <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.totalPage} + ')'  "> >> </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
 
 
             </div>
         </div>
 
+
+        <div class="pagination justify-content-center en mb-0" th:with="start=${(boards.number/maxPage) * maxPage + 1 } , end=${(boards.totalPages==0 ) ? 1 :  (start + (maxPage -1) < boards.totalPages ? start + (maxPage - 1): boards.totalPages) }">
+
+            <div class="col-2">
+
+                <ul class="pagination">
+
+                    <!--맨앞-->
+                    <li class="page-item" th:classappend="${pageResponseDTO.start} ? 'disabled' : ''">
+                        <a class="page-link"  onclick="'javascript:page(1)'"> << </a>
+                    </li>
+
+                    <!--이전-->
+                    <li class="page-item" th:classappend="${pageResponseDTO.prev} ? '' : 'disabled'">
+                        <a class="page-link"   th:onclick="'javascript:page(' + ${pageResponseDTO.start - 1} + ')'  "> < </a>
+                    </li>
+
+                    <!--반복-->
+                    <li class="page-item" th:each="page1: ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"  th:classappend="${pageResponseDTO.page eq page1 -1 } ? '' : 'active'">
+                        <a class="page-link"  th:onclick="'javascript:page(' + ${page1 - 1} + ')'  ">[[${page1}]]</a>
+                    </li>
+
+                    <!--다음-->
+                    <li class="page-item" th:classappend="${pageResponseDTO.next} ? '' : 'disabled'">
+                        <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.end + 1} + ')'  "> > </a>
+
+                        <!--맨마지막-->
+                    <li class="page-item" th:classappend="${pageResponseDTO.end < pageResponseDTO.totalPage} ? '' : 'disabled'">
+                        <a class="page-link" th:onclick="'javascript:page(' + ${pageResponseDTO.totalPage} + ')'  "> >> </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
 
         <div class="col-sm-6">
 

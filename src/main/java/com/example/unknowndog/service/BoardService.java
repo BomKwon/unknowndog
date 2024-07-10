@@ -172,6 +172,9 @@ public class BoardService {
 
         Board board = boardRepository.findById(boardDTO.getId())
                 .orElseThrow(EntityNotFoundException::new);
+
+        log.info(board);
+
         //상품정보 업데이트  repository.save(item) 이것 수정이다 >
         // 영속성 상태일때는 변경감지를 이용 update > 트랜잭션이 종료될때
         board.updateBoard(boardDTO);

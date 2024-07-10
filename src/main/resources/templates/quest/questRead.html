@@ -223,6 +223,7 @@
 
             var questId = [[${questId}]];    //아이템의 아이디를 가져온다.
             let url = "/quest/remove/" + questId;
+            let url1 = "/quest/read/" + questId;
 
             console.log(questId)
 
@@ -248,9 +249,10 @@
                     }else {
                         /*여긴 또 잘 지워짐 ㅇㅅㅇ*/
                         // alert("글을 삭제 완료 했다개😥")
+                        // alert("완료된 의뢰는 삭제할 수 없다개😥")
                         alert("확인요망 : " + result.responseText )
                         alert("확인요망 : " + result.status )
-                        location.href='/quest/list';
+                        location.href=url1;
                     }
                 }
             });
@@ -372,7 +374,7 @@
 
                                 <div class="text-end mt-3 mb-3 me-3" >
 
-                                    <div th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}">
+                                    <div sec:authorize="isAuthenticated()" th:if="${questFormDTO.questStatus.name() == 'UNSUCCESS'}">
                                         <div th:if="${questFormDTO.stockNumber > 0}" >
                                             <div th:if="${questFormDTO.createBy} != ${#authentication.principal.username}">
                                                 <button type="button" class="btn btn-light btn-lg likeBtn" onclick="addLike()">❤ 찜</button> <!--onclick="addCart()"-->
@@ -391,8 +393,15 @@
                                         </form>-->
                                     </div>
 
+                                    <div th:if="${questFormDTO.stockNumber > 0}" >
+                                        <div th:if="${principal == null}">
+                                            <button type="button" class="btn btn-light btn-lg likeBtn" onclick="addLike()">❤ 찜</button> <!--onclick="addCart()"-->
+                                            <button type="button" class="btn btn-light btn-lg okBtn" onclick="order()">✔ 신청하기</button>  <!--onclick="order()"-->
+                                        </div>
+                                    </div>
 
-                                    <div th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}">
+
+                                    <div sec:authorize="isAnonymous()" th:if="${questFormDTO.questStatus.name() == 'SUCCESS'}">
                                         <h1>완료했다개</h1>
                                     </div>
 
@@ -424,14 +433,14 @@
                                                 삭제
                                             </a>
 
-                                            <a th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm modBtn">
+                                            <a th:unless="${questFormDTO.createBy} != ${#authentication.principal.username}" th:href="@{'/quest/modify/' + ${questId} }" class="btn btn-light btn-sm modBtn">
                                                 수정
                                             </a>
 
                                     </div>
 
                                     <!--                                   삭제 수정버튼 만들깅 일반-->
-                                    <div sec:authorize="hasRole('USER')" th:if="${questFormDTO.createBy} == ${#authentication.principal.username}">
+                                    <div sec:authorize="hasRole('USER')" th:unless="${questFormDTO.createBy} != ${#authentication.principal.username}">
 
                                         <a th:href="@{'/quest/remove/' + ${questId} }" class="btn btn-danger btn-sm delBtn">
                                             삭제

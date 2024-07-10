@@ -27,11 +27,20 @@ public class BoardImgDTO {
 
 
 
-    public static BoardImgDTO of(BoardImg boardImg){
 
-        return modelMapper.map(boardImg, BoardImgDTO.class);
+    public static ModelMapper getMapper(){
+
+        modelMapper.getConfiguration()
+                .setSkipNullEnabled(true)
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+        return modelMapper;
+
     }
 
+    public static BoardImgDTO of(BoardImg boardImg) {
+        return getMapper().map(boardImg, BoardImgDTO.class);
+    }
 
 
 

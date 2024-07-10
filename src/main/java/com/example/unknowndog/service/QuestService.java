@@ -199,11 +199,35 @@ public class QuestService {
         String questNm = quest.getTitle();
         questRepository.deleteById(questId);
 
-
         return questNm;
 
     }
 
+
+    public PageResponseDTO<MainQuestDTO> MainQuestSearch(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+
+        String keyword = pageRequestDTO.getKeyword();
+
+        Pageable pageable = pageRequestDTO.getPageable("id");
+
+        Page<MainQuestDTO> questPage = questRepository.searchQuest(types, keyword, pageable);
+
+        questPage.getContent().forEach(mainQuestDTO -> log.info(mainQuestDTO));
+
+//    PageResponseDTO<BoardDTO> aa =
+//            new PageResponseDTO<BoardDTO>(pageRequestDTO, boardDTOList, (int) boardPage.getTotalElements());
+
+//    return aa;
+
+        return PageResponseDTO.<MainQuestDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(questPage.getContent())
+                .total((int) questPage.getTotalElements())
+                .totalPage(questPage.getTotalPages())
+                .build();
+
+    }
 
 
 

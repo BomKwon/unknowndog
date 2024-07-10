@@ -63,9 +63,15 @@ public class Quest extends BaseEntity {
     private int view;   //조회수
 
     //앞 나 to 뒤 데려오는애
-    @OneToMany(mappedBy = "quest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quest", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuestImg> questImgList = new ArrayList<>();
 
+
+    //추후 추가함
+    @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderQuest> orders;
 
     public void updateQuest(QuestFormDTO questFormDto) {
         this.title = questFormDto.getTitle();
@@ -74,7 +80,6 @@ public class Quest extends BaseEntity {
         this.area = questFormDto.getArea();
         this.questDetail = questFormDto.getQuestDetail();
         this.questStatus = questFormDto.getQuestStatus();
-        this.user = questFormDto.getUserId();
     }
 
     //수량을 입력받아서 db의 저장된 개수확인과 , 수량변경

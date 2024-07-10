@@ -78,7 +78,7 @@
 
                                 <div th:if =  "${#lists.isEmpty(boardDTO.boardImgDTOList)}">
                                     <div class="input-group mb-3" th:each="num: ${#numbers.sequence(1,5)}">
-                                        <input type="file" class="form-control cutom-file-input" name="boardImgFile">
+                                        <input type="file" class="form-control cutom-file-input" name="multipartFiles">
                                         <label class="input-group-text cutom-file-label" th:text="이미지 + ${num}">Upload</label>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                 <div th:if =  "${not #lists.isEmpty(boardDTO.boardImgDTOList)}">
                                     <div class="input-group  mb-3" th:each="boardImgDTO, status: ${boardDTO.boardImgDTOList}">
 
-                                        <input type="file"  class="form-control form-control-file" th:id="${status.index+1}" name="boardImgfile" >
+                                        <input type="file"  class="form-control form-control-file" th:id="${status.index+1}" name="multipartFiles" >
 
                                         <input type="text" class="form-control"  name="boardImgIds" th:value="${boardImgDTO.id}">
 
@@ -104,9 +104,12 @@
                                 </div>
 
 
-                                <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
-                                    수정
-                                </button>
+                                <div th:unless="${#strings.isEmpty(boardDTO.id)}">
+                                    <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
+                                        수정
+                                    </button>
+                                </div>
+
 
 
                             </form>

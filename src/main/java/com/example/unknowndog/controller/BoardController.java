@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.spi.ErrorMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -118,11 +119,13 @@ public class BoardController {
             model.addAttribute("errorMessage", "에러났개");
             return "/board/boardForm";
         }
-        if (boardImgFileList.get(0).isEmpty() && boardDTO.getId() == null) {
-            //대표이미지는 꼭 삽입해야한다.
-            model.addAttribute("errorMessage", "대표사진은 필수항목이개");
-            return "/board/boardForm";
-        }
+
+//        if (boardImgFileList.get(0).isEmpty() && boardDTO.getId() == null) {
+//            //대표이미지는 꼭 삽입해야한다.
+//            model.addAttribute("errorMessage", "대표사진은 필수항목이개");
+//            return "/board/boardForm";
+//        }
+
         log.info("getBytes :"  + Arrays.toString(boardImgFileList.get(0).getBytes()));
         log.info("getContentType :"  + boardImgFileList.get(0).getContentType());
         log.info("getOriginalFilename :"  + boardImgFileList.get(0).getOriginalFilename());
@@ -190,6 +193,8 @@ public class BoardController {
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
 
+        System.out.println("게시물 아이디? "+boardId);
+
         try {
 
             BoardDTO boardDTO = boardService.getboardDetail(boardId);
@@ -211,7 +216,7 @@ public class BoardController {
     @PostMapping("/modify/{boardId}")
     public String boardUpdate(@Valid BoardDTO boardDTO,
                               BindingResult bindingResult, Principal principal,
-                              @RequestParam("boardImgFile") List<MultipartFile> multipartFiles,
+                              @RequestParam(value="multipartFiles", required = false) List<MultipartFile> multipartFiles,
                               Model model) {
 
         String nickname = mainService.getUserName(principal);
@@ -222,16 +227,22 @@ public class BoardController {
             return "/board/boardForm";
         }
 
-        if(multipartFiles.get(0).isEmpty() && boardDTO.getId() == null){
-            model.addAttribute("errorMessage", "대표 이미지는 필수 입력값이다개");
-            return "/board/boardForm";
-        }
+//        if(multipartFiles.get(0).isEmpty() && boardDTO.getId() == null){
+//            model.addAttribute("errorMessage", "대표 이미지는 필수 입력값이다개");
+//            return "/board/boardForm";
+//        }
+
+
+
+        log.info(multipartFiles);
 
         try {
             boardService.getUserName(boardDTO, principal);
             boardService.updateBoard(boardDTO, multipartFiles);
         }catch (Exception e){
-            model.addAttribute("errorMessage", "수정 중에 문제가 발생했다개");
+            e.printStackTrace();
+            log.info(e.getMessage());
+            model.addAttribute("errorMessage", "오류 발생!!!");
             return "/board/boardForm";
         }
         return "redirect:/board/read/{boardId}";

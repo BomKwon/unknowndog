@@ -1,9 +1,10 @@
 package com.example.unknowndog.repository.search;
 
+import com.example.unknowndog.dto.MainQuestDTO;
 import com.example.unknowndog.dto.QuestSearchDTO;
-import com.example.unknowndog.entity.QQuest;
-import com.example.unknowndog.entity.Quest;
+import com.example.unknowndog.entity.*;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -84,5 +85,68 @@ public class QuestSearchImpl extends QuerydslRepositorySupport implements QuestS
 
     return new PageImpl<>(content, pageable, count);
   }
+
+  @Override
+  public Page<MainQuestDTO> searchQuest(String[] types, String keyword, Pageable pageable) {
+    QQuest quest = QQuest.quest; //q 도메인 객체 entity를 q로 바꾼것
+
+    JPQLQuery<Quest> query = from(quest);
+    //select board from board
+    query.groupBy(quest);
+
+
+
+    if ( (types != null && types.length > 0 && keyword != null) ){
+      BooleanBuilder booleanBuilder =new BooleanBuilder();
+
+      for (String string : types){
+
+        switch (string){
+          case "t":
+            booleanBuilder.or(quest.title.contains(keyword));
+            break;
+          case "a":
+            booleanBuilder.or(quest.area.contains(keyword));
+            break;
+
+        } //swich
+
+      }//for
+      query.where(booleanBuilder);
+      System.out.println("검색조건 추가 : " + query);
+    }//if
+
+    query.where(quest.id.gt(0L));
+    System.out.println("0보다 큰 조건 id가" + query);
+
+    JPQLQuery<MainQuestDTO> dtoQuery = query.select(Projections.bean(MainQuestDTO.class,
+            quest.id,
+            quest.title,
+            quest.writer,
+            quest.questStatus,
+            quest.view,
+            quest.questImgList,
+            quest.regTime
+    ));
+
+
+
+    //페이징
+    this.getQuerydsl().applyPagination(pageable, dtoQuery);
+    System.out.println("페이지어블" + pageable);
+
+    List<MainQuestDTO> dtoList = dtoQuery.fetch(); //실행
+    dtoList.forEach(mainQuestDTO -> System.out.println(mainQuestDTO));
+//    boardList.forEach(board1 -> log.info(board1));
+    long count = dtoQuery.fetchCount(); //row 수
+
+
+    System.out.println(count);
+
+
+    return new PageImpl<>(dtoList, pageable, count);
+
+  }
+
 
 }

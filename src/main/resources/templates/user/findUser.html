@@ -24,43 +24,19 @@
             IdForm.hide()
             PwForm.hide()
 
-            $(".findIdR").focusout("check", function () {
-                $(".find").hide()
-                PwForm.hide()
-
-                IdForm.show()
-
-            })
-
-            $(".findPwR").focusout("check", function () {
-                $(".find").hide()
-                IdForm.hide()
-
-                PwForm.show()
-
-            })
-
             $("input[name='find']").change(function(){
                 // 휴대폰 결제 선택 시.
-                if($("input[name='payment']:checked").val() == '휴대폰결제'){
-                    $('#selectPay_card').hide();
-                    $('#selectPay_noBank').hide();
-                    $('#selectPay_phone').show();
+                if($("input[name='find']:checked").val() == 'findId'){
+                    $('.findRadio').hide();
+                    IdForm.show()
                 }
                 // 무통장입금 결제 선택 시.
-                else if($("input[name='payment']:checked").val() == '무통장입금'){
-                    $('#selectPay_card').hide();
-                    $('#selectPay_phone').hide();
-                    $('#selectPay_noBank').show();
-                }
-                // 신용카드 결제 선택 시.
-                else if($("input[name='payment']:checked").val() == '신용카드'){
-                    $('#selectPay_phone').hide();
-                    $('#selectPay_noBank').hide();
-                    $('#selectPay_card').show();
+                else if($("input[name='find']:checked").val() == 'findPw'){
+                    $('.findRadio').hide();
+                    PwForm.show()
                 }
             });
-            출처: https://oneriverjj.tistory.com/13 [Rivertron:티스토리]
+
 
 
         })
@@ -104,10 +80,10 @@
                             <br>
                             <br>
 
-                            <div style="text-align: center">
+                            <div style="text-align: center" class="findRadio">
 
                                 <span>
-                                    <input class="form-check-input findIdR" type="radio" name="find" id="findIdR">
+                                    <input class="form-check-input findIdR" type="radio" name="find" value="findId" id="findIdR">
                                     <label class="form-check-label" for="findIdR">
                                         ID 찾기
                                     </label>
@@ -118,7 +94,7 @@
 
 
                                 <span>
-                                    <input class="form-check-input findPwR" type="radio" name="find" id="findPwR">
+                                    <input class="form-check-input findPwR" type="radio" name="find" value="findPw" id="findPwR">
                                     <label class="form-check-label" for="findPwR">
                                         PW 찾기
                                     </label>

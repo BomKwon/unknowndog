@@ -29,9 +29,8 @@ public class QuestImg extends BaseEntity {
 
     private String repimgYn;        // 대표이미지 여부
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "quest_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Quest quest;
 
 

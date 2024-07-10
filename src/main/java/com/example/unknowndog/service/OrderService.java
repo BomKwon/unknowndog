@@ -167,6 +167,15 @@ public class OrderService {
 
     }
 
+    public void removeOrders(Long orderId) {
+
+        orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        orderRepository.deleteById(orderId);
+
+    }
+
 
 
 
