@@ -24,8 +24,7 @@ public class Reply extends BaseEntity {
   private Long id;
 
   @JoinColumn(name = "board_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  @OnDelete(action = OnDeleteAction.CASCADE)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Board board; //참조대상
 
   private String replyText; // 내용

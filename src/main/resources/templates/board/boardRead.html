@@ -7,7 +7,7 @@
 <head>
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
-    <title>모르는 개 산책 :: 대화하개 상세보기</title>
+    <title>모르는 개 산책 :: [[${boardDTO.title}]] 상세보기</title>
 
     <th:block layout:fragment="script">
 
@@ -218,7 +218,7 @@
                             <form class="row g-3 reply" style="margin: auto">
                                 <div style="margin-bottom: 20px; text-align: center">
                                     <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
-                                    <button type="button" class="btn btn-light saveBtn" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
+                                    <button type="button" class="btn btn-light saveBtnR" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
                                 </div>
                             </form>
 
@@ -237,25 +237,23 @@
                                   <div class="clearfix">
 
                                       <div class="chat-body clearfix">
-<!--                                          <div class="header">-->
-<!--                                              <strong class="primary-font">작성자</strong>-->
-<!--                                              <small class="pull-right text-muted">-->
-<!--                                                  <i class="fa fa-clock-o fa-fw"></i> 작성일-->
-<!--                                              </small>-->
-<!--                                          </div>-->
-<!--                                          <p>-->
-<!--                                              내용-->
-<!--                                          </p>-->
+                                          <div class="header">
+                                              <strong class="primary-font"></strong>
+                                              <small class="pull-right text-muted">
+                                                  <i class="fa fa-clock-o fa-fw"></i>
+                                              </small>
+                                          </div>
+                                          <p>
+
+                                          </p>
 
                                           <div style="text-align: center">
                                               <p>아직 작성된 댓글이 없다개 🥵</p>
-                                              <div sec:authorize="isAuthenticated()" style="text-align: center">
+                                              <div style="text-align: center">
                                                   <p>가장 먼저 댓글을 달아보시개🐶</p>
                                               </div>
-                                              <div sec:authorize="isAnonymous()" style="text-align: center">
-                                                  <p>로그인해서 가장 먼저 댓글을 달아보시개🐶</p>
-                                              </div>
                                           </div>
+
                                       </div>
                                   </div>
 
@@ -272,7 +270,7 @@
                                                     <input class="form-control replyText replyText1">
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default saveBtn">Save</button>
+                                                    <button type="button" class="btn btn-default saveBtnR">Save</button>
                                                     <button type="button" class="btn btn-default modBtnR">modify</button>
                                                     <button type="button" class="btn btn-default removeBtnR">삭제</button>
                                                     <button type="button" class="btn btn-default" id="closeBtn" data-bs-dismiss="modal">Close</button>
@@ -356,7 +354,7 @@
         let replyText1 = $(".replyText1"); //label + input
         let replyText = $(".replyText"); //작성내용 input
 
-        let saveBtn = $(".saveBtn"); // 저장버튼
+        let saveBtnR = $(".saveBtnR"); // 저장버튼
         let modBtnR = $(".modBtnR"); //수정버튼
         let removeBtnR = $(".removeBtnR"); //삭제버튼
 
@@ -365,10 +363,10 @@
 
         let thispage = 1;
 
-        console.log(saveBtn)
+        console.log(saveBtnR)
 
         //저장버튼 클릭시
-        saveBtn.on("click", function (e){
+        saveBtnR.on("click", function (e){
             e.preventDefault()
 
             alert("ddd")
@@ -477,13 +475,14 @@
 
                 if ( data== null || data.dtoList == null || data.dtoList.length == 0  ) {
 
-                    pagination.html(str2);
+                    console.log("댓글"+dtoList)
+
+                    pagination.html(str);
                     replylist.html(str);
 
-                    return null;
+                } else if (data != null && data.dtoList != null && data.dtoList.length > 0){
 
-                } else if (data != null && data.dtoList != null && data.dtoList.length >= 0){
-
+                    console.log("댓글"+dtoList)
 
                     for (let i = 0; i < data.dtoList.length; i++) {
 

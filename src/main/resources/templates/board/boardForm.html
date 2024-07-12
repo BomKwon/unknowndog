@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/layout1}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>모르는 개 산책 :: 대화하개 글 작성하기</title>
 
     <th:block layout:fragment="script">
 
@@ -16,10 +16,136 @@
                 if (errorMessage != null) {
                     alert(errorMessage);
                 }
+
+                const result = [[${result}]]
+
+                if (result){
+                    alert(result)
+                }
+
+                //////////////////////////////////////////
+
+
+                const formObj = document.querySelector("#form-mul");
+
+                let imgdelBtn = $(".imgdelBtn"); //이미지 삭제 버튼
+                let image = $(".image") //이미지 패널
+                let imgmodifyBtn = $(".imgmodifyBtn"); //이미지 수정 버튼
+                let modal = $(".modal")
+
+                var boardId = [[${boardDTO.id}]]
+
+
+
+
+                //이미지 수정 버튼을 누르면
+                //data-num을 받아서 data-num의 이미지를 다른 이미지로 변경
+                //다른 이미지로 변경 > 버튼을 눌렀을 때 이미지 input 태그를 활성화
+                //이미지 input에 이미지를 넣고 저장
+
+                imgmodifyBtn.on("click", function (){
+
+                    $(this).hide()
+
+                    let str = `<input type="file" class="form-control cutom-file-input" name="multipartFiles"> <button type="button" class="appendBtn btn-light">추가</button>`
+
+                    $(".imgBlockMo").append(str)
+
+                })
+
+                $(".imgBlock").on("click",".appendBtn", function (e) {
+
+                    $(this).hide()
+
+                    //바로 전 형제 readonly
+                    let str = `<input type="file" class="form-control cutom-file-input" name="multipartFiles"> <button type="button" class="appendBtn btn-light">추가</button>`
+
+                    $(".imgBlock").append(str)
+                })
+
+                //이미지 삭제 버튼을 누르면 hide 처리로 삭제한 것으로 보이도록.
+                //삭제 버튼을 누른 구역만 hide
+                // > data-num을 가진 구역을 hide
+
+                imgdelBtn.on("click", function (e){
+                    var imageContainer = $(this).closest('.image-container');
+                    var inoInput = imageContainer.find('img.id');
+                    var dataNumValue = imageContainer.find('img').attr('data-num');
+                    console.log(dataNumValue)
+                    // inoInput.val(dataNumValue);
+                    var str = `<input name="boardImgIds" value="${dataNumValue}">`;
+                    imageContainer.append(str);
+                    console.log(inoInput.val(dataNumValue));
+
+                    imageContainer.find('img, .imgdelBtn').hide();
+                })
             })
+
+
+            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");  //불가능한 파일 확장자
+            var maxSize = 110485760;   //10MB가 최대크기
+            function checkExtension(fileName, fileSize) {
+                if(fileSize >= maxSize) {
+                    alert("파일 사이즈 초과");
+                    return false;
+                }
+
+                if(regex.test(fileName)) {
+                    alert("해당 종류의 파일은 업로드 할 수 없습니다");
+                    return false;
+                }
+
+                return true;
+            }
+            $(".upload").on("change",function (){
+
+                // var file = $(this).val().split("\\").pop();
+                // console.log(file)
+
+                var formDate = new FormData();
+
+                var inputFile = $(this)
+                var file = inputFile[0].files
+
+                console.log(file[0].name)
+                console.log(file[0].size)
+
+                if(!checkExtension( file[0].name, file[0].size  )) {
+                    $(this).val("");
+                    alert("홍길동")
+                }
+
+                console.log(file);
+
+            })
+
+
+            document.querySelector(".modifyBtn").addEventListener("click", function (e){
+                e.preventDefault();
+                e.stopPropagation();
+
+                formObj.action = `/board/modify?`+boardId;
+                formObj.method = "post";
+                formObj.submit();
+
+            });
+
+            document.querySelector(".removeBtn").addEventListener("click", function (e){
+                e.preventDefault();
+                e.stopPropagation();
+
+                formObj.action = `/board/remove`;
+                formObj.method = "post";
+                formObj.submit();
+
+            });
+
+            ;
 
         </script>
     </th:block>
+
+
 
 </head>
 <body>
@@ -42,11 +168,18 @@
 
                             <form  method="post" th:object="${boardDTO}" enctype="multipart/form-data">
 
+
                                 <input type="hidden" th:field="*{id}">
+
 
                                 <select class="form-select mb-3" th:field="*{boardCategory}" aria-label="Default select example">
                                     <option value="FREE_TALK" selected>자유</option>
                                     <option value="QUESTION">질문</option>
+
+
+
+
+
                                     <option value="SHARE">나눔</option>
                                     <option value="REVIEW">리뷰</option>
                                 </select>
@@ -76,40 +209,93 @@
 
                                 <!-- if 만약에 넘어오는 이미지 파일이 없다면-->
 
-                                <div th:if =  "${#lists.isEmpty(boardDTO.boardImgDTOList)}">
-                                    <div class="input-group mb-3" th:each="num: ${#numbers.sequence(1,5)}">
-                                        <input type="file" class="form-control cutom-file-input" name="multipartFiles">
-                                        <label class="input-group-text cutom-file-label" th:text="이미지 + ${num}">Upload</label>
-                                    </div>
-                                </div>
-
-                                <div th:if =  "${not #lists.isEmpty(boardDTO.boardImgDTOList)}">
-                                    <div class="input-group  mb-3" th:each="boardImgDTO, status: ${boardDTO.boardImgDTOList}">
-
-                                        <input type="file"  class="form-control form-control-file" th:id="${status.index+1}" name="multipartFiles" >
-
-                                        <input type="text" class="form-control"  name="boardImgIds" th:value="${boardImgDTO.id}">
-
-
-                                        <label th:for="${status.index+1}" class="input-group-text form-control-label" th:text="${not #strings.isEmpty(boardImgDTO.oriImgName)} ? ${boardImgDTO.oriImgName} : '상품이미지'" >Upload</label>
-                                    </div>
-                                </div>
-
-
-                                <!--                                 넘어오는 이미지 파일이 있다면 , 데이터값 db-->
                                 <div th:if =  "${#strings.isEmpty(boardDTO.id)}" style="text-align: center">
+
+                                    <div class="imgBlock" th:if =  "${#lists.isEmpty(boardDTO.boardImgDTOList)}">
+                                            <input type="file" class="form-control cutom-file-input" name="multipartFiles">
+                                        <button type="button" class="appendBtn btn-light">추가</button>
+
+                                    </div>
+
+
+
+                                    <!--넘어오는 이미지 파일이 있다면 , 데이터값 db-->
+
 
                                     <button th:formaction="@{/board/new}" type="submit" class="btn btn-danger">작성완료</button>
 
                                 </div>
 
 
-                                <div th:unless="${#strings.isEmpty(boardDTO.id)}">
-                                    <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-light btn-sm modBtn">
-                                        수정
-                                    </button>
+                                <div class="row row-cols-3" th:unless="${#strings.isEmpty(boardDTO.id)}">
+
+
+                                    <div class=" col-lg-4 image-container" th:if="${not #lists.isEmpty(imgdto)}" th:each="img, status:${imgdto}">
+
+
+
+                                        <div class="panel panel-default">
+
+                                            <div th:if="${img.imgUrl.length() > 0}">
+                                                <div th:data-num="${img.id}" class="panel-heading image">
+                                                    [[${img.oriImgName}]]
+                                                    <button type="button" class="btn btn-light btn-sm imgdelBtn">삭제</button>
+                                                </div>
+
+                                                <div th:data-num="${img.id}" th:if="${img.imgUrl.length() > 0}" class="panel-body image">
+                                                    <img th:data-num="${img.id}" th:src="${img.imgUrl}" alt="사진" width="300px;">
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div> <!--이미지-->
+
+                                    <div class="imgBlockMo">
+                                        <button type="button" class="imgmodifyBtn btn-light">추가</button>
+                                    </div>
+
+
+
+                                    <div style="text-align: right">
+                                        <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-danger modBtn" >
+                                            수정
+                                        </button>
+                                    </div>
+
                                 </div>
 
+                                <div class="modal fade" data-rno="" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button style="text-align: right" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div th:if =  "${not #lists.isEmpty(boardDTO.boardImgDTOList)}">
+                                                    <div class="input-group  mb-3" th:each="boardImgDTO, status: ${boardDTO.boardImgDTOList}">
+                                                        <input type="file"  class="form-control form-control-file" th:id="${status.index+1}"  name="multipartFiles" >
+                                                        <label th:for="${status.index+1}" class="input-group-text form-control-label" th:text="${not #strings.isEmpty(boardImgDTO.oriImgName)} ? ${boardImgDTO.oriImgName} : '상품이미지'" >Upload</label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default saveBtn">Save</button>
+                                                <button type="button" class="btn btn-default modBtn">modify</button>
+                                                <button type="button" class="btn btn-default removeBtn">삭제</button>
+                                                <button type="button" class="btn btn-default" id="closeBtn" data-dismiss="modal">Close</button>
+
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
 
 
                             </form>
@@ -126,6 +312,10 @@
     </div>
 
 </div>
+
+
+
+
 
 </body>
 </html>

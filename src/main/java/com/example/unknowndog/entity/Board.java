@@ -18,6 +18,7 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Board extends BaseEntity {
 
@@ -45,8 +46,14 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardCategory boardCategory; // 상품 판매 상태
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true,
+            fetch = FetchType.LAZY)
     private List<BoardImg> boardImgList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board" , cascade = CascadeType.ALL, orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Reply> replies = new ArrayList<>();
 
 
     public void updateBoard(BoardDTO boardDTO) {

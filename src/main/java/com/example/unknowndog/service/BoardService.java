@@ -143,6 +143,8 @@ public class BoardService {
                 boardImgRepository.findByBoardIdOrderByIdAsc(boardId);
         //select * from ItemImg where itemid = :itemid order by id asc;
         //2. 이미지 entity list를 dto list로 변환
+
+
         List<BoardImgDTO> boardImgDTOList = new ArrayList<>();
 //        private static ModelMapper modelMapper = new ModelMapper();
         for(BoardImg boardImg : boardImgList){
@@ -151,6 +153,8 @@ public class BoardService {
             BoardImgDTO boardImgDTO = BoardImgDTO.of(boardImg);
             boardImgDTOList.add(boardImgDTO);
         }
+
+        log.info("보드서비스"+boardImgDTOList);
 
         //아이디로 글 가져오고
         Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
@@ -161,6 +165,8 @@ public class BoardService {
         //게시판 dto 에 이미지들을 set!!
         boardDTO.setBoardImgDTOList(boardImgDTOList);
 
+        log.info("보드서비스마지막"+boardDTO);
+
         return boardDTO;
     }
 
@@ -169,6 +175,8 @@ public class BoardService {
     //상품정보 업데이트
     public Long updateBoard (BoardDTO boardDTO,
                              List<MultipartFile> multipartFiles) throws Exception {
+
+        log.info("updateBoard진입"+boardDTO);
 
         Board board = boardRepository.findById(boardDTO.getId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -179,16 +187,10 @@ public class BoardService {
         // 영속성 상태일때는 변경감지를 이용 update > 트랜잭션이 종료될때
         board.updateBoard(boardDTO);
 
-        List<Long> boardImgIds = boardDTO.getBoardImgIds();
 
 
-        //이미지 등록
-        for (int i = 0; i < multipartFiles.size(); i++) {
-
-            boardImgService
-                    .updateBoardImg(boardImgIds.get(i),multipartFiles.get(i) );
-
-        }
+        //이미지삭제 /등록
+        boardImgService.deleteBoardImgg(boardDTO, multipartFiles);
         return board.getId();
     }
 

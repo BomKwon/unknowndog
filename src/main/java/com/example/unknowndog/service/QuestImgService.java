@@ -75,7 +75,7 @@ public class QuestImgService {
             String imgName = fileService.
                     uploadFile(questImgLocation, orImgName, multipartFile.getBytes());
             // /images/item
-            String imgUrl = "/images/item/" + imgName;
+            String imgUrl = "/images/quest/" + imgName;
             // 엔티티는 현재 영속 상태이므로 데이터를 변경하는 것만으로도
             // 변경감지기능 동작하여 트랜잭션이 끝날때 update 쿼리 실행
             savedQuestImg.updateQuestImg(orImgName, imgName, imgUrl);

@@ -2,8 +2,7 @@ package com.example.unknowndog.entity;
 
 import com.example.unknowndog.entity.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,6 +11,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "board_img")
 @Getter
 @Setter
+@ToString(exclude = "board")
+@AllArgsConstructor
+@NoArgsConstructor
 public class BoardImg extends BaseEntity {
 
 
@@ -30,7 +32,6 @@ public class BoardImg extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
 

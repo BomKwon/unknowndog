@@ -5,6 +5,8 @@ import com.example.unknowndog.entity.QuestImg;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -21,6 +23,12 @@ public class BoardImgDTO {
     private String imgUrl;   //이미지 조회 경로
 
     private String repimgYn;        // 대표이미지 여부
+
+    private LocalDateTime regTime;
+    private LocalDateTime updateTime;
+
+    private String createBy;
+    private String modifiedBy;
 
     // 메소드  EntityToDto // DtoToEntity
     private static ModelMapper modelMapper = new ModelMapper();

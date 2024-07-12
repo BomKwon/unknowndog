@@ -2,12 +2,10 @@ package com.example.unknowndog.controller;
 
 import com.example.unknowndog.dto.*;
 import com.example.unknowndog.entity.Board;
+import com.example.unknowndog.entity.BoardImg;
 import com.example.unknowndog.entity.Notice;
 import com.example.unknowndog.entity.User;
-import com.example.unknowndog.service.BoardService;
-import com.example.unknowndog.service.MainService;
-import com.example.unknowndog.service.NoticeService;
-import com.example.unknowndog.service.UserService;
+import com.example.unknowndog.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.util.ListUtils;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -39,10 +38,11 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardImgService boardImgService;
     private final NoticeService noticeService;
     private final MainService mainService;
 
-    @GetMapping("/list")
+    @GetMapping({"/list","/list/{page}"})
     public String boardAll(BoardSearchDTO boardSearchDTO, BoardDTO boardDTO,
                            @PathVariable("page") Optional<Integer> page, Model model,
                            NoticeSearchDTO noticeSearchDTO, PageRequestDTO pageRequestDTO,
@@ -107,7 +107,8 @@ public class BoardController {
     @PostMapping("/new")
     public String questForm(@Valid BoardDTO boardDTO, BindingResult bindingResult,
                             Principal principal, Model model
-            , @RequestParam("boardImgFile") List<MultipartFile> boardImgFileList) throws IOException {
+            , @RequestParam("multipartFiles") List<MultipartFile> boardImgFileList) throws IOException {
+
 
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
@@ -199,6 +200,7 @@ public class BoardController {
 
             BoardDTO boardDTO = boardService.getboardDetail(boardId);
             model.addAttribute("boardDTO" , boardDTO);
+            model.addAttribute("imgdto", boardImgService.imglist(boardId));
 
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage",
@@ -219,6 +221,12 @@ public class BoardController {
                               @RequestParam(value="multipartFiles", required = false) List<MultipartFile> multipartFiles,
                               Model model) {
 
+        if (!ListUtils.isEmpty(boardDTO.getBoardImgIds())) {
+            log.info(boardDTO.getBoardImgIds().get(0));
+        }
+        log.info("입력받은 DTO: " +boardDTO);
+//        log.info("보드이미지::"+boardImgIds[0]);
+
         String nickname = mainService.getUserName(principal);
         model.addAttribute("nickname", nickname);
 
@@ -233,12 +241,24 @@ public class BoardController {
 //        }
 
 
+        log.info("얜 왜 못받아오는거셈");
+        multipartFiles.forEach(multipartFile -> log.info(multipartFile.getOriginalFilename()));
 
-        log.info(multipartFiles);
+
 
         try {
-            boardService.getUserName(boardDTO, principal);
+
             boardService.updateBoard(boardDTO, multipartFiles);
+
+
+//            if( boardImgIds != null && boardImgIds.length > 0){
+//                //수정하면서 이미지만 개별로 삭제하고 싶을 때
+//                boardImgService.deleteBoardImg(boardImgIds);
+//            }
+
+        }catch (EntityNotFoundException e) {
+            log.info("entitynot");
+            log.info(e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             log.info(e.getMessage());
