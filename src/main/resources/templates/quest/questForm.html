@@ -243,7 +243,7 @@
                                 <div th:if =  "${#lists.isEmpty(questFormDTO.questImgDTOList)}">
                                     <div class="input-group mb-3" th:each="num: ${#numbers.sequence(1,5)}">
                                         <input type="file" class="form-control cutom-file-input" name="questImgFile">
-                                        <label class="input-group-text cutom-file-label" th:text="상품이미지 + ${num}">Upload</label>
+                                        <label class="input-group-text cutom-file-label" th:text="이미지 + ${num}">Upload</label>
                                     </div>
                                 </div>
 

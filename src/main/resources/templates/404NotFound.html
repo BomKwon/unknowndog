@@ -6,6 +6,44 @@
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
     <title>모르는 개 산책 :: 산책 정보</title>
+
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var errorMessage = [[${errorMessage}]];
+
+            if (errorMessage != null) {
+                //모달로 띄우면 좀더 아름답지 않을까?
+                alert(errorMessage);
+            }
+            /*삭제버튼을 눌렀을때 장바구니 아이템 삭제*/
+            $(".apiBtn").on("click", function () {
+
+                console.log("버튼 누름")
+
+                $.ajax({
+                    url: "https://c855-124-194-92-106.ngrok-free.app/board/listRest",
+                    type: "get",
+                    dataType: "json",
+                    success: function () {
+
+                        alert("개발자 도구를 확인하세용")
+                    },
+                    error: function () {
+
+                        alert("error입니다...")
+                    }
+                })
+
+
+
+            })
+
+        })
+
+    </script>
+
+
 </head>
 <body>
 
@@ -18,6 +56,7 @@
                     <div class="card-body">
 
                         <div >
+
 
                             <!--목록이 비어있다면-->
 

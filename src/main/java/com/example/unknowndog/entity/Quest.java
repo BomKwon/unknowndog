@@ -73,6 +73,11 @@ public class Quest extends BaseEntity {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderQuest> orders;
 
+//    //추후 추가함
+//    @OneToMany(mappedBy = "quest", fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<LikeQuest> likeQuests;
+
     public void updateQuest(QuestFormDTO questFormDto) {
         this.title = questFormDto.getTitle();
         this.salary = questFormDto.getSalary();

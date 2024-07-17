@@ -124,7 +124,7 @@ public class MainController {
 
     @GetMapping("/404_NotFound")
     public String notFound(){
-        return "/404NotFound";
+        return "/api/dogsMap";
     }
 
 

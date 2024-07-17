@@ -170,9 +170,9 @@
                     <!-- 삭제 수정버튼 만들깅 관리자용-->
                     <div sec:authorize="hasRole('ADMIN')" style="text-align: right">
 
-                        <a th:href="@{'/admin/notice/remove/' + ${noticeId} }" class="btn btn-light btn-sm delBtn">
+                        <button class="btn btn-light btn-sm delBtn">
                             삭제
-                        </a>
+                        </button>
 
                         <a th:href="@{'/admin/notice/modify/' + ${noticeId} }" class="btn btn-light btn-sm modBtn">
                             수정

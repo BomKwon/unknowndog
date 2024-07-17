@@ -47,7 +47,7 @@
 
                     $(this).hide()
 
-                    let str = `<input type="file" class="form-control cutom-file-input" name="multipartFiles"> <button type="button" class="appendBtn btn-light">추가</button>`
+                    let str = `<div class="mb-2"><input type="file" class="form-control cutom-file-input" name="multipartFiles"></div> <div style="text-align: right; margin-bottom: 3px"><button type="button" class="appendBtn btn btn-light">추가</button></div>`
 
                     $(".imgBlockMo").append(str)
 
@@ -58,7 +58,7 @@
                     $(this).hide()
 
                     //바로 전 형제 readonly
-                    let str = `<input type="file" class="form-control cutom-file-input" name="multipartFiles"> <button type="button" class="appendBtn btn-light">추가</button>`
+                    let str = `<div class="mb-2"><input type="file" class="form-control cutom-file-input" name="multipartFiles"></div> <div style="text-align: right; margin-bottom: 3px"><button type="button" class="appendBtn btn btn-light">추가</button></div>`
 
                     $(".imgBlock").append(str)
                 })
@@ -254,16 +254,13 @@
                                     </div> <!--이미지-->
 
                                     <div class="imgBlockMo">
-                                        <button type="button" class="imgmodifyBtn btn-light">추가</button>
+                                        <button type="button" class="imgmodifyBtn btn btn-light">추가</button>
                                     </div>
 
 
+                                    <br>
 
-                                    <div style="text-align: right">
-                                        <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-danger modBtn" >
-                                            수정
-                                        </button>
-                                    </div>
+
 
                                 </div>
 
@@ -297,6 +294,12 @@
                                     <!-- /.modal-dialog -->
                                 </div>
 
+
+                                <div style="text-align: right" th:unless="${#strings.isEmpty(boardDTO.id)}">
+                                    <button th:formaction="@{'/board/modify/' + ${boardId} }" class="btn btn-danger modBtn" >
+                                        저장
+                                    </button>
+                                </div>
 
                             </form>
 
