@@ -10,6 +10,8 @@
 </head>
 <body>
 
+
+
     <div th:fragment="header">
         <header class="p-3 mb-3 border-bottom" style="background-color: lavenderblush">
             <div class="container" >
@@ -38,7 +40,7 @@
 
                     <div class="font-size small" sec:authorize="isAuthenticated()" >
 
-                        <span  ></span>
+
                         <a th:href="'/user/read/' +${#authentication.name}" sec:authentication property="principal" var="principal" th:text="${nickname}"></a>이시여 어서오시개🐶
 
                     </div>

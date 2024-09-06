@@ -28,6 +28,10 @@ repositories {
 }
 
 dependencies {
+
+	/*레이아웃을 위한 의존성 주입*/
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

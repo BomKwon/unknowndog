@@ -140,51 +140,51 @@
 
 
 
-                $(".regiBtn").on("click", function () {
-
-
-                    if (name == '' || name.length == 0 || name == null) {
-                        alert("이름을 입력해주개")
-                    }
-
-                    if (password == '' || password.length == 0 ) {
-                        alert("비밀번호를 입력해주개")
-                    } else if (16 < password.length < 8) {
-                        $("#label3").css("color", "lightcoral")
-                            .text("비밀번호는 8자 이상, 16자 이하로 입력해주개");
-                    }
-
-                    $("#password2").focusout(function() {
-
-                        var param1 = {
-                            password : password,
-                            password2 : pw2
-                        }
-
-                        //Ajax로 전송
-                        $.ajax({
-                            url: '/user/passwordChk',
-                            data: param1,
-                            type: 'POST',
-                            dataType: 'text',
-                            success: function (result) {
-                                console.log(result)
-                                $("#label3").css("color", "lightblue").text(result);
-                            },
-                            error : function (error) {
-                                alert("비밀번호 확인 에러발생! " + error)
-                            }
-                        })
-
-                    })
-
-                    $("#address").focusout()(function () {
-                        if (address == '', address.length == 0) {
-                            alert("주소를 입력해주개")
-                        }
-                    })
-
-                })
+                // $(".regiBtn").on("click", function () {
+                //
+                //
+                //     if (name == '' || name.length == 0 || name == null) {
+                //         alert("이름을 입력해주개")
+                //     }
+                //
+                //     if (password == '' || password.length == 0 ) {
+                //         alert("비밀번호를 입력해주개")
+                //     } else if (16 < password.length < 8) {
+                //         $("#label3").css("color", "lightcoral")
+                //             .text("비밀번호는 8자 이상, 16자 이하로 입력해주개");
+                //     }
+                //
+                //     $("#password2").focusout(function() {
+                //
+                //         var param1 = {
+                //             password : password,
+                //             password2 : pw2
+                //         }
+                //
+                //         //Ajax로 전송
+                //         $.ajax({
+                //             url: '/user/passwordChk',
+                //             data: param1,
+                //             type: 'POST',
+                //             dataType: 'text',
+                //             success: function (result) {
+                //                 console.log(result)
+                //                 $("#label3").css("color", "lightblue").text(result);
+                //             },
+                //             error : function (error) {
+                //                 alert("비밀번호 확인 에러발생! " + error)
+                //             }
+                //         })
+                //
+                //     })
+                //
+                //     $("#address").focusout()(function () {
+                //         if (address == '', address.length == 0) {
+                //             alert("주소를 입력해주개")
+                //         }
+                //     })
+                //
+                // })
 
 
 
@@ -280,7 +280,7 @@
                                         </div>
 
                                         <div class="col-auto">
-                                        <input type="text" class="form-control"  th:field="*{password}" ><!--placeholder="비밀번호를 입력하라개">-->
+                                        <input type="password" class="form-control"  th:field="*{password}" ><!--placeholder="비밀번호를 입력하라개">-->
                                         </div>
 
                                         <div class="col-auto">
@@ -288,7 +288,7 @@
                                         </div>
 
                                         <div class="col-auto">
-                                            <input type="text" class="form-control"  th:field="*{password2}" ><!--placeholder="비밀번호를 입력하라개">-->
+                                            <input type="password" class="form-control"  th:field="*{password2}" ><!--placeholder="비밀번호를 입력하라개">-->
                                         </div>
 
                                         <div class="col-auto">
@@ -381,7 +381,7 @@
 
 
                                     <div style="text-align: center">
-                                        <button type="button" class="btn btn-danger regiBtn">회원가입</button>
+                                        <button type="submit" class="btn btn-danger regiBtn">회원가입</button>
                                     </div>
 
 

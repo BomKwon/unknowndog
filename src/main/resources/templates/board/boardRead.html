@@ -7,7 +7,7 @@
 <head>
     <link rel="stylesheet" href="/css/layout1.css" />
     <meta charset="UTF-8">
-    <title>모르는 개 산책 :: [[${boardDTO.title}]] 상세보기</title>
+    <title>모르는 개 산책 :: [[${boardDTO.title}]]</title>
 
     <th:block layout:fragment="script">
 
@@ -216,6 +216,7 @@
                         <div class="panel-heading" sec:authorize="isAuthenticated()">
                             <form class="row g-3 reply" style="margin: auto">
                                 <div style="margin-bottom: 20px; text-align: center">
+                                    <input type="text" th:src="${boardDTO.id}">
                                     <input  id="exampleFormControlTextarea1" class="form-control replyText replyText1" style="display: inline-block; width: 65%; height: 100px; margin: auto"> &ensp;
                                     <button type="button" class="btn btn-light saveBtnR" style=" width: 120px; height: 95px; display: inline; margin: auto">작성</button>
                                 </div>
